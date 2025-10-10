@@ -1,0 +1,92 @@
+
+
+module.exports = {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  darkMode: "class",
+  theme: {
+    extend: {
+
+      animation: {
+        'spin-slow': 'spin 0.9s linear infinite', // slow forward
+        'spin-reverse': 'spin-reverse 0.9s linear infinite', // slow reverse
+        'morph-circle': 'morph-circle 1s ease-in-out forwards', // morph into circle
+        'zoom-in-out': 'zoomInOut 1.5s ease-in-out infinite', // inner circle zooms outward
+        'zoom-out-in': 'zoomOutIn 1.5s ease-in-out infinite', // outer circle zooms inward
+      },
+      keyframes: {
+        'spin-reverse': {
+          from: { transform: 'rotate(360deg)' },
+          to: { transform: 'rotate(0deg)' },
+        },
+        'morph-circle': {
+          '0%, 50%': { borderRadius: '1.5rem' }, // rounded-3xl
+          '100%': { borderRadius: '50%' },       // full circle
+        },
+        zoomInOut: {
+          '0%, 100%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(1.3)' }, // inner expands
+        },
+        zoomOutIn: {
+          '0%, 100%': { transform: 'scale(1.3)' },
+          '50%': { transform: 'scale(1)' },   // outer shrinks
+        },
+      },
+      colors: {
+        primary: "var(--color-primary)",
+        secondary: "var(--color-secondary)",
+        success: "var(--color-success)",
+        warning: "var(--color-warning)",
+        danger: "var(--color-danger)",
+        info: "var(--color-info)",
+        dark: "var(--color-dark)",
+
+        'surface-card': "var(--card-bg)",
+        'surface-body': "var(--body-bg)",
+        'surface-table-header': "var(-table-header-bg)",
+        'surface-hover': "var(--hover-bg)",
+        'surface-active': "var(--active-bg)",
+        'text-main': "var(--text-primary)",
+        'text-subtle': "var(--text-secondary)",
+        'text-link': "var(--text-link)",
+        'border-primary': "var(--border-default)",
+        'border-input': "var(--border-input)",
+        'border-input-hover': "var(--border-input-hover)",
+        'border-input-focus': "var(--border-input-focus)",
+        'action-danger': "var(--color-danger)",
+        'action-danger-hover-bg': "var(--color-danger-hover-bg)",
+        'badge-pending-bg': "var(--badge-warning-bg)",
+        'badge-pending-text': "var(--badge-warning-text)",
+        'badge-completed-bg': "var(--badge-success-bg)",
+        'badge-completed-text': "var(--badge-success-text)",
+        'badge-cancelled-bg': "var(--badge-danger-bg)",
+        'badge-cancelled-text': "var(--badge-danger-text)",
+        'badge-refunded-bg': "var(--badge-netural-bg)",
+        'badge-refunded-text': "var(--badge-netural-text)",
+        /* Preloader */
+        'preloader-outer': "var(--preloader-outer)",
+        'preloader-inner': "var(--preloader-inner)",
+      },
+      spacing: {
+        104: "26rem",
+        112: "28rem",
+        120: "30rem",
+        128: "32rem",
+      },
+      fontSize: {
+        xxs: "0.625rem",
+        tiny: "0.6875rem",
+      },
+       transitionDuration: {
+        300: "300ms",
+      },
+      
+    },
+    
+  },
+  plugins: [
+    require("tailwind-scrollbar")({ nocompatible: true }),
+  ],
+};

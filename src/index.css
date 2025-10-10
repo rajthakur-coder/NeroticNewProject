@@ -1,0 +1,324 @@
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /* height: 100vh !important; */
+
+}
+
+
+/* Force Dark Sidebar (independent of theme) */
+/* 
+.sidebar-dark {
+  @apply bg-gray-800 text-gray-300 !important;
+}
+
+.sidebar-dark .sidebar-item {
+  @apply text-gray-300 hover:bg-gray-800;
+}
+
+.sidebar-dark .sidebar-item-active {
+  background: rgba(var(--primary-rgb), 0.25) !important;
+  color: var(--primary) !important;
+}
+
+.sidebar-dark .sidebar-submenu {
+  @apply text-gray-300 bg-gray-900 shadow-xl rounded-xl;
+}
+
+.sidebar-dark .sidebar-submenu-header {
+  @apply text-gray-300;
+}
+
+.sidebar-dark .sidebar-submenu-item {
+  @apply text-gray-300 transition-all duration-200 bg-gray-900;
+}
+
+.sidebar-dark .sidebar-submenu-item:hover {
+  @apply bg-gray-800;
+}
+
+.sidebar-dark .sidebar-submenu-item-active,
+.sidebar-dark .sidebar-submenu-item-clicked {
+  @apply text-gray-300 bg-gray-800;
+}
+
+.sidebar-header-dark {
+  @apply text-gray-300 bg-gray-900;
+}
+
+.sidebar-header-dark span {
+  @apply text-gray-300;
+}
+
+.sidebar-header {
+  @apply text-gray-300 !important;
+} */
+
+
+
+.css-dam8fe-MuiPickersInputBase-root-MuiPickersOutlinedInput-root{
+  border-radius: 8px !important;
+  border: 0.1px solid transparent;
+  width: 170px !important;
+}
+
+.css-gy5nvb-MuiPickersInputBase-root-MuiPickersOutlinedInput-root  {
+  border-radius: 8px !important;
+  border: 0.1px solid transparent;
+  width: 170px !important;
+
+}
+
+
+.css-11rbwhu-MuiTypography-root-MuiDayCalendar-weekDayLabel { 
+  font-size: 14px !important;
+  height: 29px;
+  font-weight: 700 !important;
+}
+
+.css-1rl1vrc-MuiDayCalendar-header {
+  border-bottom: 2px solid #ccc;
+  margin: 0 14px;
+
+}
+
+.css-1y6aexk-MuiTypography-root-MuiDayCalendar-weekDayLabel {
+  font-size: 14px !important;
+  height: 29px;
+  font-weight: 700 !important;
+  
+}
+
+.css-13r221k-MuiFormLabel-root-MuiInputLabel-root {
+  line-height: 2 !important;
+}
+
+.css-gy5nvb-MuiPickersInputBase-root-MuiPickersOutlinedInput-root.Mui-focused {
+  border-color: white;
+}
+
+.css-1oyagq0-MuiFormLabel-root-MuiInputLabel-root.Mui-focused {
+  color: #D1D5D8 !important;
+  background-color: #1F2937 !important;
+  border: 8px !important;
+  margin-top: 1px;
+
+}
+ 
+
+
+
+
+
+
+
+
+
+@media (max-width: 640px) {
+  /* DatePicker input box full width */
+  .css-dam8fe-MuiPickersInputBase-root-MuiPickersOutlinedInput-root,
+  .css-gy5nvb-MuiPickersInputBase-root-MuiPickersOutlinedInput-root {
+    width: 100% !important;
+    font-size: 14px !important;
+  }
+
+  /* Calendar header spacing */
+  .css-1rl1vrc-MuiDayCalendar-header {
+    margin: 0 8px;
+  }
+
+  /* Weekday labels smaller */
+  .css-11rbwhu-MuiTypography-root-MuiDayCalendar-weekDayLabel,
+  .css-1y6aexk-MuiTypography-root-MuiDayCalendar-weekDayLabel {
+    font-size: 12px !important;
+    height: 26px;
+  }
+
+  /* Label spacing fix */
+  .css-13r221k-MuiFormLabel-root-MuiInputLabel-root {
+    line-height: 1.5 !important;
+  }
+
+  /* Calendar popup padding */
+  .MuiPickersPopper-root {
+    padding: 0 6px !important;
+  }
+}
+
+
+
+
+
+
+@keyframes neon-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.rotating-neon-wrapper {
+  position: relative;
+  padding: 2.4px;
+  border-radius: 1rem;
+  overflow: hidden;
+  transform-style: preserve-3d;
+}
+
+@media (max-width: 640px) {
+  .rotating-neon-wrapper {
+    border-radius: 0;
+  }
+}
+
+.rotating-neon-wrapper::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  border-radius: 50%;
+  background: conic-gradient(
+    #FF69B4 0deg 10deg,
+    #DA70D6 10deg 20deg,
+    #1E90FF 8deg 20deg,
+    transparent 30deg 360deg
+  );
+  animation: neon-spin 12s linear infinite;
+  filter: blur(6px);
+  z-index: 0;
+}
+
+.rotating-neon-card {
+  position: relative;
+  z-index: 1;
+  border-radius: inherit;
+  padding: 1rem;
+  background: #ffff; 
+}
+
+
+ 
+
+.custom-c-curve {
+  border-top-left-radius: none !important;
+  border-bottom-left-radius: 9999px !important;
+}
+
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px #FFFFFF inset !important;
+  -webkit-text-fill-color: #111827 !important; 
+  caret-color: #111827 !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+input:-moz-autofill {
+  box-shadow: 0 0 0px 1000px #FFFFFF inset !important;
+  -moz-text-fill-color: #111827 !important;
+}
+
+
+
+
+
+/*
+  Add this custom CSS to your project's stylesheet (e.g., index.css)
+*/
+
+/* .perspective-lg {
+  perspective: 1000px; 
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+} */
+
+
+
+
+
+
+
+
+
+
+
+.flip-container {
+  perspective: 1000px; /* 3D depth */
+  transform-style: preserve-3d;
+}
+
+/* Animate.css-like classes with full 180 flip */
+.animate__flipInYRight {
+  animation: flipInYRight var(--animate-duration, 0.3s) ease both;
+}
+.animate__flipOutYRight {
+  animation: flipOutYRight var(--animate-duration, 0.3s) ease both;
+}
+.animate__flipInYLeft {
+  animation: flipInYLeft var(--animate-duration, 0.3s) ease both;
+}
+.animate__flipOutYLeft {
+  animation: flipOutYLeft var(--animate-duration, 0.3s) ease both;
+}
+
+/* Keyframes for full 180° flip */
+
+/* SignUp: flip in from right */
+@keyframes flipInYRight {
+  0% {
+    transform: perspective(1000px) rotateY(180deg);
+    opacity: 0;
+  }
+  100% {
+    transform: perspective(1000px) rotateY(0deg);
+    opacity: 1;
+  }
+}
+
+/* SignUp: flip out to right */
+@keyframes flipOutYRight {
+  0% {
+    transform: perspective(1000px) rotateY(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: perspective(1000px) rotateY(-180deg);
+    opacity: 0;
+  }
+}
+
+/* SignIn: flip in from left */
+@keyframes flipInYLeft {
+  0% {
+    transform: perspective(1000px) rotateY(-180deg);
+    opacity: 0;
+  }
+  100% {
+    transform: perspective(1000px) rotateY(0deg);
+    opacity: 1;
+  }
+}
+
+/* SignIn: flip out to left */
+@keyframes flipOutYLeft {
+  0% {
+    transform: perspective(1000px) rotateY(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: perspective(1000px) rotateY(180deg);
+    opacity: 0;
+  }
+}
+
+
