@@ -176,10 +176,12 @@ export default function CustomInput({
                   edge="end"
                 >
                   {showPassword ? (
-                    <img src={eyes} alt="Eye Icon" width={28} className="mt-2" />
+                    <Icon name="ri-eye-fill" className="text-gray-500" />
+
                   ) : (
                     // <Icon name="ri-eye-fill" className="text-gray-500" />
-                    <img src={eye} alt="Eye Icon" width={28} className="mt-2" />
+                                        <Icon name="ri-eye-off-line" className="text-gray-500" />
+
                   )}
                 </IconButton>
               </InputAdornment>

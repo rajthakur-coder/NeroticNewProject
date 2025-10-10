@@ -220,6 +220,23 @@ input:-moz-autofill {
 
 
 
+/* 🔒 Remove default eye icon in Chrome/Edge/Opera for password fields */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear,
+input[type="password"]::-webkit-credentials-auto-fill-button,
+input[type="password"]::-webkit-textfield-decoration-container,
+input[type="password"]::-webkit-textfield-decoration-button,
+input[type="password"]::-webkit-password-toggle {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  appearance: none !important;
+}
+
+/* For Safari (optional but useful) */
+input[type="password"]::-webkit-textfield-decoration-container {
+  display: none !important;
+}
 
 
 /*

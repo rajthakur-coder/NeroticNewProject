@@ -1,6 +1,6 @@
 import type { IconType } from "react-icons";
 import { RiHomeLine, RiShoppingBagLine, RiUserLine, RiBriefcase2Fill, RiPencilFill, RiPrinterFill, RiCheckFill, RiSubtractLine, RiSubtractFill, RiEyeCloseFill, RiEyeCloseLine, RiEyeOffLine, RiEyeFill, RiSearchLine, RiLock2Line, RiMailLine, RiArrowLeftLine, RiCornerRightUpFill } from "react-icons/ri";
-import { BiUser, BiChevronRight, BiChevronLeft, BiChevronDown, BiBell, BiBriefcaseAlt2 ,BiPoll, BiTrash, BiDotsVerticalRounded, BiChevronUp, BiExport, BiImport, BiArrowBack } from "react-icons/bi";
+import { BiUser, BiChevronRight, BiChevronLeft, BiChevronDown, BiBell, BiBriefcaseAlt2 ,BiPoll, BiTrash, BiDotsVerticalRounded, BiChevronUp, BiExport, BiImport, BiArrowBack, BiMobile } from "react-icons/bi";
 import { FiCamera, FiX } from "react-icons/fi";
 import { SiBitcoin } from "react-icons/si";
 
@@ -58,7 +58,7 @@ export const iconMap: Record<string, IconEntry> = {
   "bx bx-export": BiExport,
   "bx bx-import": BiImport,
   "bx bx-arrow-back": BiArrowBack,
- 
+  "bx bx-mobile": BiMobile,
 
   // Feather
   "fi:camera": FiCamera,
