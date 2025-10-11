@@ -31,30 +31,30 @@ const TAB_COLORS: Record<string, TabColor> = {
     countActiveBg: "bg-[#1C252E] text-white",
     countActiveDarkBg: "dark:bg:white dark:text-[#1C252E]",
   },
-  Pending: {
-    countBg: "bg-[#FFAB0029] text-[#B76E00]",
-    countDarkBg: "dark:bg-[#403A27] dark:text-[#FFD600]",
-    countActiveBg: "bg-[#FFAB00] text-white",
-    countActiveDarkBg: "dark:bg-[#FFAB00] dark:text-black",
-  },
-  Completed: {
+  // Pending: {
+  //   countBg: "bg-[#FFAB0029] text-[#B76E00]",
+  //   countDarkBg: "dark:bg-[#403A27] dark:text-[#FFD600]",
+  //   countActiveBg: "bg-[#FFAB00] text-white",
+  //   countActiveDarkBg: "dark:bg-[#FFAB00] dark:text-black",
+  // },
+  Active: {
     countBg: "bg-[#22C55E29] text-[#118057]",
     countDarkBg: "dark:bg-[#164E2B] dark:text-[#77ED8B]",
     countActiveBg: "bg-[#22C55E] text-white",
     countActiveDarkBg: "dark:bg-[#22C55E] dark:text:white",
   },
-  Cancelled: {
+  Inactive: {
     countBg: "bg-[#FF563029] text-[#B71D18]",
     countDarkBg: "dark:bg-[#40241F] dark:text-[#FFAC82]",
     countActiveBg: "bg-[#FF5630] text:white",
     countActiveDarkBg: "dark:bg-[#FF5630] dark:text:white",
   },
-  Refunded: {
-    countBg: "bg-[#919EAB29] text-[#637381]",
-    countDarkBg: "dark:bg-[#374151] dark:text-[#919EAB]",
-    countActiveBg: "bg-[#1C252E] text-[#ffff]",
-    countActiveDarkBg: "dark:bg-[#ffff] dark:text-[#1C252E]",
-  },
+  // Refunded: {
+  //   countBg: "bg-[#919EAB29] text-[#637381]",
+  //   countDarkBg: "dark:bg-[#374151] dark:text-[#919EAB]",
+  //   countActiveBg: "bg-[#1C252E] text-[#ffff]",
+  //   countActiveDarkBg: "dark:bg-[#ffff] dark:text-[#1C252E]",
+  // },
 };
 
 const Tabs: React.FC<TabsProps> = ({ tabs, selectedTab, onTabChange }) => {

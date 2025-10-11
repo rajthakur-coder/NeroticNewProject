@@ -10,6 +10,7 @@ type ButtonShape = "square" | "rounded" | "circle";
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   text?: string;
   icon?: React.ElementType;
+  iconPosition?: "left" | "right"; // ✅ new
   color?: ButtonColor;
   size?: ButtonSize;
   shape?: ButtonShape;
@@ -26,6 +27,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 export const Button: React.FC<ButtonProps> = ({
   text = "Button",
   icon: Icon,
+  iconPosition = "left",
   color = "primary",
   size = "md",
   shape = "rounded",
@@ -53,7 +55,7 @@ export const Button: React.FC<ButtonProps> = ({
     circle: "rounded-full",
   };
 
-  // === Variants using theme colors ===
+  // === Variants ===
   const baseColors: Record<ButtonColor, Record<ButtonVariant, string>> = {
     primary: {
       solid: "bg-primary text-white hover:bg-primary/90",
@@ -62,7 +64,8 @@ export const Button: React.FC<ButtonProps> = ({
     },
     secondary: {
       solid: "bg-secondary text-white hover:bg-secondary/90",
-      outline: "border border-border-input text-secondary hover:bg-secondary/10",
+      outline:
+        "border border-border-input text-secondary hover:bg-secondary/10",
       ghost: "text-secondary hover:bg-secondary/10",
     },
     success: {
@@ -77,7 +80,8 @@ export const Button: React.FC<ButtonProps> = ({
     },
     surface: {
       solid: "bg-surface-card text-text-main hover:bg-surface-hover",
-      outline: "border border-border-input text-text-main hover:bg-surface-hover",
+      outline:
+        "border border-border-input text-text-main hover:bg-surface-hover",
       ghost: "text-text-main hover:bg-surface-hover",
     },
   };
@@ -94,18 +98,28 @@ export const Button: React.FC<ButtonProps> = ({
         className
       )}
       style={{
-        width: width || "150px", // ✅ default width 150px
-        height: height || "auto", // ✅ default auto, but can override
+        width: width || "150px",
+        height: height || "auto",
         transitionDuration: `${animationSpeed}ms`,
       }}
       {...props}
     >
+      {/* Icon Left */}
+      {!loading && Icon && iconPosition === "left" && (
+        <Icon className="w-4 h-4" />
+      )}
+
+      {/* Text */}
       {loading ? (
         <Loader2 className="w-4 h-4 animate-spin" />
       ) : (
-        Icon && <Icon className="w-4 h-4" />
+        text && <span>{text}</span>
       )}
-      {text && <span>{text}</span>}
+
+      {/* Icon Right */}
+      {!loading && Icon && iconPosition === "right" && (
+        <Icon className="w-4 h-4" />
+      )}
     </button>
   );
 };

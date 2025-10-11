@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import Preloader from "../components/Common/Preloader";
+import ProductCategory from "../pages/Admin/Product Managements/ProductCategory";
+import Product from "../pages/Admin/Product Managements/Product";
 
 // Pages
 import EcommercePage from "../pages/Ecommerce";
@@ -22,6 +24,8 @@ const AppRoutes = () => {
       <Route path="/ecommerce" element={<EcommercePage />} />
       <Route path="/analytics" element={<Analytics />} />
       <Route path="/banking" element={<Banking />} />
+      <Route path="/product-category" element={<ProductCategory />} />
+      <Route path="/product" element={<Product />} />
 
       {/* Catch-all: redirect unknown routes to /ecommerce */}
       <Route path="*" element={<Navigate to="/ecommerce" replace />} />

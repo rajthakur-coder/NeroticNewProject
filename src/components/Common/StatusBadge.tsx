@@ -1,29 +1,83 @@
-import React from 'react';
-import clsx from 'clsx';
+// import React from 'react';
+// import clsx from 'clsx';
+
+// interface StatusBadgeProps {
+//   status: Order["status"];
+//   onClick: () => void;
+//   loading: any
+// }
+
+// // Map status to CSS variable based Tailwind classes
+// const STATUS_CLASSES: Record<Order['status'], string> = {
+//   // Pending: 'bg-badge-pending-bg text-badge-pending-text',
+//   Active: 'bg-badge-completed-bg text-badge-completed-text',
+//   Inactive: 'bg-badge-cancelled-bg text-badge-cancelled-text',
+//   // Refunded: 'bg-badge-refunded-bg text-badge-refunded-text',
+// };
+
+// const StatusBadge: React.FC<StatusBadgeProps> = ({
+//   status,
+//   onClick,
+//   loading,
+// }) => {
+//   const classes =
+//     STATUS_CLASSES[status] || "bg-badge-refunded-bg text-badge-refunded-text";
+
+//   return (
+//     <span
+//       className={clsx("px-2 py-1.5 rounded-md text-xxs font-semibold", classes)}
+//     >
+//       {status}
+//     </span>
+//   );
+// };
+// export default StatusBadge;
+
+
+
+
+import React from "react";
+import clsx from "clsx";
+import { Spinner } from "reactstrap";
 
 interface StatusBadgeProps {
-  status: Order['status'];
+  status:"All" |"Active" | "Inactive"; // you can extend this based on your Order["status"]
+  onClick?: () => void;
+  loading?: boolean;
 }
 
-// Map status to CSS variable based Tailwind classes
-const STATUS_CLASSES: Record<Order['status'], string> = {
-  Pending: 'bg-badge-pending-bg text-badge-pending-text',
-  Completed: 'bg-badge-completed-bg text-badge-completed-text',
-  Cancelled: 'bg-badge-cancelled-bg text-badge-cancelled-text',
-  Refunded: 'bg-badge-refunded-bg text-badge-refunded-text',
+// Tailwind-style custom badge classes
+const STATUS_CLASSES: Record<StatusBadgeProps["status"], string> = {
+  Active: "bg-badge-completed-bg text-badge-completed-text",
+  Inactive: "bg-badge-cancelled-bg text-badge-cancelled-text",
 };
 
-const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
-  const classes = STATUS_CLASSES[status] || 'bg-badge-refunded-bg text-badge-refunded-text';
+const StatusBadge: React.FC<StatusBadgeProps> = ({
+  status,
+  onClick,
+  loading,
+}) => {
+  const classes =
+    STATUS_CLASSES[status] || "bg-badge-refunded-bg text-badge-refunded-text";
 
   return (
     <span
       className={clsx(
-        "px-2 py-1.5 rounded-md text-xxs font-semibold",
-        classes
+        "px-2 py-1.5 rounded-md text-xxs font-semibold cursor-pointer inline-flex items-center gap-1 transition",
+        classes,
+        {
+          "opacity-70": loading,
+          "hover:opacity-90": !loading,
+        }
       )}
+      onClick={loading ? undefined : onClick}
     >
-      {status}
+      {loading ? (
+        <Spinner size="xxs" style={{ width: "0.8rem", height: "0.8rem" }} />
+      ) : (
+        status
+      )}
+      {/* {status} */}
     </span>
   );
 };
