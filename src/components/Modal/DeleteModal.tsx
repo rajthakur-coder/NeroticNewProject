@@ -1,69 +1,46 @@
-
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import ContentModal from "../ContentModal/DeleteContentModal"; 
-// import Icon from 'path/to/Icon'; // If ContentModal needs it
+import BaseModal from "../BaseModals/BaseModal";
+import ContentModal from "../ContentModal/DeleteContentModal";
 
-interface ModalProps {
+interface DeleteModalProps {
   isOpen: boolean;
   toggle: () => void;
   id?: string | number;
-  headerBgColor?: string;
-  confirmClassName?: string;
-  cancelClassName?: string;
-  itemsToDelete: number;
+  confirmColor?: string;
+  cancelColor?: string;
+  itemsToDelete?: number;
   message?: string;
 }
 
-// --- Framer Motion Variants for Center Pop-up ---
-
-// 1. Modal Content Variants (Center pop-up with slight scale and spring)
+// Animation Variants
 const modalVariants = {
-  hidden: {
-    scale: 0.9,     // Start slightly smaller
-    opacity: 0,
-    y: -50,         // Start slightly above center for the "drop" effect
-  },
+  hidden: { scale: 0.9, opacity: 0, y: -50 },
   visible: {
-    scale: 1,       // Pop to full size
+    scale: 1,
     opacity: 1,
-    y: 0,           // Final position at center
-    transition: {
-      type: "spring",
-      damping: 25,  // Controls the bounce
-      stiffness: 250, // Controls the speed
-      duration: 0.2,
-    },
+    y: 0,
+    transition: { type: "spring", damping: 25, stiffness: 250 },
   },
-  exit: {
-    scale: 0.8,     // Shrink slightly on close
-    opacity: 0,
-    y: 50,          // Drop down slightly on exit
-    transition: {
-      duration: 0.15, // Quick exit
-    },
-  },
+  exit: { scale: 0.8, opacity: 0, y: 50, transition: { duration: 0.15 } },
 };
 
-// 2. Backdrop Variants (Simple fade-in/out)
 const backdropVariants = {
   hidden: { opacity: 0 },
   visible: { opacity: 1 },
   exit: { opacity: 0 },
 };
 
-const DeleteModal: React.FC<ModalProps> = ({
+const DeleteModal: React.FC<DeleteModalProps> = ({
   isOpen,
   toggle,
   id,
-  confirmClassName,
-  cancelClassName,
+  confirmColor,
+  cancelColor,
   itemsToDelete,
   message,
 }) => {
   const handleConfirm = () => {
-    console.log("Confirmed id:", id);
-    // Add your actual deletion logic here
     toggle();
   };
 
@@ -74,15 +51,13 @@ const DeleteModal: React.FC<ModalProps> = ({
   const finalMessage =
     message ??
     (itemsToDelete && itemsToDelete > 0
-      ? `Are you sure you want to permanently delete ${itemsToDelete} item${itemsToDelete > 1 ? "s" : ""}? `
-      : "Are you sure you want to permanently delete this item?");
+      ? `Are you sure you want to permanently delete ${itemsToDelete} item${itemsToDelete > 1 ? "s" : ""}?`
+      : "Are you sure you want to delete?");
 
   return (
     <AnimatePresence>
       {isOpen && (
-        // 1. Backdrop (Change: Now centers children with 'items-center justify-center')
         <motion.div
-          // Use 'items-center' and 'justify-center' to center the modal content
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
           onClick={toggle}
           variants={backdropVariants}
@@ -90,28 +65,34 @@ const DeleteModal: React.FC<ModalProps> = ({
           animate="visible"
           exit="exit"
         >
-          {/* 2. Modal Content Container (Change: Removed bottom styling, using rounded-xl) */}
           <motion.div
             onClick={(e) => e.stopPropagation()}
-            // Use 'rounded-xl' for standard central modal look, removed 'max-w-lg' for better sizing control
-            className="w-full max-w-md p-6 mx-4 shadow-2xl bg-surface-body rounded-xl" // 'mx-4' for mobile padding
+            className="w-[450px] "
             variants={modalVariants}
             initial="hidden"
             animate="visible"
             exit="exit"
           >
-            <ContentModal
-              title="Delete "
-              message={finalMessage}
+            <BaseModal
+              isOpen={isOpen}
+              toggle={toggle}
+              showCloseIcon={false}
               onConfirm={handleConfirm}
               onCancel={handleCancel}
-              confirmClassName={confirmClassName}
-              cancelClassName={cancelClassName}
-            />
+              confirmText="Delete"
+              cancelText="Cancel"
+              confirmColor={confirmColor}
+              cancelColor={cancelColor}
+              widthClass="w-[450px]"
+
+            >
+              <ContentModal title="Delete" message={finalMessage} />
+            </BaseModal>
           </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
+
   );
 };
 

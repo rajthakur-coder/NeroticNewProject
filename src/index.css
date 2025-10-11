@@ -158,11 +158,12 @@ body {
 
 .rotating-neon-wrapper {
   position: relative;
-  padding: 2.4px;
   border-radius: 1rem;
   overflow: hidden;
   transform-style: preserve-3d;
+  padding: 1px;
 }
+
 
 @media (max-width: 640px) {
   .rotating-neon-wrapper {
@@ -173,10 +174,10 @@ body {
 .rotating-neon-wrapper::before {
   content: '';
   position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
+   top: -25%; /* pehle -50% tha */
+  left: -25%;
+  width: 150%;
+  height: 150%;
   border-radius: 50%;
   background: conic-gradient(
     #FF69B4 0deg 10deg,
@@ -191,11 +192,12 @@ body {
 
 .rotating-neon-card {
   position: relative;
-  z-index: 1;
+  z-index: 10;
   border-radius: inherit;
-  padding: 1rem;
-  background: #ffff; 
+  padding:2rem;
+  background: #fff;
 }
+
 
 
  
@@ -237,6 +239,34 @@ input[type="password"]::-webkit-password-toggle {
 input[type="password"]::-webkit-textfield-decoration-container {
   display: none !important;
 }
+
+/* styles.css */
+.faster-slideInRight {
+  --animate-duration: 0.5s;
+  animation-timing-function: ease-out; /* smooth */
+}
+
+.faster-slideInLeft {
+  --animate-duration: 0.2s;
+  animation-timing-function: ease-in; /* smooth */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /*

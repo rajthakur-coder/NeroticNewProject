@@ -1,66 +1,97 @@
 
-
 import React, { ReactNode } from "react";
 import clsx from "clsx";
+import { X } from "lucide-react";
 
 interface BaseModalProps {
   isOpen: boolean;
   toggle: () => void;
-  header?: ReactNode;
-  footer?: ReactNode;
   children: ReactNode;
-  widthClass?: string; // ex: w-96, w-full, md:w-1/2
-  headerBgColor?: string;
+
+  // Buttons
+  onConfirm?: () => void;
+  onCancel?: () => void;
+  confirmText?: string;
+  cancelText?: string;
+
+  // Button color customization
+  confirmColor?: string; 
+  cancelColor?: string;  
+
+  widthClass?: string;
+
+  // Optional close (X) icon
+  showCloseIcon?: boolean;
 }
 
 const BaseModal: React.FC<BaseModalProps> = ({
   isOpen,
   toggle,
-  header,
-  footer,
   children,
-  widthClass = "w-112",
-  // Default prop uses semantic surface-card (main modal background)
-  headerBgColor = "bg-surface-card", 
+  onConfirm,
+  onCancel,
+  confirmText = "Confirm",
+  cancelText = "Cancel",
+  confirmColor = "bg-black hover:bg-gray-900 text-white",
+  cancelColor = "bg-gray-200 hover:bg-gray-300 text-black",
+  widthClass = "w-96",
+  showCloseIcon = true,
 }) => {
   if (!isOpen) return null;
 
   return (
     <div
-      // Backdrop: Kept as bg-black/50 dark:bg-black/70 which is standard for universal backdrops.
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 dark:bg-black/70"
+      className="fixed inset-0 z-50 flex items-center justify-center "
       onClick={toggle}
     >
       <div
         className={clsx(
-          // 1. FIXED: Modal Body BG and Text Color
-          // Ensures the modal's main background and text are semantic.
           "rounded-2xl shadow-xl bg-surface-card text-text-main overflow-hidden transition-all duration-200",
           widthClass
         )}
-        onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
+        onClick={(e) => e.stopPropagation()}
       >
-        {header && (
-          <div
-            className={clsx(
-              // 2. FIXED: Header Border Color
-              "p-4 font-semibold text-lg border-b border-border-primary",
-              headerBgColor // Uses the default semantic headerBgColor prop or an override
-            )}
-          >
-            {header}
+        {/* Header with optional cross icon */}
+        {showCloseIcon && (
+          <div className="flex justify-end p-3 border-b border-border-primary">
+            <button
+              onClick={toggle}
+              className="p-1 transition rounded-full hover:bg-surface-hover"
+            >
+              <X className="w-5 h-5 text-text-subtle hover:text-text-main" />
+            </button>
           </div>
         )}
 
         {/* Body */}
         <div className="p-4">{children}</div>
 
-        {/* Footer */}
-        {footer && (
-          <div 
-         className="p-4 border-t border-border-primary"
-          >
-            {footer}
+        {/* Footer Buttons */}
+        {(onCancel || onConfirm) && (
+          <div className="flex justify-end gap-3 p-4 border-border-primary">
+            {onCancel && (
+              <button
+                onClick={onCancel}
+                className={clsx(
+                  "px-3.5 py-2.5 text-xs font-semibold rounded-lg transition-colors duration-200",
+                  cancelColor
+                )}
+              >
+                {cancelText}
+              </button>
+            )}
+
+            {onConfirm && (
+              <button
+                onClick={onConfirm}
+                className={clsx(
+                  "px-3.5 py-2.5 text-xs font-semibold rounded-lg transition-colors duration-200",
+                  confirmColor
+                )}
+              >
+                {confirmText}
+              </button>
+            )}
           </div>
         )}
       </div>
