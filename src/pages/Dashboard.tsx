@@ -4,7 +4,7 @@ import { ChartBarIcon, ArrowUpIcon, ArrowDownIcon } from "@heroicons/react/24/ou
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import Toggle from "../components/Common/ToggleButton";
 import { Button } from "../components/Common/Button";
-import { Plus, Trash2 } from "lucide-react";
+import { ArrowRight, Plus, Star, Trash2 } from "lucide-react";
 
 const statsData = [
   { title: "Total active users", value: "18,765", change: "+2.6%", iconColor: "text-green-500", trendIcon: <ArrowUpIcon className="inline-block w-5 h-5" /> },
@@ -71,14 +71,16 @@ const App: React.FC = () => {
         ))}
       </div>
 
+
 <div className="flex flex-col gap-4 p-6">
-      {/* Default */}
-<Button text="Default" />
-<Button text="Wide" width="200px" />
-<Button text="Tall" height="60px" />
-<Button text="Big" width="200px" height="60px" />
-<Button text="Small" size="sm" width="100px" />
-    </div>
+  <Button text="Default" />
+  <Button text="With Icon Left" icon={Star} />
+  {/* <Button text="With Icon Right" icon={ArrowRight} iconPosition="right" />
+  <Button text="Wide" width="200px" />
+  <Button text="Tall" height="60px" />
+  <Button text="Big" width="200px" height="60px" />
+  <Button text="Small" size="sm" width="100px" /> */}
+</div>
 
       {/* Donut Chart */}
       <div className="grid gap-6 md:grid-cols-2">

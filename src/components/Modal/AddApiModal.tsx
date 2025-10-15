@@ -1,44 +1,44 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import BaseModal from "../BaseModals/BaseModal";
-import AddCategoryForm from "../ContentModal/CategoryForm";
+import AddApiModalForm from "../ContentModal/AddApiForm";
 
-interface AddCategoryModalProps {
-  isOpen: boolean;
-  toggle: () => void;
-  confirmColor?: string;
-  cancelColor?: string;
-  categoryData?: { name: string; status: string } | null;
+interface ApiData {
+  id?: string;
+  api_name: string;
 }
 
-const AddCategoryModal: React.FC<AddCategoryModalProps> = ({
+interface AddApiModalProps {
+  isOpen: boolean;
+  toggle: () => void;
+  apiData?: ApiData | null; // Optional for edit mode
+}
+
+const AddApiModal: React.FC<AddApiModalProps> = ({
   isOpen,
   toggle,
-  categoryData,
+  apiData,
 }) => {
-  const [formData, setFormData] = useState({ name: "", status: "Active" });
-  const [touched, setTouched] = useState({ name: false, status: false });
 
-  const isEditMode = Boolean(categoryData);
+  const [formData, setFormData] = useState<ApiData>({ api_name: "" });
+  const [touched, setTouched] = useState({ api_name: false });
 
-  // ✅ Prefill data if editing, or reset if adding new
+
+
+  // ✅ Pre-fill for edit mode, reset on close
   useEffect(() => {
-    if (isOpen) {
-      if (categoryData) {
-        setFormData({
-          name: categoryData.name || "",
-          status: categoryData.status || "Active",
-        });
-      } else {
-        setFormData({ name: "", status: "Active" });
-        setTouched({ name: false, status: false });
-      }
+    if (apiData && isOpen) {
+      setFormData(apiData);
+    } else if (!isOpen) {
+      setFormData({ api_name: "" });
+      setTouched({ api_name: false });
     }
-  }, [categoryData, isOpen]);
+  }, [apiData, isOpen]);
 
+  // validation
   const errors = useMemo(
     () => ({
-      name: formData.name ? "" : "Name is required",
+      api_name: formData.api_name?.trim() ? "" : "API Name is required",
     }),
     [formData]
   );
@@ -52,27 +52,18 @@ const AddCategoryModal: React.FC<AddCategoryModalProps> = ({
     setTouched((prev) => ({ ...prev, [field]: true }));
   };
 
-  const handleConfirm = () => {
+  const handleSubmit = async () => {
     if (!isValid) return;
 
-    if (isEditMode) {
-      console.log("✅ Updated Category:", formData);
-    } else {
-      console.log("✅ Added New Category:", formData);
-    }
-    // ✅ reset form after submission
-    setFormData({ name: "", status: "Active" });
-    setTouched({ name: false, status: false });
+
+
     toggle();
+    setFormData({ api_name: "" });
+    setTouched({ api_name: false });
+
   };
 
-  const handleCancel = () => {
-    setFormData({ name: "", status: "Active" });
-    setTouched({ name: false, status: false });
-    toggle();
-  };
-
-  // --- Framer Motion Variants ---
+  // --- Framer Motion ---
   const modalVariants = {
     hidden: { scale: 0.9, opacity: 0, y: -50 },
     visible: {
@@ -99,7 +90,7 @@ const AddCategoryModal: React.FC<AddCategoryModalProps> = ({
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
           onClick={toggle}
           variants={backdropVariants}
           initial="hidden"
@@ -107,8 +98,8 @@ const AddCategoryModal: React.FC<AddCategoryModalProps> = ({
           exit="exit"
         >
           <motion.div
+            className="w-[500px]"
             onClick={(e) => e.stopPropagation()}
-            className="w-[450px] "
             variants={modalVariants}
             initial="hidden"
             animate="visible"
@@ -117,22 +108,20 @@ const AddCategoryModal: React.FC<AddCategoryModalProps> = ({
             <BaseModal
               isOpen={isOpen}
               toggle={toggle}
-              headerText={
-                isEditMode ? "Update Product Category" : "Add Product Category"
+              headerText={apiData ? "Edit API" : "Add API"}
+              onConfirm={handleSubmit}
+              onCancel={toggle}
+              confirmText={
+                apiData ? "Update" : "Submit"
               }
-              onConfirm={handleConfirm}
-              onCancel={handleCancel}
-              confirmText={isEditMode ? "Update" : "Submit"}
-              cancelText="Cancel"
               confirmColor={
                 isValid
                   ? "bg-black hover:bg-gray-900 text-white"
                   : "bg-gray-400 text-white cursor-not-allowed"
               }
-              widthClass="w-[450px]"
+              widthClass="w-[500px]"
             >
-              {/* Form */}
-              <AddCategoryForm
+              <AddApiModalForm
                 values={formData}
                 errors={errors}
                 onChange={setFormData}
@@ -147,4 +136,4 @@ const AddCategoryModal: React.FC<AddCategoryModalProps> = ({
   );
 };
 
-export default AddCategoryModal;
+export default AddApiModal;

@@ -1,39 +1,38 @@
 // src/components/Common/OtpScreen.tsx
 
 import React, { useState, useEffect, useRef, FormEvent } from "react";
-// Adjust these imports based on your project structure
-import { ToasterUtils } from "../ui/toast"; 
-import Icon from "../ui/Icon"; 
-
-// --- INTERFACE ---
+import { ToasterUtils } from "../ui/toast";
+import Icon from "../ui/Icon";
 
 export interface OtpScreenProps {
-  /** Function to call when OTP is verified. Passes the full 6-digit OTP string. */
   onOtpConfirm: (otp: string) => void;
-  /** Function to call when the user clicks the back/cancel button. */
   onCancel: () => void;
-  /** The masked contact information (e.g., "xxxxxx8110" or "user@email.com"). */
   phoneNumber: string;
-  /** Determines the text shown in the header/description. */
-  flowType: 'signin' | 'forgot';
+  flowType: "signin" | "forgot";
 }
-
-// --- OTP SCREEN COMPONENT ---
 
 const OtpScreen: React.FC<OtpScreenProps> = ({
   onOtpConfirm,
   onCancel,
   phoneNumber,
-  flowType
+  flowType,
 }) => {
   const [otp, setOtp] = useState<string[]>(new Array(6).fill(""));
   const [loading, setLoading] = useState(false);
   const [resendTimer, setResendTimer] = useState(30);
+  const [exiting, setExiting] = useState(false);
+  const [entering, setEntering] = useState(true);
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
 
   const isOtpValid = otp.every((digit) => digit.length === 1);
 
-  // Resend timer logic
+  // Entrance animation on mount
+  useEffect(() => {
+    const t = setTimeout(() => setEntering(false), 10);
+    return () => clearTimeout(t);
+  }, []);
+
+  // Resend timer countdown
   useEffect(() => {
     if (resendTimer > 0) {
       const timerId = setInterval(() => {
@@ -43,50 +42,41 @@ const OtpScreen: React.FC<OtpScreenProps> = ({
     }
   }, [resendTimer]);
 
-  const handleChange = (
-    element: HTMLInputElement,
-    index: number,
-    value: string
-  ) => {
+  // Input change handler
+  const handleChange = (element: HTMLInputElement, index: number, value: string) => {
     if (/^\d?$/.test(value)) {
       const newOtp = [...otp];
-      
-      // Update the digit
       newOtp[index] = value;
       setOtp(newOtp);
-
-      // Auto-focus to the next input
       if (value !== "" && index < otp.length - 1) {
         inputRefs.current[index + 1]?.focus();
       }
     }
   };
 
+  // Keyboard navigation and backspace
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
     if (e.key === "Backspace") {
       e.preventDefault();
-
       const newOtp = [...otp];
-      
       if (newOtp[index] !== "") {
-        // Clear the current box and stay
         newOtp[index] = "";
         setOtp(newOtp);
       } else if (index > 0) {
-        // Current box is empty, move back and clear previous
         newOtp[index - 1] = "";
         setOtp(newOtp);
         inputRefs.current[index - 1]?.focus();
       }
     }
 
-    if (e.key === 'ArrowRight' && index < otp.length - 1) {
+    if (e.key === "ArrowRight" && index < otp.length - 1) {
       inputRefs.current[index + 1]?.focus();
-    } else if (e.key === 'ArrowLeft' && index > 0) {
+    } else if (e.key === "ArrowLeft" && index > 0) {
       inputRefs.current[index - 1]?.focus();
     }
   };
 
+  // Confirm OTP handler
   const handleConfirm = (e: FormEvent) => {
     e.preventDefault();
     if (!isOtpValid) return;
@@ -94,11 +84,8 @@ const OtpScreen: React.FC<OtpScreenProps> = ({
     setLoading(true);
     const fullOtp = otp.join("");
 
-    const toastId = ToasterUtils.loading("Verifying OTP...");
     setTimeout(() => {
       setLoading(false);
-      ToasterUtils.dismiss(toastId);
-      // --- Mock Verification Logic (Replace with actual API call) ---
       if (fullOtp === "123456" || fullOtp === "000000") {
         onOtpConfirm(fullOtp);
       } else {
@@ -106,47 +93,62 @@ const OtpScreen: React.FC<OtpScreenProps> = ({
         setOtp(new Array(6).fill(""));
         inputRefs.current[0]?.focus();
       }
-      // -----------------------------------------------------------
     }, 1500);
   };
 
+  // Resend OTP handler
   const handleResendOtp = () => {
     if (resendTimer === 0) {
       ToasterUtils.info("New OTP sent!");
       setResendTimer(30);
       setOtp(new Array(6).fill(""));
       inputRefs.current[0]?.focus();
-      // Add actual resend OTP API call here
     }
   };
 
-  // Format the time as 0:XX
+  // Format resend timer
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
-    return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+    return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
+  };
+
+  // Smooth exit animation
+  const handleCancelClick = () => {
+    setExiting(true);
+    setTimeout(() => {
+      onCancel();
+    }, 400);
   };
 
   return (
-    <div className="flex flex-col p-6 lg:p-0">
+  <div
+  className={`flex flex-col  p-6 lg:p-0 animate__animated ${
+    exiting ? 'animate__slideInLeft faster-slideInLeft' : 'animate__slideInRight faster-slideInRight'
+  }`}
+>
+
+      {/* Header */}
       <div className="flex items-center pb-6">
         <button
-          onClick={onCancel}
+          onClick={handleCancelClick}
           className="p-1 mr-4 text-gray-500 transition duration-150 hover:text-gray-700"
-          aria-label={flowType === 'signin' ? "Back to Sign In" : "Back to Forgot Password"}
+          aria-label={flowType === "signin" ? "Back to Sign In" : "Back to Forgot Password"}
         >
           <Icon name="bx bx-arrow-back" size={24} />
         </button>
         <h2 className="text-2xl font-semibold text-gray-700">Enter OTP</h2>
       </div>
 
-      <p className="mb-6 text-md gray-700 text-">
-        Enter the 6-digit OTP sent to {flowType === 'signin' ? "your phone number" : "the specified contact"}{" "}
+      {/* Info Text */}
+      <p className="mb-6 text-gray-700 text-md">
+        Enter the 6-digit OTP sent to{" "}
+        {flowType === "signin" ? "your phone number" : "the specified contact"}{" "}
         <span className="font-semibold text-gray-900">{phoneNumber}</span>
       </p>
 
+      {/* OTP Input Form */}
       <form onSubmit={handleConfirm} className="space-y-10">
-        {/* OTP Input Boxes (w-12 h-12 for equal size) */}
         <div className="flex justify-between space-x-2">
           {otp.map((digit, index) => (
             <input
@@ -160,11 +162,12 @@ const OtpScreen: React.FC<OtpScreenProps> = ({
               autoFocus={index === 0 && otp[index] === ""}
               onChange={(e) => handleChange(e.currentTarget, index, e.target.value)}
               onKeyDown={(e) => handleKeyDown(e, index)}
-              className="w-12 h-12 text-xl text-center transition duration-150 border-2 border-gray-300 shadow-md rounded-xl focus:outline-none focus:border-gray-300 focus:border-4"
+              className="w-12 h-12 text-xl text-center transition duration-150 border-2 border-gray-300 shadow-md rounded-xl focus:outline-none focus:border-gray-400 focus:border-4"
             />
           ))}
         </div>
 
+        {/* Resend Timer */}
         <div className="flex items-center justify-between text-sm">
           {resendTimer > 0 ? (
             <p className="font-medium text-gray-500 transition duration-150">
@@ -181,38 +184,38 @@ const OtpScreen: React.FC<OtpScreenProps> = ({
           )}
         </div>
 
-        {/* Action Buttons (Only Confirm button remains) */}
-        <div className="flex justify-end pt-4 space-x-4">
+        {/* Confirm Button */}
+        <div className="flex justify-center pt-4">
           <button
             type="submit"
             disabled={!isOtpValid || loading}
-            className={`px-6 py-2 rounded-lg font-medium transition duration-300 ease-in-out shadow-md
-              ${!isOtpValid || loading
-                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                : "bg-black text-white"
+            className={`relative flex items-center justify-center font-medium shadow-md transition-all duration-300 ease-in-out overflow-hidden
+              ${
+                !isOtpValid || loading
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-black text-white"
               }
+              ${loading ? "w-12 h-12 rounded-full" : "w-full h-12 rounded-xl"}
             `}
           >
             {loading ? (
               <svg
-                className="w-5 h-5 text-white animate-spin"
+                className="absolute w-8 h-8 text-white animate-spin"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
               >
                 <circle
-                  className="opacity-25"
+                  className="opacity-100"
                   cx="12"
                   cy="12"
                   r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
+                  stroke="white"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeDasharray="31.4"
+                  strokeDashoffset="0"
+                />
               </svg>
             ) : (
               "Confirm"

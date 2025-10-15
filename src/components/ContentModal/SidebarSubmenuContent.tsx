@@ -129,5 +129,12 @@ const DeleteIcon = () => (
     className="w-6 h-5 text-action-danger" 
   />
 );
+const AuthKeyIcon = () => (
+  <Icon
+    name="ri-key-fill"
+    // FIXED: Delete icon color uses semantic action-danger color
+    className="w-6 h-5 text-text-main"
+  />
+);
 
-export { ContentModal, ContentModalItem, EditIcon, DeleteIcon };
+export { ContentModal, ContentModalItem, EditIcon, DeleteIcon, AuthKeyIcon };

@@ -2,126 +2,121 @@ import { motion, AnimatePresence } from "framer-motion";
 import React, { useState, useRef, useEffect } from "react";
 import clsx from "clsx";
 import DynamicSidebarMenu from "../../../components/Modal/SidebarSubmenu";
-import {EditIcon, DeleteIcon} from "../../../components/ContentModal/SidebarSubmenuContent";
+import { EditIcon, DeleteIcon } from "../../../components/ContentModal/SidebarSubmenuContent";
 import Icon from "../../../components/ui/Icon";
 import DeleteModal from "../../../components/Modal/DeleteModal";
 import AnimatedDeleteButton from "../../../components/Common/AnimatedDeleteButton";
-import Tab from "../../../components/Common/Tabs";
-import StatusBadge from "../../../components/Common/StatusBadge";
 import { Button } from "../../../components/Common/Button";
-import AddCategoryModal from "../../../components/Modal/AddCategoryModal";
+import AddProductPricingModal from "../../../components/Modal/AddProductPricingModal";
 
-interface Category {
+interface ProductPriceTable {
   id: string;
-  name: string;
+  productName: string;
+  price: string; // or number
   date: string;
   time: string;
-  slug: string;
-  status: "All" | "Active" | "Inactive";
+  created: string; // e.g., "20 Sep 2025 11:01 am"
 }
 
-const categoryData: Category[] = [
+const productPricingData: ProductPriceTable[] = [
   {
     id: "11",
-    name: "Aadhaar / Pan",
+    productName: "Jayvion Simon",
+    price: "₹499",
     date: "20 Sep 2025",
     time: "11:01 am",
-    slug: "aadhaar-pan",
-    status: "Active",
+    created: "20 Sep 2025 11:01 am",
   },
   {
     id: "10",
-    name: "Bank Account",
-    date: "19 Sep 2025",
-    time: "10:01 am",
-    slug: "bank-account",
-    status: "Active",
+    productName: "Lucian Obrien",
+    price: "₹299",
+    date: "20 Sep 2025",
+    time: "11:01 am",
+    created: "19 Sep 2025 10:01 am",
   },
   {
     id: "9",
-    name: "KYB (Know your business)",
-    date: "10 Sep 2025",
-    time: "1:01 am",
-    slug: "kyb-know-your-business",
-    status: "Inactive",
+    productName: "Soren Durham",
+    price: "₹199",
+    date: "20 Sep 2025",
+    time: "11:01 am",
+    created: "10 Sep 2025 01:01 am",
   },
   {
     id: "8",
-    name: "Regulated Digital KYC",
-    date: "09 Sep 2025",
-    time: "12:01 am",
-    slug: "regulated-digital-kyc",
-    status: "Inactive",
+    productName: "Cortez Herring",
+    price: "₹399",
+    date: "20 Sep 2025",
+    time: "11:01 am",
+    created: "09 Sep 2025 12:01 am",
   },
   {
     id: "7",
-    name: "Other Official Documents",
-    date: "07 Sep 2025",
-    time: "11:01 pm",
-    slug: "other-official-documents",
-    status: "Active",
+    productName: "Brycen Jimenez",
+    price: "₹599",
+    date: "20 Sep 2025",
+    time: "11:01 am",
+    created: "07 Sep 2025 11:01 pm",
   },
   {
     id: "6",
-    name: "Telecom Intelligence",
-    date: "16 Sep 2025",
-    time: "1:20 am",
-    slug: "telecom-intelligence",
-    status: "Inactive",
+    productName: "Shawn Manning",
+    price: "₹299",
+    date: "20 Sep 2025",
+    time: "11:01 am",
+    created: "16 Sep 2025 01:20 am",
   },
   {
     id: "5",
-    name: "Utility Bill Intelligence",
-    date: "17 Sep 2025",
-    time: "2:20 am",
-    slug: "utility-bill-intelligence",
-    status: "Active",
+    productName: "Chase Day",
+    price: "₹699",
+    date: "20 Sep 2025",
+    time: "11:01 am",
+    created: "17 Sep 2025 02:20 am",
   },
   {
     id: "4",
-    name: "Melanie Noble",
-    date: "18 Sep 2025",
-    time: "3:20 am",
-    slug: "aadhaar-pan",
-    status: "Inactive",
+    productName: "Melanie Noble",
+    price: "₹199",
+    date: "20 Sep 2025",
+    time: "11:01 am",
+    created: "18 Sep 2025 03:20 am",
   },
   {
     id: "3",
-    name: "Christopher Cardenas",
-    date: "19 Sep 2025",
-    time: "4:20 am",
-    slug: "aadhaar-pan",
-    status: "Inactive",
+    productName: "Christopher Cardenas",
+    price: "₹499",
+    date: "20 Sep 2025",
+    time: "11:01 am",
+    created: "19 Sep 2025 04:20 am",
   },
   {
     id: "2",
-    name: "Lainey Davidson",
+    productName: "Lainey Davidson",
+    price: "₹299",
     date: "20 Sep 2025",
-    time: "5:20 am",
-    slug: "aadhaar-pan",
-    status: "Active",
+    time: "11:01 am",
+    created: "20 Sep 2025 05:20 am",
   },
   {
     id: "1",
-    name: "Elias Graham",
-    date: "21 Sep 2025",
-    time: "6:00 am",
-    slug: "aadhaar-pan",
-    status: "Inactive",
+    productName: "Elias Graham",
+    price: "₹399",
+    date: "20 Sep 2025",
+    time: "11:01 am",
+    created: "21 Sep 2025 06:00 am",
   },
 ];
 
+
 const ROWS_PER_PAGE_OPTIONS = [5, 10, 25];
 
-const ProductCategory = () => {
+const ProductPricing = () => {
   // Combine both arrays once into state
-  const [allOrders, setAllOrders] = useState([...categoryData]);
+  const [allOrders, setAllOrders] = useState([...productPricingData]);
   const [selectedTab, setSelectedTab] = useState<string>("All");
   const [selectedOrders, setSelectedOrders] = useState<string[]>([]);
-  const [statusState, setStatusState] = useState({
-    loading: false,
-    id: null,
-  });
   const [search, setSearch] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(ROWS_PER_PAGE_OPTIONS[0]);
@@ -152,11 +147,10 @@ const ProductCategory = () => {
   const toggleAddModal = () => setIsAddModalOpen((prev) => !prev);
 
   const filteredOrders = allOrders.filter((order) => {
-    const matchesTab = selectedTab === "All" || order.status === selectedTab;
-    const matchesSearch = order.name
+    const matchesSearch = order.productName
       .toLowerCase()
       .includes(search.toLowerCase());
-    return matchesTab && matchesSearch;
+    return matchesSearch;
   });
 
   const indexOfLastRow = currentPage * rowsPerPage;
@@ -198,24 +192,7 @@ const ProductCategory = () => {
 
   const closeDeleteModal = () => setIsDeleteModalOpen(false);
   const openDeleteModal = () => setIsDeleteModalOpen(true);
-
-  const toggleStatus = (id) => {
-    setStatusState({ loading: true, id });
-    setTimeout(() => {
-      setAllOrders((prev) =>
-        prev.map((product) =>
-          product.id === id
-            ? {
-                ...product,
-                status: product.status === "Active" ? "Inactive" : "Active",
-              }
-            : product
-        )
-      );
-      setStatusState({ loading: false, id: null });
-    }, 800);
-  };
-
+    
   const handleRowsPerPageChange = (newRows: number) => {
     setRowsPerPage(newRows);
     setCurrentPage(1);
@@ -244,12 +221,6 @@ const ProductCategory = () => {
     openDeleteModal();
   };
 
-  const handleTabChange = (key: string) => {
-    setSelectedTab(key);
-    setSelectedOrders([]);
-    setCurrentPage(1);
-  };
-
   const openPopup = (e: React.MouseEvent<HTMLButtonElement>, id: string) => {
     const rect = e.currentTarget.getBoundingClientRect();
     setMenuPosition({
@@ -270,41 +241,14 @@ const actions = [
   },
 ];
 
-  interface Tab {
-    name: string;
-    key: string;
-    count: number;
-  };
-
-  const orderTabs: Tab[] = [
-    { name: "All", key: "All", count: allOrders.length },
-    {
-      name: "Active",
-      key: "Active",
-      count: allOrders.filter((o) => o.status === "Active").length,
-    },
-    {
-      name: "Inactive",
-      key: "Inactive",
-      count: allOrders.filter((o) => o.status === "Inactive").length,
-    },
-  ];
 
   // ------------------ JSX ------------------
   return (
     <div className="rounded-lg bg-surface-body text-text-main">
       <div className="shadow-xl bg-surface-card rounded-xl">
         <div className="p-4 sm:p-6">
-          <Tab
-            tabs={orderTabs}
-            selectedTab={selectedTab}
-            onTabChange={handleTabChange}
-          />
-
-          <div className={`-mx-4 border-b-[1px] border-border-primary`}></div>
-
-          <div className="flex flex-col gap-4 mt-3 md:flex-row md:items-center md:gap-4">
-            <div className="flex items-center w-full gap-5 md:flex-1 ">
+          <div className="flex flex-col gap-4 mt-6 md:flex-row md:items-center md:gap-4">
+            <div className="flex items-center w-full gap-2 md:flex-1">
               <div className="relative flex-1 w-1/2">
                 <Icon
                   name="ri-search-line"
@@ -322,7 +266,7 @@ const actions = [
               <div className="text-text-subtle">
                 <Button
                   className="p-2 transition-colors rounded-full"
-                  text="Add Category"
+                  text="Add price"
                   onClick={handleAdd}
                   size="sm"
                   width="150px"
@@ -474,16 +418,13 @@ const actions = [
                     #
                   </th>
                   <th className="px-3 py-5 text-xs font-semibold text-left">
-                    Name
+                    Product Name
                   </th>
                   <th className="px-3 py-5 text-xs font-semibold text-left">
-                    Slug
+                    Price
                   </th>
                   <th className="px-3 py-5 text-xs font-semibold text-left">
                     Created
-                  </th>
-                  <th className="px-3 py-5 text-xs font-semibold text-left">
-                    Status
                   </th>
                   <th className="px-3 py-5 text-xs font-semibold text-left">
                     Action
@@ -536,29 +477,18 @@ const actions = [
                         {order.id}
                       </td>
                       <td className="p-3 text-xs">
-                        <div className="text-xs font-medium text-text-main">
-                          {order.name}
+                        <div className="text-text-main">
+                          {order.productName}
                         </div>
                       </td>
                       <td className="p-3 text-xs text-text-main">
-                        {order.slug}
+                        {order.price}
                       </td>
                       <td className="p-3 text-xs">
                         <div className="text-text-main">{order.date}</div>
                         <div className="text-text-subtle text-xxs">
                           {order.time}
                         </div>
-                      </td>
-                      <td className="p-3">
-                        <td className="p-3">
-                          <StatusBadge
-                            status={order.status}
-                            onClick={() => toggleStatus(order.id)}
-                            loading={
-                              statusState.loading && statusState.id === order.id
-                            }
-                          />
-                        </td>
                       </td>
                       <td className="p-3">
                         <button
@@ -658,10 +588,10 @@ const actions = [
       </div>
 
       {/* ✅ Modal used for both Add and Edit */}
-      <AddCategoryModal
+      <AddProductPricingModal
         isOpen={isAddModalOpen}
         toggle={toggleAddModal}
-        categoryData={selectedId} // null → Add mode | object → Edit mode
+        pricingData={selectedId} // null → Add mode | object → Edit mode
       />
 
       {/* Existing Modals */}
@@ -685,4 +615,4 @@ const actions = [
   );
 };
 
-export default ProductCategory;
+export default ProductPricing;

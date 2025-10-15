@@ -2,120 +2,130 @@ import { motion, AnimatePresence } from "framer-motion";
 import React, { useState, useRef, useEffect } from "react";
 import clsx from "clsx";
 import DynamicSidebarMenu from "../../../components/Modal/SidebarSubmenu";
-import {EditIcon, DeleteIcon} from "../../../components/ContentModal/SidebarSubmenuContent";
+import {
+  EditIcon,
+  DeleteIcon,
+} from "../../../components/ContentModal/SidebarSubmenuContent";
+import SearchModalWrapper from "../../../components/Modal/SearchModalWrapper";
+import type { Country } from "../../../components/ContentModal/SearchContentModal";
 import Icon from "../../../components/ui/Icon";
 import DeleteModal from "../../../components/Modal/DeleteModal";
 import AnimatedDeleteButton from "../../../components/Common/AnimatedDeleteButton";
 import Tab from "../../../components/Common/Tabs";
 import StatusBadge from "../../../components/Common/StatusBadge";
 import { Button } from "../../../components/Common/Button";
-import AddCategoryModal from "../../../components/Modal/AddCategoryModal";
+import AddServiceModal from "../../../components/Modal/AddServiceModal";
 
-interface Category {
-  id: string;
-  name: string;
-  date: string;
-  time: string;
-  slug: string;
-  status: "All" | "Active" | "Inactive";
+// src/data/apiTableData.ts
+export interface ApiTableData {
+  id: number;
+  apiName: string;
+  product: string;
+  serviceCode: string;
+  purchase: string;
+  limit: string;
+  status: "Active" | "Inactive";
 }
 
-const categoryData: Category[] = [
+export const apiTableData: ApiTableData[] = [
   {
-    id: "11",
-    name: "Aadhaar / Pan",
-    date: "20 Sep 2025",
-    time: "11:01 am",
-    slug: "aadhaar-pan",
+    id: 1,
+    apiName: "Cashfree",
+    product: "Aadhaar OKYC",
+    serviceCode: "PR001",
+    purchase: "surcharge @ 1 ₹/Txn",
+    limit: "10000",
     status: "Active",
   },
   {
-    id: "10",
-    name: "Bank Account",
-    date: "19 Sep 2025",
-    time: "10:01 am",
-    slug: "bank-account",
+    id: 2,
+    apiName: "Cashfree",
+    product: "Aadhaar Masking",
+    serviceCode: "UB001",
+    purchase: "surcharge @ 1.0 ₹/Txn",
+    limit: "50000",
     status: "Active",
   },
   {
-    id: "9",
-    name: "KYB (Know your business)",
-    date: "10 Sep 2025",
-    time: "1:01 am",
-    slug: "kyb-know-your-business",
-    status: "Inactive",
-  },
-  {
-    id: "8",
-    name: "Regulated Digital KYC",
-    date: "09 Sep 2025",
-    time: "12:01 am",
-    slug: "regulated-digital-kyc",
-    status: "Inactive",
-  },
-  {
-    id: "7",
-    name: "Other Official Documents",
-    date: "07 Sep 2025",
-    time: "11:01 pm",
-    slug: "other-official-documents",
+    id: 3,
+    apiName: "Cashfree",
+    product: "PAN",
+    serviceCode: "DTH01",
+    purchase: "surcharge @ 1 ₹/Txn",
+    limit: "20000",
     status: "Active",
   },
   {
-    id: "6",
-    name: "Telecom Intelligence",
-    date: "16 Sep 2025",
-    time: "1:20 am",
-    slug: "telecom-intelligence",
+    id: 4,
+    apiName: "Cashfree",
+    product: "PAN 360",
+    serviceCode: "POST01",
+    purchase: "surcharge @ 1 ₹/Txn",
+    limit: "15000",
     status: "Inactive",
   },
   {
-    id: "5",
-    name: "Utility Bill Intelligence",
-    date: "17 Sep 2025",
-    time: "2:20 am",
-    slug: "utility-bill-intelligence",
+    id: 5,
+    apiName: "Cashfree",
+    product: "PAN Lite",
+    serviceCode: "POST01",
+    purchase: "surcharge @ 1 ₹/Txn",
+    limit: "15000",
+    status: "Inactive",
+  },
+  {
+    id: 6,
+    apiName: "Cashfree",
+    product: "Penny Drop",
+    serviceCode: "POST01",
+    purchase: "surcharge @ 1 ₹/Txn",
+    limit: "15000",
+    status: "Inactive",
+  },
+  {
+    id: 7,
+    apiName: "Cashfree",
+    product: "IFSC Lookup",
+    serviceCode: "API_P7",
+    purchase: "",
+    limit: "50000",
+    status: "Inactive",
+  },
+  {
+    id: 8,
+    apiName: "Surepass",
+    product: "UPI ID Validation",
+    serviceCode: "API_P8",
+    purchase: "",
+    limit: "50000",
     status: "Active",
   },
   {
-    id: "4",
-    name: "Melanie Noble",
-    date: "18 Sep 2025",
-    time: "3:20 am",
-    slug: "aadhaar-pan",
-    status: "Inactive",
-  },
-  {
-    id: "3",
-    name: "Christopher Cardenas",
-    date: "19 Sep 2025",
-    time: "4:20 am",
-    slug: "aadhaar-pan",
-    status: "Inactive",
-  },
-  {
-    id: "2",
-    name: "Lainey Davidson",
-    date: "20 Sep 2025",
-    time: "5:20 am",
-    slug: "aadhaar-pan",
+    id: 9,
+    apiName: "Surepass",
+    product: "PAN to GSTIN",
+    serviceCode: "API_P9",
+    purchase: "",
+    limit: "50000",
     status: "Active",
   },
   {
-    id: "1",
-    name: "Elias Graham",
-    date: "21 Sep 2025",
-    time: "6:00 am",
-    slug: "aadhaar-pan",
+    id: 10,
+    apiName: "Surepass",
+    product: "CIN / MCA Lookup",
+    serviceCode: "API_P10",
+    purchase: "",
+    limit: "50000",
     status: "Inactive",
   },
 ];
 
+
 const ROWS_PER_PAGE_OPTIONS = [5, 10, 25];
 
-const ProductCategory = () => {
+const ServiceSwitching = () => {
   // Combine both arrays once into state
-  const [allOrders, setAllOrders] = useState([...categoryData]);
+  const [allOrders, setAllOrders] = useState([...apiTableData]);
   const [selectedTab, setSelectedTab] = useState<string>("All");
   const [selectedOrders, setSelectedOrders] = useState<string[]>([]);
   const [statusState, setStatusState] = useState({
@@ -134,7 +144,16 @@ const ProductCategory = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<any>(null);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
+    const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
+      const [isSearchContentModalOpen, setIsSearchContentModalOpen] = useState(false);
+      const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
+    
+        const handleCountrySelect = (country: Country) => {
+            setSelectedCountry(country);
+    
+            setSearch(country.name);
+            setIsSearchContentModalOpen(false);
+        };
 
   // ✅ Open modal for Add
   const handleAdd = () => {
@@ -153,7 +172,7 @@ const ProductCategory = () => {
 
   const filteredOrders = allOrders.filter((order) => {
     const matchesTab = selectedTab === "All" || order.status === selectedTab;
-    const matchesSearch = order.name
+    const matchesSearch = order.apiName
       .toLowerCase()
       .includes(search.toLowerCase());
     return matchesTab && matchesSearch;
@@ -260,21 +279,15 @@ const ProductCategory = () => {
     setMenuOpen(true);
   };
 
-const actions = [
-  { label: "Edit", icon: <EditIcon />, onClick: handleEdit },
-  {
-    label: "Delete",
-    icon: <DeleteIcon />,
-    onClick: deleteSelectedOrders,
-    danger: true,
-  },
-];
-
-  interface Tab {
-    name: string;
-    key: string;
-    count: number;
-  };
+  const actions = [
+    { label: "Edit", icon: <EditIcon />, onClick: handleEdit },
+    {
+      label: "Delete",
+      icon: <DeleteIcon />,
+      onClick: deleteSelectedOrders,
+      danger: true,
+    },
+  ];
 
   const orderTabs: Tab[] = [
     { name: "All", key: "All", count: allOrders.length },
@@ -303,33 +316,70 @@ const actions = [
 
           <div className={`-mx-4 border-b-[1px] border-border-primary`}></div>
 
-          <div className="flex flex-col gap-4 mt-3 md:flex-row md:items-center md:gap-4">
-            <div className="flex items-center w-full gap-5 md:flex-1 ">
-              <div className="relative flex-1 w-1/2">
-                <Icon
-                  name="ri-search-line"
-                  className="absolute -translate-y-1/2 text-text-subtle left-3 top-1/2"
-                />
-                <input
-                  placeholder="Search By Name..."
-                  onChange={(e) => setSearch(e.target.value)}
-                  className="w-1/2 px-3 py-3.5 pl-10 text-sm border rounded-lg cursor-pointer bg-surface-card text-text-main placeholder-text-subtle
-    border-border-input hover:border-[var(--color-border-input-hover)] 
-    focus:border-[var(--color-border-input-focus)] focus:ring-primary"
-                />
-              </div>
+          <div className="flex flex-col gap-4 mt-6 md:flex-row md:items-center md:gap-4">
+            {/* Search Input */}
+            <div className="relative flex-1">
+              <Icon
+                name="ri-search-line"
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-text-subtle"
+              />
+              <input
+                placeholder="Search By ApiName"
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full px-3 py-3.5 pl-10 text-sm border rounded-lg bg-surface-card 
+                 text-text-main placeholder-text-subtle border-border-input
+                 hover:border-[var(--color-border-input-hover)] 
+                 focus:border-[var(--color-border-input-focus)] focus:ring-primary"
+              />
+            </div>
 
-              <div className="text-text-subtle">
-                <Button
-                  className="p-2 transition-colors rounded-full"
-                  text="Add Category"
-                  onClick={handleAdd}
-                  size="sm"
-                  width="150px"
-                  height="48px"
-                  icon={() => <Icon name="ri-add-fill" size={20} />}
-                ></Button>
-              </div>
+            {/* Dropdown / Filter Input */}
+            <div className="relative flex-1">
+              <Icon
+                name="ri-search-line"
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-text-subtle"
+              />
+              <input
+                readOnly
+                value={
+                  selectedCountry
+                    ? `Filtering by: ${selectedCountry.name}`
+                    : search
+                }
+                placeholder="Search By Products"
+                onClick={() => setIsSearchContentModalOpen(true)}
+                className="w-full px-3 py-3.5 pl-10 text-sm border rounded-lg cursor-pointer bg-surface-card
+                 text-text-main placeholder-text-subtle border-border-input
+                 hover:border-[var(--color-border-input-hover)] 
+                 focus:border-[var(--color-border-input-focus)] focus:ring-primary"
+              />
+              {selectedCountry && (
+                <button
+                  data-no-ripple
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedCountry(null);
+                    setSearch("");
+                  }}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-full 
+                   text-text-subtle hover:bg-surface-hover hover:text-text-main transition-colors"
+                >
+                  <Icon name="x" className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+
+            {/* Add Button */}
+            <div>
+              <Button
+                className="p-2 transition-colors rounded-full"
+                text="Add Service"
+                onClick={handleAdd}
+                size="sm"
+                width="150px"
+                height="48px"
+                icon={() => <Icon name="ri-add-fill" size={20} />}
+              />
             </div>
           </div>
 
@@ -474,13 +524,19 @@ const actions = [
                     #
                   </th>
                   <th className="px-3 py-5 text-xs font-semibold text-left">
-                    Name
+                    Api Name
                   </th>
                   <th className="px-3 py-5 text-xs font-semibold text-left">
-                    Slug
+                    Product
                   </th>
                   <th className="px-3 py-5 text-xs font-semibold text-left">
-                    Created
+                    Api Service Code
+                  </th>
+                  <th className="px-3 py-5 text-xs font-semibold text-left">
+                    Purchase(₹, %)
+                  </th>
+                  <th className="px-3 py-5 text-xs font-semibold text-left">
+                    Limit
                   </th>
                   <th className="px-3 py-5 text-xs font-semibold text-left">
                     Status
@@ -537,17 +593,20 @@ const actions = [
                       </td>
                       <td className="p-3 text-xs">
                         <div className="text-xs font-medium text-text-main">
-                          {order.name}
+                          {order.apiName}
                         </div>
                       </td>
                       <td className="p-3 text-xs text-text-main">
-                        {order.slug}
+                        {order.product}
                       </td>
-                      <td className="p-3 text-xs">
-                        <div className="text-text-main">{order.date}</div>
-                        <div className="text-text-subtle text-xxs">
-                          {order.time}
-                        </div>
+                      <td className="p-3 text-xs text-text-main">
+                        {order.serviceCode}
+                      </td>
+                      <td className="p-3 text-xs text-text-main">
+                        {order.purchase}
+                      </td>
+                      <td className="p-3 text-xs text-text-main">
+                        {order.limit}
                       </td>
                       <td className="p-3">
                         <td className="p-3">
@@ -658,10 +717,10 @@ const actions = [
       </div>
 
       {/* ✅ Modal used for both Add and Edit */}
-      <AddCategoryModal
+      <AddServiceModal
         isOpen={isAddModalOpen}
         toggle={toggleAddModal}
-        categoryData={selectedId} // null → Add mode | object → Edit mode
+        initialValues={selectedId} // null → Add mode | object → Edit mode
       />
 
       {/* Existing Modals */}
@@ -681,8 +740,14 @@ const actions = [
         confirmColor="bg-red-600 hover:bg-red-700 text-white"
         cancelColor="bg-gray-200 hover:bg-gray-300 text-black"
       />
+      <SearchModalWrapper
+        initialSearch={search}
+        isOpen={isSearchContentModalOpen}
+        onClose={() => setIsSearchContentModalOpen(false)}
+        onSelect={handleCountrySelect}
+      />
     </div>
   );
 };
 
-export default ProductCategory;
+export default ServiceSwitching;

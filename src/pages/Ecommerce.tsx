@@ -466,7 +466,7 @@ const OrderList = () => {
                 <div className="flex flex-col gap-4 px-5 py-6 mt-0 text-xs border-t sm:flex-row sm:items-center sm:justify-end sm:gap-8 border-border-primary text-text-subtle">
                     <div className="flex flex-wrap items-center justify-between w-full gap-4 sm:justify-end sm:gap-8 sm:w-auto">
                         {/* Rows per page selector */}
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 ">
                             <span className="font-semibold text-text-main whitespace-nowrap">Rows per page:</span>
                             <div className="relative" ref={dropdownRef}>
                                 <button
@@ -487,7 +487,7 @@ const OrderList = () => {
                                             animate={{ opacity: 1, y: 0, scale: 1 }}
                                             exit={{ opacity: 0, y: 10, scale: 0.95 }}
                                             transition={{ duration: 0.15 }}
-                                            className="absolute right-0 z-20 w-16 p-1 mb-2 overflow-hidden border rounded-lg shadow-lg bg-surface-card border-border-primary bottom-full"
+                                            className="absolute right-0 z-20 p-1 mb-2 overflow-hidden border rounded-lg shadow-lg w-14 bg-surface-card border-border-primary bottom-full"
                                         >
                                             {ROWS_PER_PAGE_OPTIONS.map((rows) => (
                                                 <div
@@ -557,14 +557,20 @@ const OrderList = () => {
                 toggle={closeEditModal}
                 id={selectedId || undefined}
                 itemsToDelete={0}
+                  confirmColor="bg-red-600 hover:bg-red-700 text-white"
+  cancelColor="bg-gray-200 hover:bg-gray-300 text-black"
             />
 
             <DeleteModal
                 isOpen={isDeleteModalOpen}
                 toggle={closeDeleteModal}
                 itemsToDelete={selectedOrders.length}
+                  confirmColor="bg-red-600 hover:bg-red-700 text-white"
+  cancelColor="bg-gray-200 hover:bg-gray-300 text-black"
 
             />
+
+            
             <PrintImportExportModal
                 open={isPrintImportModalOpen}
                 position={modalPos}

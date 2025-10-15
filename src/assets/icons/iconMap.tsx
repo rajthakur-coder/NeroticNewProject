@@ -1,6 +1,6 @@
 import type { IconType } from "react-icons";
-import { RiHomeLine, RiShoppingBagLine, RiUserLine, RiBriefcase2Fill, RiPencilFill, RiPrinterFill, RiCheckFill, RiSubtractLine, RiSubtractFill, RiEyeCloseFill, RiEyeCloseLine, RiEyeOffLine, RiEyeFill, RiSearchLine, RiLock2Line, RiMailLine, RiArrowLeftLine, RiCornerRightUpFill, RiAddFill } from "react-icons/ri";
-import { BiUser, BiChevronRight, BiChevronLeft, BiChevronDown, BiBell, BiBriefcaseAlt2 ,BiPoll, BiTrash, BiDotsVerticalRounded, BiChevronUp, BiExport, BiImport, BiArrowBack, BiMobile } from "react-icons/bi";
+import { RiHomeLine, RiShoppingBagLine, RiUserLine, RiBriefcase2Fill, RiPencilFill, RiPrinterFill, RiCheckFill, RiSubtractLine, RiSubtractFill, RiEyeCloseFill, RiEyeCloseLine, RiEyeOffLine, RiEyeFill, RiSearchLine, RiLock2Line, RiMailLine, RiArrowLeftLine, RiCornerRightUpFill, RiAddFill,RiKeyFill } from "react-icons/ri";
+import { BiUser, BiChevronRight, BiChevronLeft, BiChevronDown, BiBell, BiBriefcaseAlt2 ,BiPoll, BiTrash, BiDotsVerticalRounded, BiChevronUp, BiExport, BiImport, BiArrowBack, BiMobile, } from "react-icons/bi";
 import { FiCamera, FiX } from "react-icons/fi";
 import { SiBitcoin } from "react-icons/si";
 
@@ -41,8 +41,7 @@ export const iconMap: Record<string, IconEntry> = {
   "ri-user-line":RiUserLine,
   "ri-mail-line": RiMailLine,
   "ri-add-fill": RiAddFill,
-
-  
+  "ri-key-fill":RiKeyFill,
 
 
   // Boxicons

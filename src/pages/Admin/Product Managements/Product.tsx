@@ -1,161 +1,148 @@
 import { motion, AnimatePresence } from "framer-motion";
 import React, { useState, useRef, useEffect } from "react";
 import clsx from "clsx";
-import SidebarSubmenu from "../../../components/Modal/SidebarSubmenu";
+import DynamicSidebarMenu from "../../../components/Modal/SidebarSubmenu";
+import {
+  EditIcon,
+  DeleteIcon,
+} from "../../../components/ContentModal/SidebarSubmenuContent";
 import Icon from "../../../components/ui/Icon";
 import DeleteModal from "../../../components/Modal/DeleteModal";
 import AnimatedDeleteButton from "../../../components/Common/AnimatedDeleteButton";
 import Tab from "../../../components/Common/Tabs";
 import StatusBadge from "../../../components/Common/StatusBadge";
 import { Button } from "../../../components/Common/Button";
-import AddCategoryModal from "../../../components/Modal/AddCategoryModal";
+import AddProductModal from "../../../components/Modal/AddproductModal";
 
-interface Order {
+interface Product {
   id: string;
+  categroyName: string;
   name: string;
-  email: string;
   date: string;
   time: string;
-  items: number;
-  amount: string;
+  slug: string;
   status: "All" | "Active" | "Inactive";
   avatar: string;
 }
 
-const ordersData: Order[] = [
+const productData: Product[] = [
   {
-    id: "#6010",
+    id: "11",
+    categroyName: "Aadhaar / Pan",
     name: "Jayvion Simon",
-    email: "nannie.abernathy70@yahoo.com",
     date: "20 Sep 2025",
     time: "11:01 am",
-    items: 6,
-    amount: "$484.15",
+    slug: "aadhaar-pan",
     status: "Active",
     avatar: "https://i.pravatar.cc/40?img=1",
   },
   {
-    id: "#6011",
+    id: "10",
+    categroyName: "Aadhaar / Pan",
     name: "Lucian Obrien",
-    email: "ashlynn.ohara62@gmail.com",
     date: "19 Sep 2025",
     time: "10:01 am",
-    items: 1,
-    amount: "$83.74",
+    slug: "aadhaar-pan",
     status: "Active",
     avatar: "https://i.pravatar.cc/40?img=2",
   },
   {
-    id: "#60110",
+    id: "9",
+    categroyName: "Aadhaar / Pan",
     name: "Soren Durham",
-    email: "vergie.block82@hotmail.com",
     date: "10 Sep 2025",
     time: "1:01 am",
-    items: 5,
-    amount: "$400.41",
+    slug: "aadhaar-pan",
     status: "Inactive",
     avatar: "https://i.pravatar.cc/40?img=3",
   },
   {
-    id: "#60111",
+    id: "8",
+    categroyName: "Aadhaar / Pan",
     name: "Cortez Herring",
-    email: "vito.hudson@hotmail.com",
     date: "09 Sep 2025",
     time: "12:01 am",
-    items: 1,
-    amount: "$83.74",
+    slug: "aadhaar-pan",
     status: "Inactive",
     avatar: "https://i.pravatar.cc/40?img=4",
   },
   {
-    id: "#60112",
+    id: "7",
+    categroyName: "Aadhaar / Pan",
     name: "Brycen Jimenez",
-    email: "tyrel.greenholt@gmail.com",
     date: "07 Sep 2025",
     time: "11:01 pm",
-    items: 6,
-    amount: "$484.15",
+    slug: "aadhaar-pan",
     status: "Active",
     avatar: "https://i.pravatar.cc/40?img=5",
   },
-];
-
-const screenshotOrders: Order[] = [
   {
-    id: "#6019",
+    id: "6",
+    categroyName: "Aadhaar / Pan",
     name: "Shawn Manning",
-    email: "marjoline.white94@gmail.com",
     date: "16 Sep 2025",
     time: "1:20 am",
-    items: 1,
-    amount: "$83.74",
+    slug: "aadhaar-pan",
     status: "Inactive",
     avatar: "https://i.pravatar.cc/40?img=21",
   },
   {
-    id: "#6018",
+    id: "5",
+    categroyName: "Aadhaar / Pan",
     name: "Chase Day",
-    email: "joana.simonis84@gmail.com",
     date: "17 Sep 2025",
     time: "2:20 am",
-    items: 5,
-    amount: "$400.41",
+    slug: "aadhaar-pan",
     status: "Active",
     avatar: "https://i.pravatar.cc/40?img=22",
   },
   {
-    id: "#6017",
+    id: "4",
+    categroyName: "Aadhaar / Pan",
     name: "Melanie Noble",
-    email: "luella.ryan33@gmail.com",
     date: "18 Sep 2025",
     time: "3:20 am",
-    items: 1,
-    amount: "$83.74",
+    slug: "aadhaar-pan",
     status: "Inactive",
     avatar: "https://i.pravatar.cc/40?img=23",
   },
   {
-    id: "#6016",
+    id: "3",
+    categroyName: "Aadhaar / Pan",
     name: "Christopher Cardenas",
-    email: "lenna.bergnaum27@hotmail.com",
     date: "19 Sep 2025",
     time: "4:20 am",
-    items: 6,
-    amount: "$484.15",
+    slug: "aadhaar-pan",
     status: "Inactive",
     avatar: "https://i.pravatar.cc/40?img=24",
   },
   {
-    id: "#6015",
+    id: "2",
+    categroyName: "Aadhaar / Pan",
     name: "Lainey Davidson",
-    email: "aditya.greenfelder31@gmail.com",
     date: "20 Sep 2025",
     time: "5:20 am",
-    items: 1,
-    amount: "$83.74",
+    slug: "aadhaar-pan",
     status: "Active",
     avatar: "https://i.pravatar.cc/40?img=25",
   },
   {
-    id: "#6014",
+    id: "1",
+    categroyName: "Aadhaar / Pan",
     name: "Elias Graham",
-    email: "elias.graham@gmail.com",
     date: "21 Sep 2025",
     time: "6:00 am",
-    items: 2,
-    amount: "$150.99",
+    slug: "aadhaar-pan",
     status: "Inactive",
     avatar: "https://i.pravatar.cc/40?img=26",
   },
 ];
+
 const ROWS_PER_PAGE_OPTIONS = [5, 10, 25];
 
 const Product = () => {
   // Combine both arrays once into state
-  const [allOrders, setAllOrders] = useState([
-    ...screenshotOrders,
-    ...ordersData,
-  ]);
+  const [allOrders, setAllOrders] = useState([...productData]);
   const [selectedTab, setSelectedTab] = useState<string>("All");
   const [selectedOrders, setSelectedOrders] = useState<string[]>([]);
   const [statusState, setStatusState] = useState({
@@ -167,14 +154,14 @@ const Product = () => {
   const [rowsPerPage, setRowsPerPage] = useState(ROWS_PER_PAGE_OPTIONS[0]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const [popupOpen, setPopupOpen] = useState(false);
-  const [popupPos, setPopupPos] = useState({ top: 0, left: 0 });
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const selectAllHeaderRef = useRef<HTMLInputElement>(null);
   const selectAllOverlayRef = useRef<HTMLInputElement>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<any>(null);
+    const [menuOpen, setMenuOpen] = useState(false);
+    const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
 
   // ✅ Open modal for Add
   const handleAdd = () => {
@@ -184,7 +171,7 @@ const Product = () => {
 
   // ✅ Open modal for Edit
   const handleEdit = (category: any) => {
-    setSelectedId(category); // pass category data
+    setSelectedId(category);
     setIsAddModalOpen(true);
   };
 
@@ -292,15 +279,23 @@ const Product = () => {
 
   const openPopup = (e: React.MouseEvent<HTMLButtonElement>, id: string) => {
     const rect = e.currentTarget.getBoundingClientRect();
-    setPopupPos({
+    setMenuPosition({
       top: rect.bottom + window.scrollY - 40,
       left: rect.right - 170,
     });
     setSelectedOrderId(id);
-    setPopupOpen(true);
+    setMenuOpen(true);
   };
 
-  const closePopup = () => setPopupOpen(false);
+const actions = [
+  { label: "Edit", icon: <EditIcon />, onClick: handleEdit },
+  {
+    label: "Delete",
+    icon: <DeleteIcon />,
+    onClick: deleteSelectedOrders,
+    danger: true,
+  },
+];
 
   const orderTabs: Tab[] = [
     { name: "All", key: "All", count: allOrders.length },
@@ -349,7 +344,7 @@ const Product = () => {
                 <Button
                   className="p-2 transition-colors rounded-full"
                   text="Add Product"
-                //   onClick={handleAdd}
+                  onClick={handleAdd}
                   size="sm"
                   width="150px"
                   height="48px"
@@ -573,26 +568,17 @@ const Product = () => {
                           alt={order.name}
                           className="w-8 h-8 rounded-full"
                         />
-                        <div>
-                          {/* <div className="text-xs font-medium text-text-main">
-                            {order.name}
-                          </div>
-                          <div className="text-text-subtle text-xxs">
-                            {order.email}
-                          </div> */}
-                        </div>
                       </td>
                       <td className="p-3 text-xs">
-                        <div className="text-text-main">{order.date}</div>
-                        <div className="text-text-subtle text-xxs">
-                          {order.time}
+                        <div className="text-text-main">
+                          {order.categroyName}
                         </div>
                       </td>
                       <td className="p-3 text-xs text-text-main">
-                        {order.items}
+                        {order.name}
                       </td>
                       <td className="p-3 text-xs text-text-main">
-                        {order.amount}
+                        {order.slug}
                       </td>
                       <td className="p-3 text-xs">
                         <div className="text-text-main">{order.date}</div>
@@ -707,26 +693,19 @@ const Product = () => {
       </div>
 
       {/* ✅ Modal used for both Add and Edit */}
-      <AddCategoryModal
+      <AddProductModal
         isOpen={isAddModalOpen}
         toggle={toggleAddModal}
-        categoryData={selectedId} // null → Add mode | object → Edit mode
+        productData={selectedId} // null → Add mode | object → Edit mode
       />
 
       {/* Existing Modals */}
       {selectedOrderId && (
-        <SidebarSubmenu
-          open={popupOpen}
-          position={popupPos}
-          onClose={closePopup}
-        //   onEdit={() => {
-        //     closePopup();
-        //     handleEdit(selectedOrderId);
-        //   }}
-          onDelete={() => {
-            closePopup();
-            openDeleteModal();
-          }}
+        <DynamicSidebarMenu
+          open={menuOpen}
+          position={menuPosition}
+          onClose={() => setMenuOpen(false)}
+          actions={actions}
         />
       )}
 
@@ -734,6 +713,8 @@ const Product = () => {
         isOpen={isDeleteModalOpen}
         toggle={closeDeleteModal}
         itemsToDelete={selectedOrders.length}
+        confirmColor="bg-red-600 hover:bg-red-700 text-white"
+        cancelColor="bg-gray-200 hover:bg-gray-300 text-black"
       />
     </div>
   );

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import type { FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
@@ -186,7 +185,7 @@ const SignInForm: React.FC = () => {
       // Mock phone number/email for Sign In flow
       setOtpContact("xxxxxx8110"); 
       setCurrentView('otp');
-      ToasterUtils.info("Credentials verified. Please enter OTP.");
+      // ToasterUtils.info("Credentials verified. Please enter OTP.");
     }, 500);
   };
 
@@ -435,7 +434,7 @@ const SignInForm: React.FC = () => {
 
 
   return (
-    <div className="flex flex-col h-screen lg:flex-row">
+    <div className="flex flex-col h-screen bg-gray-100 lg:flex-row">
       {/* LEFT SECTION — Carousel (Desktop only) */}
       <div className="hidden lg:flex w-[60%] relative bg-gradient-to-br from-[#00AD7D] via-[#0A5C4F] text-white">
         <div className="relative sticky top-0 w-full h-screen overflow-hidden">
@@ -483,10 +482,12 @@ const SignInForm: React.FC = () => {
 
       {/* RIGHT SECTION — Form / Views */}
       <div className="flex flex-1 h-screen overflow-y-auto conditional-scrollbar animate__animated animate__zoomIn">
-        <div className="w-full h-full mx-auto my-auto sm:h-screen sm:max-h-screen lg:h-auto lg:max-w-md">
-          <div className="h-full rotating-neon-wrapper group">
-            <div className="h-full transition duration-100 bg-white shadow-xl rotating-neon-card sm:rounded-none lg:rounded-2xl lg:p-6">
-              {/* Conditional rendering of form, OTP, forgot, or reset view */}
+        <div className="w-full h-full mx-auto my-auto sm:h-screen sm:max-h-screen lg:h-auto lg:max-w-md lg:rounded-3xl">
+          <div className="h-full rotating-neon-wrapper ">
+<div className="h-full transition-all duration-300 border-2 border-gray-200 rotating-neon-card sm:rounded-none lg:rounded-2xl">
+
+      
+  {/* Conditional rendering of form, OTP, forgot, or reset view */}
               {renderContent()}
             </div>
           </div>

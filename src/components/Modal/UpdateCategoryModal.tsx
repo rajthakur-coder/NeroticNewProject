@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import AddCategoryForm from "../../components/ContentModal/CategoryFormModal";
+import AddCategoryForm from "../ContentModal/CategoryForm";
 import { X } from "lucide-react"; // for close icon (optional, from lucide-react)
 
 interface AddCategoryModalProps {

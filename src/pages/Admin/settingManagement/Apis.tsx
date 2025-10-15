@@ -2,19 +2,21 @@ import { motion, AnimatePresence } from "framer-motion";
 import React, { useState, useRef, useEffect } from "react";
 import clsx from "clsx";
 import DynamicSidebarMenu from "../../../components/Modal/SidebarSubmenu";
-import {EditIcon, DeleteIcon} from "../../../components/ContentModal/SidebarSubmenuContent";
+import { EditIcon, DeleteIcon, AuthKeyIcon } from "../../../components/ContentModal/SidebarSubmenuContent";
 import Icon from "../../../components/ui/Icon";
 import DeleteModal from "../../../components/Modal/DeleteModal";
 import AnimatedDeleteButton from "../../../components/Common/AnimatedDeleteButton";
 import Tab from "../../../components/Common/Tabs";
 import StatusBadge from "../../../components/Common/StatusBadge";
 import { Button } from "../../../components/Common/Button";
-import AddCategoryModal from "../../../components/Modal/AddCategoryModal";
+import AddApiModal from "../../../components/Modal/AddApiModal";
+import AuthkeyMpinModal from "../../../components/Modal/AuthkeyMpinModal";
 
 interface Category {
   id: string;
   name: string;
   date: string;
+  price: string;
   time: string;
   slug: string;
   status: "All" | "Active" | "Inactive";
@@ -25,6 +27,7 @@ const categoryData: Category[] = [
     id: "11",
     name: "Aadhaar / Pan",
     date: "20 Sep 2025",
+    price: "₹499",
     time: "11:01 am",
     slug: "aadhaar-pan",
     status: "Active",
@@ -32,6 +35,7 @@ const categoryData: Category[] = [
   {
     id: "10",
     name: "Bank Account",
+    price: "₹499",
     date: "19 Sep 2025",
     time: "10:01 am",
     slug: "bank-account",
@@ -40,6 +44,7 @@ const categoryData: Category[] = [
   {
     id: "9",
     name: "KYB (Know your business)",
+    price: "₹499",
     date: "10 Sep 2025",
     time: "1:01 am",
     slug: "kyb-know-your-business",
@@ -48,6 +53,7 @@ const categoryData: Category[] = [
   {
     id: "8",
     name: "Regulated Digital KYC",
+    price: "₹499",
     date: "09 Sep 2025",
     time: "12:01 am",
     slug: "regulated-digital-kyc",
@@ -56,6 +62,7 @@ const categoryData: Category[] = [
   {
     id: "7",
     name: "Other Official Documents",
+    price: "₹499",
     date: "07 Sep 2025",
     time: "11:01 pm",
     slug: "other-official-documents",
@@ -64,6 +71,7 @@ const categoryData: Category[] = [
   {
     id: "6",
     name: "Telecom Intelligence",
+    price: "₹499",
     date: "16 Sep 2025",
     time: "1:20 am",
     slug: "telecom-intelligence",
@@ -72,6 +80,7 @@ const categoryData: Category[] = [
   {
     id: "5",
     name: "Utility Bill Intelligence",
+    price: "₹499",
     date: "17 Sep 2025",
     time: "2:20 am",
     slug: "utility-bill-intelligence",
@@ -80,6 +89,7 @@ const categoryData: Category[] = [
   {
     id: "4",
     name: "Melanie Noble",
+    price: "₹499",
     date: "18 Sep 2025",
     time: "3:20 am",
     slug: "aadhaar-pan",
@@ -88,6 +98,7 @@ const categoryData: Category[] = [
   {
     id: "3",
     name: "Christopher Cardenas",
+    price: "₹499",
     date: "19 Sep 2025",
     time: "4:20 am",
     slug: "aadhaar-pan",
@@ -96,6 +107,7 @@ const categoryData: Category[] = [
   {
     id: "2",
     name: "Lainey Davidson",
+    price: "₹499",
     date: "20 Sep 2025",
     time: "5:20 am",
     slug: "aadhaar-pan",
@@ -104,6 +116,7 @@ const categoryData: Category[] = [
   {
     id: "1",
     name: "Elias Graham",
+    price: "₹499",
     date: "21 Sep 2025",
     time: "6:00 am",
     slug: "aadhaar-pan",
@@ -113,7 +126,7 @@ const categoryData: Category[] = [
 
 const ROWS_PER_PAGE_OPTIONS = [5, 10, 25];
 
-const ProductCategory = () => {
+const Apis = () => {
   // Combine both arrays once into state
   const [allOrders, setAllOrders] = useState([...categoryData]);
   const [selectedTab, setSelectedTab] = useState<string>("All");
@@ -133,8 +146,9 @@ const ProductCategory = () => {
   const selectAllOverlayRef = useRef<HTMLInputElement>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<any>(null);
-  const [menuOpen, setMenuOpen] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
+    const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   // ✅ Open modal for Add
   const handleAdd = () => {
@@ -243,6 +257,7 @@ const ProductCategory = () => {
   const deleteSelectedOrders = () => {
     openDeleteModal();
   };
+    const toggleAuthModal = () => setIsAuthModalOpen(!isAuthModalOpen);
 
   const handleTabChange = (key: string) => {
     setSelectedTab(key);
@@ -268,13 +283,8 @@ const actions = [
     onClick: deleteSelectedOrders,
     danger: true,
   },
+  { label: "AuthKey", icon: <AuthKeyIcon />, onClick: toggleAuthModal },
 ];
-
-  interface Tab {
-    name: string;
-    key: string;
-    count: number;
-  };
 
   const orderTabs: Tab[] = [
     { name: "All", key: "All", count: allOrders.length },
@@ -303,8 +313,8 @@ const actions = [
 
           <div className={`-mx-4 border-b-[1px] border-border-primary`}></div>
 
-          <div className="flex flex-col gap-4 mt-3 md:flex-row md:items-center md:gap-4">
-            <div className="flex items-center w-full gap-5 md:flex-1 ">
+          <div className="flex flex-col gap-4 mt-6 md:flex-row md:items-center md:gap-4">
+            <div className="flex items-center w-full gap-2 md:flex-1">
               <div className="relative flex-1 w-1/2">
                 <Icon
                   name="ri-search-line"
@@ -322,7 +332,7 @@ const actions = [
               <div className="text-text-subtle">
                 <Button
                   className="p-2 transition-colors rounded-full"
-                  text="Add Category"
+                  text="Add APIs"
                   onClick={handleAdd}
                   size="sm"
                   width="150px"
@@ -477,7 +487,7 @@ const actions = [
                     Name
                   </th>
                   <th className="px-3 py-5 text-xs font-semibold text-left">
-                    Slug
+                    Balance
                   </th>
                   <th className="px-3 py-5 text-xs font-semibold text-left">
                     Created
@@ -511,10 +521,7 @@ const actions = [
                             type="checkbox"
                             checked={isChecked}
                             onChange={() => toggleSelect(order.id)}
-                            className={`
-                                                            w-4 h-4
-                                                            appearance-none
-                                                            rounded
+                            className={`w-4 h-4 appearance-non rounded
                                                             bg-[var(--color-checkbox-bg)] border-[1.5px] border-[var(--color-checkbox-border)]
                                                             checked:bg-primary checked:border-primary checked:border-none
                                                             cursor-pointer
@@ -541,7 +548,7 @@ const actions = [
                         </div>
                       </td>
                       <td className="p-3 text-xs text-text-main">
-                        {order.slug}
+                        {order.price}
                       </td>
                       <td className="p-3 text-xs">
                         <div className="text-text-main">{order.date}</div>
@@ -658,11 +665,12 @@ const actions = [
       </div>
 
       {/* ✅ Modal used for both Add and Edit */}
-      <AddCategoryModal
+      <AddApiModal
         isOpen={isAddModalOpen}
         toggle={toggleAddModal}
-        categoryData={selectedId} // null → Add mode | object → Edit mode
+        apiData={selectedId}
       />
+      <AuthkeyMpinModal isOpen={isAuthModalOpen} toggle={toggleAuthModal} />
 
       {/* Existing Modals */}
       {selectedOrderId && (
@@ -685,4 +693,4 @@ const actions = [
   );
 };
 
-export default ProductCategory;
+export default Apis;

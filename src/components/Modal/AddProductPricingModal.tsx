@@ -1,47 +1,55 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import BaseModal from "../BaseModals/BaseModal";
-import AddCategoryForm from "../ContentModal/CategoryForm";
+import ProductPricingForm from "../ContentModal/ProductPricingForm";
 
-interface AddCategoryModalProps {
-  isOpen: boolean;
-  toggle: () => void;
-  confirmColor?: string;
-  cancelColor?: string;
-  categoryData?: { name: string; status: string } | null;
+interface ProductPricingData {
+  product_id: number | string;
+  price: string | number;
+  currency: string;
 }
 
-const AddCategoryModal: React.FC<AddCategoryModalProps> = ({
+interface AddProductPricingModalProps {
+  isOpen: boolean;
+  toggle: () => void;
+  onSuccess?: () => void;
+  pricingData?: ProductPricingData | null; // optional for edit mode
+}
+
+const AddProductPricingModal: React.FC<AddProductPricingModalProps> = ({
   isOpen,
   toggle,
-  categoryData,
+  onSuccess,
+  pricingData,
 }) => {
-  const [formData, setFormData] = useState({ name: "", status: "Active" });
-  const [touched, setTouched] = useState({ name: false, status: false });
+  const [values, setValues] = useState<ProductPricingData>({
+    product_id: "",
+    price: "",
+    currency: "INR",
+  });
 
-  const isEditMode = Boolean(categoryData);
+  const [touched, setTouched] = useState({
+    product_id: false,
+    price: false,
+  });
 
-  // ✅ Prefill data if editing, or reset if adding new
+  // Pre-fill when editing
   useEffect(() => {
-    if (isOpen) {
-      if (categoryData) {
-        setFormData({
-          name: categoryData.name || "",
-          status: categoryData.status || "Active",
-        });
-      } else {
-        setFormData({ name: "", status: "Active" });
-        setTouched({ name: false, status: false });
-      }
+    if (pricingData && isOpen) {
+      setValues(pricingData);
+    } else if (!isOpen) {
+      // Reset when modal closes
+      setValues({ product_id: "", price: "", currency: "INR" });
+      setTouched({ product_id: false, price: false });
     }
-  }, [categoryData, isOpen]);
+  }, [pricingData, isOpen]);
 
-  const errors = useMemo(
-    () => ({
-      name: formData.name ? "" : "Name is required",
-    }),
-    [formData]
-  );
+  const errors = useMemo(() => {
+    return {
+      product_id: values.product_id ? "" : "Product is required",
+      price: values.price ? "" : "Price is required",
+    };
+  }, [values]);
 
   const isValid = useMemo(
     () => Object.values(errors).every((e) => !e),
@@ -52,27 +60,25 @@ const AddCategoryModal: React.FC<AddCategoryModalProps> = ({
     setTouched((prev) => ({ ...prev, [field]: true }));
   };
 
-  const handleConfirm = () => {
+  const handleSubmit = async () => {
     if (!isValid) return;
 
-    if (isEditMode) {
-      console.log("✅ Updated Category:", formData);
+    if (pricingData) {
+      console.log("📝 Editing pricing:", values);
+      // Call your update dispatch here
     } else {
-      console.log("✅ Added New Category:", formData);
+      console.log("🆕 Adding new pricing:", values);
+      // Call your add dispatch here
     }
-    // ✅ reset form after submission
-    setFormData({ name: "", status: "Active" });
-    setTouched({ name: false, status: false });
+
+    if (onSuccess) onSuccess();
     toggle();
   };
 
   const handleCancel = () => {
-    setFormData({ name: "", status: "Active" });
-    setTouched({ name: false, status: false });
     toggle();
   };
 
-  // --- Framer Motion Variants ---
   const modalVariants = {
     hidden: { scale: 0.9, opacity: 0, y: -50 },
     visible: {
@@ -99,7 +105,7 @@ const AddCategoryModal: React.FC<AddCategoryModalProps> = ({
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
           onClick={toggle}
           variants={backdropVariants}
           initial="hidden"
@@ -108,7 +114,7 @@ const AddCategoryModal: React.FC<AddCategoryModalProps> = ({
         >
           <motion.div
             onClick={(e) => e.stopPropagation()}
-            className="w-[450px] "
+            className="w-[500px]"
             variants={modalVariants}
             initial="hidden"
             animate="visible"
@@ -118,24 +124,23 @@ const AddCategoryModal: React.FC<AddCategoryModalProps> = ({
               isOpen={isOpen}
               toggle={toggle}
               headerText={
-                isEditMode ? "Update Product Category" : "Add Product Category"
+                pricingData ? "Edit Product Price" : "Add Product Price"
               }
-              onConfirm={handleConfirm}
+              onConfirm={handleSubmit}
               onCancel={handleCancel}
-              confirmText={isEditMode ? "Update" : "Submit"}
+              confirmText={pricingData ? "Update" : "Submit"}
               cancelText="Cancel"
               confirmColor={
                 isValid
                   ? "bg-black hover:bg-gray-900 text-white"
                   : "bg-gray-400 text-white cursor-not-allowed"
               }
-              widthClass="w-[450px]"
+              widthClass="w-[500px]"
             >
-              {/* Form */}
-              <AddCategoryForm
-                values={formData}
+              <ProductPricingForm
+                values={values}
                 errors={errors}
-                onChange={setFormData}
+                onChange={setValues}
                 onBlur={handleBlur}
                 touched={touched}
               />
@@ -147,4 +152,4 @@ const AddCategoryModal: React.FC<AddCategoryModalProps> = ({
   );
 };
 
-export default AddCategoryModal;
+export default AddProductPricingModal;

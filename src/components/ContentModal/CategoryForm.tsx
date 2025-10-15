@@ -1,4 +1,6 @@
 import React from "react";
+import InputField from "../../components/Common/inputField";
+import RadioButton from "../Common/RadioButton";
 
 type Values = {
   name: string;
@@ -29,13 +31,13 @@ const AddCategoryForm: React.FC<Props> = ({
     <div className="grid grid-cols-1 gap-6">
       {/* Category Name Field */}
       <div>
-        <label
+        {/* <label
           htmlFor="categoryName"
-          className="block text-sm font-medium text-gray-700 mb-1"
+          className="block text-sm font-medium text-gray-700 mb-1 "
         >
           Name
-        </label>
-        <input
+        </label> */}
+        {/* <input
           type="text"
           id="categoryName"
           value={values.name}
@@ -48,6 +50,15 @@ const AddCategoryForm: React.FC<Props> = ({
               ? "border-red-500 focus:ring-red-500"
               : "border-gray-300"
           }`}
+        /> */}
+        <InputField
+          label="Name"
+          type="text"
+          value={values.name}
+          onChange={(e) => onChange({ ...values, name: e.target.value })}
+          onBlur={() => onBlur("name")}
+          placeholder="Enter Product Category Name"
+          autoComplete="off"
         />
         {touched.name && errors.name && (
           <p className="mt-1 text-sm text-red-500">{errors.name}</p>
@@ -59,34 +70,35 @@ const AddCategoryForm: React.FC<Props> = ({
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Status
         </label>
+
         <div className="flex items-center space-x-6">
           {/* Active */}
-          <label className="inline-flex items-center space-x-2 cursor-pointer">
-            <input
-              type="radio"
-              name="status"
-              value="Active"
-              checked={values.status === "Active"}
-              onChange={() => onChange({ ...values, status: "Active" })}
-              onBlur={() => onBlur("status")}
-              className="text-green-600 focus:ring-green-500"
-            />
-            <span className="text-sm text-gray-700">Active</span>
-          </label>
+          <RadioButton
+            checked={values.status === "Active"}
+            onChange={() => {
+              onChange({ ...values, status: "Active" });
+              onBlur("status");
+            }}
+            label="Active"
+            size="sm"
+            activeColor="bg-green-600"
+            borderColor="border-green-600"
+            labelColor="text-gray-700"
+          />
 
           {/* Inactive */}
-          <label className="inline-flex items-center space-x-2 cursor-pointer">
-            <input
-              type="radio"
-              name="status"
-              value="Inactive"
-              checked={values.status === "Inactive"}
-              onChange={() => onChange({ ...values, status: "Inactive" })}
-              onBlur={() => onBlur("status")}
-              className="text-red-600 focus:ring-red-500"
-            />
-            <span className="text-sm text-gray-700">Inactive</span>
-          </label>
+          <RadioButton
+            checked={values.status === "Inactive"}
+            onChange={() => {
+              onChange({ ...values, status: "Inactive" });
+              onBlur("status");
+            }}
+            label="Inactive"
+            size="sm"
+            activeColor="bg-red-600"
+            borderColor="border-red-600"
+            labelColor="text-gray-700"
+          />
         </div>
 
         {touched.status && errors.status && (
