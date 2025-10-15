@@ -15,3 +15,28 @@ const ContentModal: React.FC<ContentModalProps> = ({ title, message }) => {
 };
 
 export default ContentModal;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

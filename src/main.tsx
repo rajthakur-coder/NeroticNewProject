@@ -3,17 +3,15 @@ import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App.tsx';
 import 'animate.css';
-
-// import { createRipple } from './hooks/useRipple.ts';
-
+import { store } from "./components/app/store.ts";
+import { Provider } from "react-redux"; 
 import { createRipple } from './hooks/useRipple.ts';
 
+// Ripple effect
 document.addEventListener("mousedown", (e) => {
   const target = e.target as HTMLElement;
 
-  if (target.closest("[data-no-ripple]")) {
-    return; 
-  }
+  if (target.closest("[data-no-ripple]")) return;
 
   const clickable = target.closest("button, a, [data-ripple]") as HTMLElement;
   if (clickable) {
@@ -24,9 +22,12 @@ document.addEventListener("mousedown", (e) => {
   }
 });
 
+const root = createRoot(document.getElementById('root')!);
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
+root.render(
+  <Provider store={store}>
+    <StrictMode>
+      <App />
+    </StrictMode>
+  </Provider>
 );

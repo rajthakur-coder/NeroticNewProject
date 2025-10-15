@@ -559,7 +559,7 @@ const OrderList = () => {
                 id={selectedId || undefined}
                 itemsToDelete={0}
                   confirmColor="bg-red-600 hover:bg-red-700 text-white"
-  cancelColor="bg-gray-200 hover:bg-gray-300 text-black"
+  cancelColor="bg-gray-200 hover:bg-gray-100 text-black"
             />
 
             <DeleteModal
@@ -567,7 +567,7 @@ const OrderList = () => {
                 toggle={closeDeleteModal}
                 itemsToDelete={selectedOrders.length}
                   confirmColor="bg-red-600 hover:bg-red-700 text-white"
-  cancelColor="bg-gray-200 hover:bg-gray-300 text-black"
+  cancelColor="bg-gray-200 hover:bg-gray-100 text-black "
 
             />
 

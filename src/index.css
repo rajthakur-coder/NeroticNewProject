@@ -243,12 +243,12 @@ input[type="password"]::-webkit-textfield-decoration-container {
 /* styles.css */
 .faster-slideInRight {
   --animate-duration: 0.5s;
-  animation-timing-function: ease-out; /* smooth */
+  /* animation-timing-function: ease-out; */
 }
 
 .faster-slideInLeft {
   --animate-duration: 0.2s;
-  animation-timing-function: ease-in; /* smooth */
+  /* animation-timing-function: ease-in;  */
 }
 
 
