@@ -11,6 +11,7 @@ import ServiceSwitching from "../pages/Admin/settingManagement/ServiceSwitching"
 import EcommercePage from "../pages/Ecommerce";
 import Analytics from "../pages/Dashboard";
 import Banking from "../pages/Banking";
+import WalletTransfer from "../pages/Admin/Account Management/WalletTransfer";
 
 const AppRoutes = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -31,7 +32,14 @@ const AppRoutes = () => {
       <Route path="/products" element={<Product />} />
       <Route path="/product-pricing" element={<ProductPricing />} />
       <Route path="/setting-management/apis" element={<Apis />} />
-      <Route path="/setting-management/service-switching" element={<ServiceSwitching />} />
+      <Route
+        path="/setting-management/service-switching"
+        element={<ServiceSwitching />}
+      />
+      <Route
+        path="/account-management/wallet-transfer"
+        element={<WalletTransfer />}
+      />
 
       {/* Catch-all: redirect unknown routes to /ecommerce */}
       <Route path="*" element={<Navigate to="/ecommerce" replace />} />

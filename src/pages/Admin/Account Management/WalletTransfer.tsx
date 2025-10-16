@@ -1,121 +1,150 @@
 import { motion, AnimatePresence } from "framer-motion";
 import React, { useState, useRef, useEffect } from "react";
 import clsx from "clsx";
+import DateAndTime from "../../../components/Common/DateAndTime";
 import DynamicSidebarMenu from "../../../components/Modal/SidebarSubmenu";
-import {EditIcon, DeleteIcon} from "../../../components/ContentModal/SidebarSubmenuContent";
+import {
+  EditIcon,
+  DeleteIcon,
+} from "../../../components/ContentModal/SidebarSubmenuContent";
+import SearchModalWrapper from "../../../components/Modal/SearchModalWrapper";
+import type { Country } from "../../../components/ContentModal/SearchContentModal";
 import Icon from "../../../components/ui/Icon";
 import DeleteModal from "../../../components/Modal/DeleteModal";
 import AnimatedDeleteButton from "../../../components/Common/AnimatedDeleteButton";
 import Tab from "../../../components/Common/Tabs";
 import StatusBadge from "../../../components/Common/StatusBadge";
 import { Button } from "../../../components/Common/Button";
-import AddCategoryModal from "../../../components/Modal/AddCategoryModal";
 
-interface Category {
+interface Product {
   id: string;
+  categroyName: string;
   name: string;
   date: string;
   time: string;
   slug: string;
   status: "All" | "Active" | "Inactive";
+  avatar: string;
 }
 
-const categoryData: Category[] = [
+const productData: Product[] = [
   {
     id: "11",
-    name: "Aadhaar / Pan",
+    categroyName: "Aadhaar / Pan",
+    name: "Jayvion Simon",
     date: "20 Sep 2025",
     time: "11:01 am",
     slug: "aadhaar-pan",
     status: "Active",
+    avatar: "https://i.pravatar.cc/40?img=1",
   },
   {
     id: "10",
-    name: "Bank Account",
+    categroyName: "Aadhaar / Pan",
+    name: "Lucian Obrien",
     date: "19 Sep 2025",
     time: "10:01 am",
-    slug: "bank-account",
+    slug: "aadhaar-pan",
     status: "Active",
+    avatar: "https://i.pravatar.cc/40?img=2",
   },
   {
     id: "9",
-    name: "KYB (Know your business)",
+    categroyName: "Aadhaar / Pan",
+    name: "Soren Durham",
     date: "10 Sep 2025",
     time: "1:01 am",
-    slug: "kyb-know-your-business",
+    slug: "aadhaar-pan",
     status: "Inactive",
+    avatar: "https://i.pravatar.cc/40?img=3",
   },
   {
     id: "8",
-    name: "Regulated Digital KYC",
+    categroyName: "Aadhaar / Pan",
+    name: "Cortez Herring",
     date: "09 Sep 2025",
     time: "12:01 am",
-    slug: "regulated-digital-kyc",
+    slug: "aadhaar-pan",
     status: "Inactive",
+    avatar: "https://i.pravatar.cc/40?img=4",
   },
   {
     id: "7",
-    name: "Other Official Documents",
+    categroyName: "Aadhaar / Pan",
+    name: "Brycen Jimenez",
     date: "07 Sep 2025",
     time: "11:01 pm",
-    slug: "other-official-documents",
+    slug: "aadhaar-pan",
     status: "Active",
+    avatar: "https://i.pravatar.cc/40?img=5",
   },
   {
     id: "6",
-    name: "Telecom Intelligence",
+    categroyName: "Aadhaar / Pan",
+    name: "Shawn Manning",
     date: "16 Sep 2025",
     time: "1:20 am",
-    slug: "telecom-intelligence",
+    slug: "aadhaar-pan",
     status: "Inactive",
+    avatar: "https://i.pravatar.cc/40?img=21",
   },
   {
     id: "5",
-    name: "Utility Bill Intelligence",
+    categroyName: "Aadhaar / Pan",
+    name: "Chase Day",
     date: "17 Sep 2025",
     time: "2:20 am",
-    slug: "utility-bill-intelligence",
+    slug: "aadhaar-pan",
     status: "Active",
+    avatar: "https://i.pravatar.cc/40?img=22",
   },
   {
     id: "4",
+    categroyName: "Aadhaar / Pan",
     name: "Melanie Noble",
     date: "18 Sep 2025",
     time: "3:20 am",
     slug: "aadhaar-pan",
     status: "Inactive",
+    avatar: "https://i.pravatar.cc/40?img=23",
   },
   {
     id: "3",
+    categroyName: "Aadhaar / Pan",
     name: "Christopher Cardenas",
     date: "19 Sep 2025",
     time: "4:20 am",
     slug: "aadhaar-pan",
     status: "Inactive",
+    avatar: "https://i.pravatar.cc/40?img=24",
   },
   {
     id: "2",
+    categroyName: "Aadhaar / Pan",
     name: "Lainey Davidson",
     date: "20 Sep 2025",
     time: "5:20 am",
     slug: "aadhaar-pan",
     status: "Active",
+    avatar: "https://i.pravatar.cc/40?img=25",
   },
   {
     id: "1",
+    categroyName: "Aadhaar / Pan",
     name: "Elias Graham",
     date: "21 Sep 2025",
     time: "6:00 am",
     slug: "aadhaar-pan",
     status: "Inactive",
+    avatar: "https://i.pravatar.cc/40?img=26",
   },
 ];
 
 const ROWS_PER_PAGE_OPTIONS = [5, 10, 25];
 
-const ProductCategory = () => {
+const WalletTransfer = () => {
   // Combine both arrays once into state
-  const [allOrders, setAllOrders] = useState([...categoryData]);
+  const [allOrders, setAllOrders] = useState([...productData]);
   const [selectedTab, setSelectedTab] = useState<string>("All");
   const [selectedOrders, setSelectedOrders] = useState<string[]>([]);
   const [statusState, setStatusState] = useState({
@@ -133,8 +162,16 @@ const ProductCategory = () => {
   const selectAllOverlayRef = useRef<HTMLInputElement>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<any>(null);
-  const [menuOpen, setMenuOpen] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
+  const [isSearchContentModalOpen, setIsSearchContentModalOpen] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
+      
+  const handleCountrySelect = (country: Country) => {
+    setSelectedCountry(country);
+    setSearch(country.name);
+    setIsSearchContentModalOpen(false);
+    };
 
   // ✅ Open modal for Add
   const handleAdd = () => {
@@ -144,153 +181,147 @@ const ProductCategory = () => {
 
   // ✅ Open modal for Edit
   const handleEdit = (category: any) => {
-    setSelectedId(category); // pass category data
+    setSelectedId(category);
     setIsAddModalOpen(true);
-  };
-
-  // ✅ Toggle modal close/open
-  const toggleAddModal = () => setIsAddModalOpen((prev) => !prev);
-
-  const filteredOrders = allOrders.filter((order) => {
-    const matchesTab = selectedTab === "All" || order.status === selectedTab;
-    const matchesSearch = order.name
-      .toLowerCase()
-      .includes(search.toLowerCase());
-    return matchesTab && matchesSearch;
-  });
-
-  const indexOfLastRow = currentPage * rowsPerPage;
-  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentOrders = filteredOrders.slice(indexOfFirstRow, indexOfLastRow);
-  const totalPages = Math.ceil(filteredOrders.length / rowsPerPage);
-
-  const allSelected =
-    currentOrders.length > 0 && selectedOrders.length === currentOrders.length;
-  const partiallySelected =
-    selectedOrders.length > 0 && selectedOrders.length < currentOrders.length;
-
-  useEffect(() => {
-    const indeterminate = selectedOrders.length > 0 && !allSelected;
-
-    if (selectAllHeaderRef.current) {
-      selectAllHeaderRef.current.indeterminate = indeterminate;
-      selectAllHeaderRef.current.checked = allSelected;
-    }
-
-    if (selectAllOverlayRef.current) {
-      selectAllOverlayRef.current.indeterminate = indeterminate;
-      selectAllOverlayRef.current.checked = allSelected;
-    }
-  }, [selectedOrders, currentOrders, allSelected]);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsDropdownOpen(false);
-      }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+    
+      // ✅ Toggle modal close/open
+      const toggleAddModal = () => setIsAddModalOpen((prev) => !prev);
+    
+      const filteredOrders = allOrders.filter((order) => {
+        const matchesTab = selectedTab === "All" || order.status === selectedTab;
+        const matchesSearch = order.name
+          .toLowerCase()
+          .includes(search.toLowerCase());
+        return matchesTab && matchesSearch;
+      });
+    
+      const indexOfLastRow = currentPage * rowsPerPage;
+      const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+      const currentOrders = filteredOrders.slice(indexOfFirstRow, indexOfLastRow);
+      const totalPages = Math.ceil(filteredOrders.length / rowsPerPage);
+    
+      const allSelected =
+        currentOrders.length > 0 && selectedOrders.length === currentOrders.length;
+      const partiallySelected =
+        selectedOrders.length > 0 && selectedOrders.length < currentOrders.length;
+    
+      useEffect(() => {
+        const indeterminate = selectedOrders.length > 0 && !allSelected;
+    
+        if (selectAllHeaderRef.current) {
+          selectAllHeaderRef.current.indeterminate = indeterminate;
+          selectAllHeaderRef.current.checked = allSelected;
+        }
+    
+        if (selectAllOverlayRef.current) {
+          selectAllOverlayRef.current.indeterminate = indeterminate;
+          selectAllOverlayRef.current.checked = allSelected;
+        }
+      }, [selectedOrders, currentOrders, allSelected]);
+    
+      useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+          if (
+            dropdownRef.current &&
+            !dropdownRef.current.contains(event.target as Node)
+          ) {
+            setIsDropdownOpen(false);
+          }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+      }, []);
+    
+      const closeDeleteModal = () => setIsDeleteModalOpen(false);
+      const openDeleteModal = () => setIsDeleteModalOpen(true);
+    
+      const toggleStatus = (id) => {
+        setStatusState({ loading: true, id });
+        setTimeout(() => {
+          setAllOrders((prev) =>
+            prev.map((product) =>
+              product.id === id
+                ? {
+                    ...product,
+                    status: product.status === "Active" ? "Inactive" : "Active",
+                  }
+                : product
+            )
+          );
+          setStatusState({ loading: false, id: null });
+        }, 800);
+      };
+    
+      const handleRowsPerPageChange = (newRows: number) => {
+        setRowsPerPage(newRows);
+        setCurrentPage(1);
+        setIsDropdownOpen(false);
+      };
+    
+      const toggleSelect = (id: string) => {
+        setSelectedOrders((prev) =>
+          prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+        );
+      };
+    
+      const toggleSelectAll = () => {
+        if (
+          selectedOrders.length === currentOrders.length &&
+          currentOrders.length > 0
+        ) {
+          setSelectedOrders([]);
+        } else {
+          // Select all visible orders on the current page
+          setSelectedOrders(currentOrders.map((o) => o.id));
+        }
+      };
+    
+      const deleteSelectedOrders = () => {
+        openDeleteModal();
+      };
+    
+      const handleTabChange = (key: string) => {
+        setSelectedTab(key);
+        setSelectedOrders([]);
+        setCurrentPage(1);
+      };
+    
+      const openPopup = (e: React.MouseEvent<HTMLButtonElement>, id: string) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        setMenuPosition({
+          top: rect.bottom + window.scrollY - 40,
+          left: rect.right - 170,
+        });
+        setSelectedOrderId(id);
+        setMenuOpen(true);
+      };
+    
+    const actions = [
+      { label: "Edit", icon: <EditIcon />, onClick: handleEdit },
+      {
+        label: "Delete",
+        icon: <DeleteIcon />,
+        onClick: deleteSelectedOrders,
+        danger: true,
+      },
+    ];
+    
+      const orderTabs: Tab[] = [
+        { name: "All", key: "All", count: allOrders.length },
+        {
+          name: "Active",
+          key: "Active",
+          count: allOrders.filter((o) => o.status === "Active").length,
+        },
+        {
+          name: "Inactive",
+          key: "Inactive",
+          count: allOrders.filter((o) => o.status === "Inactive").length,
+        },
+      ];
+    
 
-  const closeDeleteModal = () => setIsDeleteModalOpen(false);
-  const openDeleteModal = () => setIsDeleteModalOpen(true);
-
-  const toggleStatus = (id) => {
-    setStatusState({ loading: true, id });
-    setTimeout(() => {
-      setAllOrders((prev) =>
-        prev.map((product) =>
-          product.id === id
-            ? {
-                ...product,
-                status: product.status === "Active" ? "Inactive" : "Active",
-              }
-            : product
-        )
-      );
-      setStatusState({ loading: false, id: null });
-    }, 800);
-  };
-
-  const handleRowsPerPageChange = (newRows: number) => {
-    setRowsPerPage(newRows);
-    setCurrentPage(1);
-    setIsDropdownOpen(false);
-  };
-
-  const toggleSelect = (id: string) => {
-    setSelectedOrders((prev) =>
-      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
-    );
-  };
-
-  const toggleSelectAll = () => {
-    if (
-      selectedOrders.length === currentOrders.length &&
-      currentOrders.length > 0
-    ) {
-      setSelectedOrders([]);
-    } else {
-      // Select all visible orders on the current page
-      setSelectedOrders(currentOrders.map((o) => o.id));
-    }
-  };
-
-  const deleteSelectedOrders = () => {
-    openDeleteModal();
-  };
-
-  const handleTabChange = (key: string) => {
-    setSelectedTab(key);
-    setSelectedOrders([]);
-    setCurrentPage(1);
-  };
-
-  const openPopup = (e: React.MouseEvent<HTMLButtonElement>, id: string) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    setMenuPosition({
-      top: rect.bottom + window.scrollY - 40,
-      left: rect.right - 170,
-    });
-    setSelectedOrderId(id);
-    setMenuOpen(true);
-  };
-
-const actions = [
-  { label: "Edit", icon: <EditIcon />, onClick: handleEdit },
-  {
-    label: "Delete",
-    icon: <DeleteIcon />,
-    onClick: deleteSelectedOrders,
-    danger: true,
-  },
-];
-
-  interface Tab {
-    name: string;
-    key: string;
-    count: number;
-  };
-
-  const orderTabs: Tab[] = [
-    { name: "All", key: "All", count: allOrders.length },
-    {
-      name: "Active",
-      key: "Active",
-      count: allOrders.filter((o) => o.status === "Active").length,
-    },
-    {
-      name: "Inactive",
-      key: "Inactive",
-      count: allOrders.filter((o) => o.status === "Inactive").length,
-    },
-  ];
-
-  // ------------------ JSX ------------------
   return (
     <div className="rounded-lg bg-surface-body text-text-main">
       <div className="shadow-xl bg-surface-card rounded-xl">
@@ -304,7 +335,16 @@ const actions = [
           <div className={`-mx-4 border-b-[1px] border-border-primary`}></div>
 
           <div className="flex flex-col gap-4 mt-6 md:flex-row md:items-center md:gap-4">
-            <div className="flex items-center w-full gap-5 md:flex-1 ">
+            {/* Dates Section */}
+            <div className="flex flex-col w-full gap-3 sm:flex-row md:gap-4 md:w-auto">
+              <div className="w-full sm:w-auto">
+                <DateAndTime />
+              </div>
+              <div className="w-full sm:w-auto">
+                <DateAndTime label="End Date" />
+              </div>
+            </div>
+            <div className="flex items-center w-full gap-2 md:flex-1">
               <div className="relative flex-1 w-1/2">
                 <Icon
                   name="ri-search-line"
@@ -319,10 +359,46 @@ const actions = [
                 />
               </div>
 
+              {/* Dropdown / Filter Input */}
+              <div className="relative flex-1">
+                <Icon
+                  name="ri-search-line"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-text-subtle"
+                />
+                <input
+                  readOnly
+                  value={
+                    selectedCountry
+                      ? `Filtering by: ${selectedCountry.name}`
+                      : search
+                  }
+                  placeholder="Search By Products"
+                  onClick={() => setIsSearchContentModalOpen(true)}
+                  className="w-full px-3 py-3.5 pl-10 text-sm border rounded-lg cursor-pointer bg-surface-card
+                 text-text-main placeholder-text-subtle border-border-input
+                 hover:border-[var(--color-border-input-hover)] 
+                 focus:border-[var(--color-border-input-focus)] focus:ring-primary"
+                />
+                {selectedCountry && (
+                  <button
+                    data-no-ripple
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedCountry(null);
+                      setSearch("");
+                    }}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-full 
+                   text-text-subtle hover:bg-surface-hover hover:text-text-main transition-colors"
+                  >
+                    <Icon name="x" className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+
               <div className="text-text-subtle">
                 <Button
                   className="p-2 transition-colors rounded-full"
-                  text="Add Category"
+                  text="Add Product"
                   onClick={handleAdd}
                   size="sm"
                   width="150px"
@@ -371,7 +447,7 @@ const actions = [
 
         {/* Table Section */}
         <div className="relative w-full mt-4">
-
+          {/* Selected Row Overlay */}
           <AnimatePresence>
             {selectedOrders.length > 0 && (
               <motion.div
@@ -383,7 +459,7 @@ const actions = [
               >
                 <div className="flex items-center gap-4 text-sm font-medium">
                   <div className="relative w-4 h-4">
-
+                    {/* Overlay Checkbox Input */}
                     <input
                       type="checkbox"
                       ref={selectAllOverlayRef}
@@ -396,6 +472,7 @@ const actions = [
                       )}
                     />
 
+                    {/* FIX: Checkmark icon rendered only when fully checked, subtract icon for indeterminate */}
                     <span className="absolute inset-0 flex items-center justify-center pointer-events-none">
                       {allSelected && (
                         <Icon
@@ -473,6 +550,12 @@ const actions = [
                     #
                   </th>
                   <th className="px-3 py-5 text-xs font-semibold text-left">
+                    Icon
+                  </th>
+                  <th className="px-3 py-5 text-xs font-semibold text-left">
+                    Category
+                  </th>
+                  <th className="px-3 py-5 text-xs font-semibold text-left">
                     Name
                   </th>
                   <th className="px-3 py-5 text-xs font-semibold text-left">
@@ -534,10 +617,20 @@ const actions = [
                       <td className="p-3 text-xs font-medium text-text-main">
                         {order.id}
                       </td>
+                      <td className="flex items-center gap-2 p-3">
+                        <img
+                          src={order.avatar}
+                          alt={order.name}
+                          className="w-8 h-8 rounded-full"
+                        />
+                      </td>
                       <td className="p-3 text-xs">
-                        <div className="text-xs font-medium text-text-main">
-                          {order.name}
+                        <div className="text-text-main">
+                          {order.categroyName}
                         </div>
+                      </td>
+                      <td className="p-3 text-xs text-text-main">
+                        {order.name}
                       </td>
                       <td className="p-3 text-xs text-text-main">
                         {order.slug}
@@ -549,15 +642,13 @@ const actions = [
                         </div>
                       </td>
                       <td className="p-3">
-                        <td className="p-3">
-                          <StatusBadge
-                            status={order.status}
-                            onClick={() => toggleStatus(order.id)}
-                            loading={
-                              statusState.loading && statusState.id === order.id
-                            }
-                          />
-                        </td>
+                        <StatusBadge
+                          status={order.status}
+                          onClick={() => toggleStatus(order.id)}
+                          loading={
+                            statusState.loading && statusState.id === order.id
+                          }
+                        />
                       </td>
                       <td className="p-3">
                         <button
@@ -657,11 +748,6 @@ const actions = [
       </div>
 
       {/* ✅ Modal used for both Add and Edit */}
-      <AddCategoryModal
-        isOpen={isAddModalOpen}
-        toggle={toggleAddModal}
-        categoryData={selectedId} // null → Add mode | object → Edit mode
-      />
 
       {/* Existing Modals */}
       {selectedOrderId && (
@@ -680,8 +766,14 @@ const actions = [
         confirmColor="bg-red-600 hover:bg-red-700 text-white"
         cancelColor="bg-gray-200 hover:bg-gray-300 text-black"
       />
+      <SearchModalWrapper
+        initialSearch={search}
+        isOpen={isSearchContentModalOpen}
+        onClose={() => setIsSearchContentModalOpen(false)}
+        onSelect={handleCountrySelect}
+      />
     </div>
   );
 };
 
-export default ProductCategory;
+export default WalletTransfer;

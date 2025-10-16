@@ -83,7 +83,6 @@ const AddCategoryModal: React.FC<AddCategoryModalProps> = ({
         type: "spring",
         damping: 25,
         stiffness: 250,
-        duration: 0.2,
       },
     },
     exit: { scale: 0.8, opacity: 0, y: 50, transition: { duration: 0.15 } },

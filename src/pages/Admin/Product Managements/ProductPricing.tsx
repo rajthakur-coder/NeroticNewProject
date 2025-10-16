@@ -247,7 +247,7 @@ const actions = [
     <div className="rounded-lg bg-surface-body text-text-main">
       <div className="shadow-xl bg-surface-card rounded-xl">
         <div className="p-4 sm:p-6">
-          <div className="flex flex-col gap-4 mt-6 md:flex-row md:items-center md:gap-4">
+          <div className="flex flex-col gap-4 mt-1 md:flex-row md:items-center md:gap-4">
             <div className="flex items-center w-full gap-2 md:flex-1">
               <div className="relative flex-1 w-1/2">
                 <Icon
@@ -258,8 +258,8 @@ const actions = [
                   placeholder="Search By Name..."
                   onChange={(e) => setSearch(e.target.value)}
                   className="w-1/2 px-3 py-3.5 pl-10 text-sm border rounded-lg cursor-pointer bg-surface-card text-text-main placeholder-text-subtle
-    border-border-input hover:border-[var(--color-border-input-hover)] 
-    focus:border-[var(--color-border-input-focus)] focus:ring-primary"
+                  border-border-input hover:border-[var(--color-border-input-hover)] 
+                  focus:border-[var(--color-border-input-focus)] focus:ring-primary"
                 />
               </div>
 
@@ -276,41 +276,6 @@ const actions = [
               </div>
             </div>
           </div>
-
-          {selectedTab !== "All" && (
-            <>
-              <div className="mt-4 text-xs font-bold">
-                {filteredOrders.length}
-
-                <span className="font-normal text-text-subtle">
-                  {" "}
-                  result found
-                </span>
-              </div>
-              <div className="flex flex-wrap items-center gap-3 mt-3">
-                <span className="flex items-center px-3 py-2 text-xs font-semibold border border-dashed rounded-lg bg-surface-card border-border-primary text-text-main">
-                  Status:
-                  <span className="flex items-center px-2 py-1 ml-2 font-medium rounded-md bg-surface-hover text-xxs text-text-main">
-                    {selectedTab}
-                    <button
-                      onClick={() => setSelectedTab("All")}
-                      // Inner button is neutral gray, using subtle text color as BG
-                      className="flex items-center justify-center w-3.5 h-3.5 ml-2 text-white bg-text-subtle rounded-full hover:bg-text-main"
-                    >
-                      <Icon
-                        name="x"
-                        className="w-1.5 h-1.5 text-white dark:text-black"
-                      />
-                    </button>
-                  </span>
-                </span>
-                <AnimatedDeleteButton
-                  onClick={() => setSelectedTab("All")}
-                  label="Clear"
-                />
-              </div>
-            </>
-          )}
         </div>
 
         {/* Table Section */}

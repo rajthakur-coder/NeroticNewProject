@@ -50,8 +50,13 @@ export const sidebarSections = [
             name: "Service Switcing",
             path: "/setting-management/service-switching",
           },
-          // { name: "Create", path: "/product/create" },
-          // { name: "Edit", path: "/product/edit" },
+        ],
+      },
+      {
+        name: "Account Management",
+        icon: <Icon name="mdi:package-variant" />,
+        children: [
+          { name: "Wallet Transfer", path: "/account-management/wallet-transfer" },
         ],
       },
       { name: "Order", path: "/order", icon: <Icon name="mdi:bank-outline" /> },
