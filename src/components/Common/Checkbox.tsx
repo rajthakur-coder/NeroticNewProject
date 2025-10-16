@@ -5,17 +5,19 @@ import { Check } from "lucide-react";
 interface CheckboxProps {
   checked: boolean;
   onChange: () => void;
-  size?: "xs"|"sm" | "md" | "lg";
+  size?: "xs" | "sm" | "md" | "lg";
   shape?: "square" | "rounded" | "circle";
   checkedColor?: string;
   uncheckedColor?: string;
   borderColor?: string;
-  borderWidth?: string; 
+  borderWidth?: string;
   iconColor?: string;
   animationSpeed?: number;
   showLabel?: boolean;
   label?: string;
   labelPosition?: "left" | "right";
+  // Custom icon for checked state (can be used for minus icon)
+  checkedIcon?: React.ReactNode; 
 }
 
 const Checkbox: React.FC<CheckboxProps> = ({
@@ -32,6 +34,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
   showLabel = false,
   label = "",
   labelPosition = "right",
+  checkedIcon, // Use the custom icon prop
 }) => {
   const sizes = {
     xs: "w-4 h-4 text-[10px]",
@@ -42,9 +45,21 @@ const Checkbox: React.FC<CheckboxProps> = ({
 
   const shapes = {
     square: "rounded-none",
-    rounded:"rounded",
+    rounded: "rounded",
     roundedmd: "rounded-md",
     circle: "rounded-full",
+  };
+
+  // 💡 लॉजिक: अगर `checkedIcon` पास किया गया है, तो उसे रेंडर करें।
+  // नहीं तो, डिफ़ॉल्ट `Check` आइकॉन को रेंडर करें।
+  const renderIcon = () => {
+    // 1. If a custom icon (like the minus icon) is passed, render it.
+    if (checkedIcon) {
+      return checkedIcon;
+    }
+    
+    // 2. Otherwise, render the default checkmark icon.
+    return <Check className={clsx("w-3 h-3", iconColor)} strokeWidth={3} />;
   };
 
   return (
@@ -64,19 +79,17 @@ const Checkbox: React.FC<CheckboxProps> = ({
         className={clsx(
           "flex items-center justify-center transition-all duration-300",
           sizes[size],
-          shapes[shape],
+          // NOTE: 'roundedmd' is not a standard shape key in your object. Using 'rounded' instead.
+          shape === 'roundedmd' ? shapes.rounded : shapes[shape], 
           checked ? checkedColor : uncheckedColor,
-          !checked && `${borderWidth} ${borderColor}`, 
+          !checked && `${borderWidth} ${borderColor}`,
           "shadow-sm"
         )}
         style={{
           transitionDuration: `${animationSpeed}ms`,
-         
         }}
       >
-        {checked && (
-          <Check className={clsx("w-3 h-3", iconColor)} strokeWidth={3} />
-        )}
+        {checked && renderIcon()}
       </div>
 
       {labelPosition === "right" && showLabel && (

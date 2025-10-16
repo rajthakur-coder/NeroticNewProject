@@ -17,7 +17,7 @@ const LogoutContentModal: React.FC<LogoutContentModalProps> = ({
   setAllDevices,
 }) => {
   return (
-    <div className="p-2 pt-4 space-y-4 text-start">
+    <div className="space-y-4  text-start">
       <h3 className="text-lg font-semibold text-text-main">{title}</h3>
       {message && <p className="text-sm font-normal text-text-main">{message}</p>}
 

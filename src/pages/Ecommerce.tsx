@@ -1,4 +1,3 @@
-
 import { motion, AnimatePresence } from "framer-motion";
 import React, { useState, useRef, useEffect } from "react";
 import clsx from "clsx";
@@ -202,7 +201,7 @@ const OrderList = () => {
     return (
         <div className="rounded-lg bg-surface-body text-text-main">
             <div className="shadow-xl bg-surface-card rounded-xl">
-                <div className="p-4 sm:p-6">
+                <div className="p-4 sm:p-6 md:p-4">
 
                     <Tab
                         tabs={orderTabs}

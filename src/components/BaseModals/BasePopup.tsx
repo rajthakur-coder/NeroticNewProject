@@ -1,7 +1,5 @@
-
-
 import { createPortal } from "react-dom";
-import { ReactNode, useEffect, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import clsx from "clsx";
 
 interface BasePopupProps {

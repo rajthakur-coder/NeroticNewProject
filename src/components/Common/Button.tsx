@@ -64,7 +64,8 @@ export const Button: React.FC<ButtonProps> = ({
     },
     secondary: {
       solid: "bg-secondary text-white hover:bg-secondary/90",
-      outline: "border border-border-input text-secondary hover:bg-secondary/10",
+      outline:
+        "border border-border-input text-secondary hover:bg-secondary/10",
       ghost: "text-secondary hover:bg-secondary/10",
     },
     success: {
@@ -79,7 +80,8 @@ export const Button: React.FC<ButtonProps> = ({
     },
     surface: {
       solid: "bg-surface-card text-text-main hover:bg-surface-hover",
-      outline: "border border-border-input text-text-main hover:bg-surface-hover",
+      outline:
+        "border border-border-input text-text-main hover:bg-surface-hover",
       ghost: "text-text-main hover:bg-surface-hover",
     },
   };
@@ -103,7 +105,9 @@ export const Button: React.FC<ButtonProps> = ({
       {...props}
     >
       {/* Icon Left */}
-      {!loading && Icon && iconPosition === "left" && <Icon className="w-4 h-4" />}
+      {!loading && Icon && iconPosition === "left" && (
+        <Icon className="w-4 h-4" />
+      )}
 
       {/* Text */}
       {loading ? (
@@ -113,7 +117,9 @@ export const Button: React.FC<ButtonProps> = ({
       )}
 
       {/* Icon Right */}
-      {!loading && Icon && iconPosition === "right" && <Icon className="w-4 h-4" />}
+      {!loading && Icon && iconPosition === "right" && (
+        <Icon className="w-4 h-4" />
+      )}
     </button>
   );
 };
