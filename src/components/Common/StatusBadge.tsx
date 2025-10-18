@@ -63,7 +63,7 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({
   return (
     <span
       className={clsx(
-        "px-2 py-1.5 rounded-md text-xxs font-semibold cursor-pointer inline-flex items-center gap-1 transition",
+        "px-2 py-1.5 rounded-md text-xs font-semibold cursor-pointer inline-flex items-center gap-1 transition",
         classes,
         {
           "opacity-70": loading,
@@ -73,7 +73,7 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({
       onClick={loading ? undefined : onClick}
     >
       {loading ? (
-        <Spinner size="xxs" style={{ width: "0.8rem", height: "0.8rem" }} />
+        <Spinner size="xs" style={{ width: "1rem", height: "1rem" }} />
       ) : (
         status
       )}

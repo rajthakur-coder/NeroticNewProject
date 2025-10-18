@@ -59,7 +59,7 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({
   };
 
   return (
-    <div className="flex flex-col p-6 lg:p-0">
+    <div className="flex flex-col p-6 lg:p-0 animate__animated animate__slideInRight faster-slideInRight ">
       <div className="flex items-center pb-6">
         <button
           onClick={onCancel}
@@ -115,7 +115,7 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({
                 : "bg-black text-white "
               }
               ${loading
-                ? "w-12 h-12 rounded-full" 
+                ? "w-12 h-12 rounded-full bg-gray-900 " 
                 : "w-full h-12 rounded-xl" 
               }
             `}

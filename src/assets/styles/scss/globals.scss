@@ -23,6 +23,24 @@
   --color-info: theme(colors.blue.500);
   --color-dark: theme(colors.gray.900);
 
+
+
+
+--font-size-base-xxs: 0.625rem;   /* New 10px for text-xxs */
+  --font-size-base-xs: 0.75rem;     /* 12px for text-xs */
+  --font-size-base-sm: 0.875rem;    /* 14px for text-sm */
+  --font-size-base-md: 0.9375rem;   /* 15px for text-md */
+  --font-size-base-lg: 1.125rem;    /* 18px for text-lg */
+  --font-size-base-xl: 1.25rem;     /* New 20px for text-xl */
+  --font-size-base-2xl: 1.5rem;    /* New 24px for text-2xl */
+  
+  /* Line Heights (aap inko bhi customize kar sakte hain) */
+  --line-height-base-xs: 1.125rem;
+  --line-height-base-md: 1.5rem;
+  --line-height-base-xl: 1.75rem;
+  --line-height-base-2xl: 2rem;
+
+
   /* Backgrounds / Surfaces */
   --card-bg: theme(colors.white);
   --body-bg: theme(colors.gray.100);
@@ -57,6 +75,11 @@
   /* Scrollbar */
   --scrollbar-thumb: rgba(112, 105, 105, 0.2);
   --scrollbar-thumb-hover: rgba(0, 0, 0, 0.4);
+
+
+    /* Unchecked Checkbox Border Color */
+  --color-checkbox-bg: #FFFFFF;
+  --color-checkbox-border: #D1D5DB;
 }
 
 /* ===========================
@@ -500,4 +523,56 @@ body {
     animation: morph-square-circle 2s ease-in-out infinite alternate,
                spin-reverse 1.5s linear infinite;
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* src/styles/globals.css */

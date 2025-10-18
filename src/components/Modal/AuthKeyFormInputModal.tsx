@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import BaseModal from "../BaseModals/BaseModal";
-import { motion, AnimatePresence } from "framer-motion";
 import AuthKeyFormInputs from "../ContentModal/AuthKeyFormInputs";
 
 export interface AuthKeyFormData {
@@ -62,48 +61,7 @@ const AuthKeyFormInputModal: React.FC<Props> = ({ isOpen, toggle, mPin }) => {
     toggle(); // Close modal
   };
 
-  // --- Framer Motion Variants ---
-  const modalVariants = {
-    hidden: { scale: 0.9, opacity: 0, y: -50 },
-    visible: {
-      scale: 1,
-      opacity: 1,
-      y: 0,
-      transition: {
-        type: "spring",
-        damping: 25,
-        stiffness: 250,
-        duration: 0.2,
-      },
-    },
-    exit: { scale: 0.8, opacity: 0, y: 50, transition: { duration: 0.15 } },
-  };
-
-  const backdropVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1 },
-    exit: { opacity: 0 },
-  };
-
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
-          onClick={toggle}
-          variants={backdropVariants}
-          initial="hidden"
-          animate="visible"
-          exit="exit"
-        >
-          <motion.div
-            onClick={(e) => e.stopPropagation()}
-            className="w-[600px] "
-            variants={modalVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-          >
             <BaseModal
               isOpen={isOpen}
               toggle={toggle}
@@ -122,10 +80,6 @@ const AuthKeyFormInputModal: React.FC<Props> = ({ isOpen, toggle, mPin }) => {
                 />
               </div>
             </BaseModal>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
   );
 };
 

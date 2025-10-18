@@ -1,5 +1,8 @@
-import { useState, useEffect } from "react";
-import { Route, Routes, Navigate } from "react-router-dom";
+
+// src/routes/AppRoutes.tsx
+import React, { useState, useEffect } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+
 import Preloader from "../components/Common/Preloader";
 import ProductCategory from "../pages/Admin/Product Managements/ProductCategory";
 import Product from "../pages/Admin/Product Managements/Product";
@@ -16,6 +19,7 @@ import WalletTransfer from "../pages/Admin/Account Management/WalletTransfer";
 const AppRoutes = () => {
   const [isLoading, setIsLoading] = useState(true);
 
+  // Simulate initial loading (preloader)
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 500);
     return () => clearTimeout(timer);
@@ -25,7 +29,13 @@ const AppRoutes = () => {
 
   return (
     <Routes>
+      {/* Main authenticated routes */}
       <Route path="/ecommerce" element={<EcommercePage />} />
+            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/banking" element={<Banking />} />
+            <Route path="/user/profile" element={<Analytics />} />
+            <Route path="/user/cards" element={<EcommercePage />} />
+            <Route path="/user/list" element={<Banking />} />
       <Route path="/analytics" element={<Analytics />} />
       <Route path="/banking" element={<Banking />} />
       <Route path="/product-category" element={<ProductCategory />} />

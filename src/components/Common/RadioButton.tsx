@@ -6,8 +6,8 @@ interface RadioButtonProps {
   onChange: () => void;
   label?: string;
   size?: "sm" | "md" | "lg";
-  activeColor?: string; 
-  inactiveColor?: string; 
+  activeColor?: string;
+  inactiveColor?: string;
   borderColor?: string;
   animationSpeed?: number;
   labelPosition?: "left" | "right";
@@ -28,6 +28,8 @@ const RadioButton: React.FC<RadioButtonProps> = ({
   labelColor = "text-text-main",
   hoverGlow = true,
 }) => {
+  const id = React.useId();
+
   const sizes = {
     sm: { outer: "w-4 h-4", inner: "w-2 h-2" },
     md: { outer: "w-6 h-6", inner: "w-3 h-3" },
@@ -37,9 +39,9 @@ const RadioButton: React.FC<RadioButtonProps> = ({
   const labelElement = label && (
     <span
       className={clsx(
-        "select-none font-medium transition-colors duration-200",
+        "select-none font-semibold transition-colors duration-200",
         labelColor,
-        checked ? "opacity-100" : "opacity-50"
+        checked ? "opacity-100" : "opacity-70"
       )}
     >
       {label}
@@ -48,15 +50,23 @@ const RadioButton: React.FC<RadioButtonProps> = ({
 
   return (
     <label
+      htmlFor={id}
       className={clsx(
         "flex items-center cursor-pointer gap-2",
         labelPosition === "left" && "flex-row-reverse"
       )}
     >
-      {labelPosition === "left" && labelElement}
+      {/* ✅ Invisible input to make label clickable */}
+      <input
+        id={id}
+        type="radio"
+        checked={checked}
+        onChange={onChange}
+        className="hidden"
+      />
 
+      {/* Custom radio visual */}
       <span
-        onClick={onChange}
         className={clsx(
           "relative flex items-center justify-center rounded-full border transition-all ease-in-out",
           sizes[size].outer,
@@ -69,12 +79,9 @@ const RadioButton: React.FC<RadioButtonProps> = ({
           transitionDuration: `${animationSpeed}ms`,
         }}
       >
-        {/* White inner circle */}
+        {/* Inner circle */}
         <span
-          className={clsx(
-            "rounded-full bg-white absolute",
-            sizes[size].inner
-          )}
+          className={clsx("rounded-full bg-white absolute", sizes[size].inner)}
           style={{
             top: "50%",
             left: "50%",
@@ -86,9 +93,10 @@ const RadioButton: React.FC<RadioButtonProps> = ({
         />
       </span>
 
-      {labelPosition === "right" && labelElement}
+      {labelElement}
     </label>
   );
 };
 
 export default RadioButton;
+

@@ -243,12 +243,12 @@ input[type="password"]::-webkit-textfield-decoration-container {
 /* styles.css */
 .faster-slideInRight {
   --animate-duration: 0.5s;
-  animation-timing-function: ease-out; /* smooth */
+  /* animation-timing-function: ease-out; */
 }
 
 .faster-slideInLeft {
   --animate-duration: 0.2s;
-  animation-timing-function: ease-in; /* smooth */
+  /* animation-timing-function: ease-in;  */
 }
 
 
@@ -264,30 +264,26 @@ input[type="password"]::-webkit-textfield-decoration-container {
 
 
 
+/* Add this new block to your global CSS file */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
+@layer components {
+  .table-header {
+    /* The utility class combining all styles */
+    @apply px-3 py-5 font-semibold text-left text-text-subtle text-md;
+  }
 
-
-
-
-/*
-  Add this custom CSS to your project's stylesheet (e.g., index.css)
-*/
-
-/* .perspective-lg {
-  perspective: 1000px; 
+  .table-data {
+    /* New utility class for the main table data cells */
+    @apply p-3 font-medium text-md text-text-main;
+  }
 }
 
-.rotate-y-180 {
-  transform: rotateY(180deg);
-}
+/* Note: I added 'text-text-subtle' from your <thead> to make the style complete */
 
-.transform-style-3d {
-  transform-style: preserve-3d;
-}
 
-.backface-hidden {
-  backface-visibility: hidden;
-} */
 
 
 

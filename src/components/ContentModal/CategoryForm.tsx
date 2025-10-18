@@ -28,46 +28,24 @@ const AddCategoryForm: React.FC<Props> = ({
   touched,
 }) => {
   return (
-    <div className="grid grid-cols-1 gap-6">
+    <div className="grid grid-cols-1 gap-6 ">
       {/* Category Name Field */}
       <div>
-        {/* <label
-          htmlFor="categoryName"
-          className="block text-sm font-medium text-gray-700 mb-1 "
-        >
-          Name
-        </label> */}
-        {/* <input
-          type="text"
-          id="categoryName"
-          value={values.name}
-          onChange={(e) => onChange({ ...values, name: e.target.value })}
-          onBlur={() => onBlur("name")}
-          placeholder="Enter Product Category Name"
-          autoComplete="off"
-          className={`w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-            touched.name && errors.name
-              ? "border-red-500 focus:ring-red-500"
-              : "border-gray-300"
-          }`}
-        /> */}
         <InputField
-          label="Name"
-          type="text"
-          value={values.name}
-          onChange={(e) => onChange({ ...values, name: e.target.value })}
-          onBlur={() => onBlur("name")}
-          placeholder="Enter Product Category Name"
-          autoComplete="off"
-        />
-        {touched.name && errors.name && (
-          <p className="mt-1 text-sm text-red-500">{errors.name}</p>
-        )}
-      </div>
-
+              label="Name"
+                    placeholder="Enter Product Category Name"
+                    type="text"
+                    themeMode="light"
+                    value={values.name}
+                    onChange={(e) => onChange({ ...values, name: e.target.value })}
+                    onBlur={() => onBlur("name")}
+                    touched={touched.name}
+                    error={errors.name}
+                  />
+</div>
       {/* Status Field */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block mb-1 text-sm font-medium text-text-main">
           Status
         </label>
 
@@ -83,7 +61,7 @@ const AddCategoryForm: React.FC<Props> = ({
             size="sm"
             activeColor="bg-green-600"
             borderColor="border-green-600"
-            labelColor="text-gray-700"
+            labelColor="text-text-main"
           />
 
           {/* Inactive */}
@@ -95,14 +73,14 @@ const AddCategoryForm: React.FC<Props> = ({
             }}
             label="Inactive"
             size="sm"
-            activeColor="bg-red-600"
+            activeColor="bg-danger"
             borderColor="border-red-600"
-            labelColor="text-gray-700"
+            labelColor="text-text-main"
           />
         </div>
 
         {touched.status && errors.status && (
-          <p className="mt-1 text-sm text-red-500">{errors.status}</p>
+          <p className="mt-1 text-sm text-danger">{errors.status}</p>
         )}
       </div>
     </div>

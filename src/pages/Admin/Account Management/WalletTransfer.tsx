@@ -12,9 +12,9 @@ import type { Country } from "../../../components/ContentModal/SearchContentModa
 import Icon from "../../../components/ui/Icon";
 import DeleteModal from "../../../components/Modal/DeleteModal";
 import AnimatedDeleteButton from "../../../components/Common/AnimatedDeleteButton";
-import Tab from "../../../components/Common/Tabs";
 import StatusBadge from "../../../components/Common/StatusBadge";
 import { Button } from "../../../components/Common/Button";
+import TransactionsModal from "../../../components/Modal/TransactionsModal";
 
 interface Product {
   id: string;
@@ -306,35 +306,12 @@ const WalletTransfer = () => {
         danger: true,
       },
     ];
-    
-      const orderTabs: Tab[] = [
-        { name: "All", key: "All", count: allOrders.length },
-        {
-          name: "Active",
-          key: "Active",
-          count: allOrders.filter((o) => o.status === "Active").length,
-        },
-        {
-          name: "Inactive",
-          key: "Inactive",
-          count: allOrders.filter((o) => o.status === "Inactive").length,
-        },
-      ];
-    
 
   return (
     <div className="rounded-lg bg-surface-body text-text-main">
       <div className="shadow-xl bg-surface-card rounded-xl">
         <div className="p-4 sm:p-6">
-          <Tab
-            tabs={orderTabs}
-            selectedTab={selectedTab}
-            onTabChange={handleTabChange}
-          />
-
-          <div className={`-mx-4 border-b-[1px] border-border-primary`}></div>
-
-          <div className="flex flex-col gap-4 mt-6 md:flex-row md:items-center md:gap-4">
+          <div className="flex flex-col gap-4 mt-1 md:flex-row md:items-center md:gap-4">
             {/* Dates Section */}
             <div className="flex flex-col w-full gap-3 sm:flex-row md:gap-4 md:w-auto">
               <div className="w-full sm:w-auto">
@@ -345,20 +322,6 @@ const WalletTransfer = () => {
               </div>
             </div>
             <div className="flex items-center w-full gap-2 md:flex-1">
-              <div className="relative flex-1 w-1/2">
-                <Icon
-                  name="ri-search-line"
-                  className="absolute -translate-y-1/2 text-text-subtle left-3 top-1/2"
-                />
-                <input
-                  placeholder="Search By Name..."
-                  onChange={(e) => setSearch(e.target.value)}
-                  className="w-1/2 px-3 py-3.5 pl-10 text-sm border rounded-lg cursor-pointer bg-surface-card text-text-main placeholder-text-subtle
-    border-border-input hover:border-[var(--color-border-input-hover)] 
-    focus:border-[var(--color-border-input-focus)] focus:ring-primary"
-                />
-              </div>
-
               {/* Dropdown / Filter Input */}
               <div className="relative flex-1">
                 <Icon
@@ -367,12 +330,68 @@ const WalletTransfer = () => {
                 />
                 <input
                   readOnly
-                  value={
-                    selectedCountry
-                      ? `Filtering by: ${selectedCountry.name}`
-                      : search
-                  }
-                  placeholder="Search By Products"
+                  value={selectedCountry ? `${selectedCountry.name}` : search}
+                  placeholder="Select User"
+                  onClick={() => setIsSearchContentModalOpen(true)}
+                  className="w-full px-3 py-3.5 pl-10 text-sm border rounded-lg cursor-pointer bg-surface-card
+                 text-text-main placeholder-text-subtle border-border-input
+                 hover:border-[var(--color-border-input-hover)] 
+                 focus:border-[var(--color-border-input-focus)] focus:ring-primary"
+                />
+                {selectedCountry && (
+                  <button
+                    data-no-ripple
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedCountry(null);
+                      setSearch("");
+                    }}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-full 
+                   text-text-subtle hover:bg-surface-hover hover:text-text-main transition-colors"
+                  >
+                    <Icon name="x" className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+              <div className="relative flex-1">
+                <Icon
+                  name="ri-search-line"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-text-subtle"
+                />
+                <input
+                  readOnly
+                  value={selectedCountry ? `${selectedCountry.name}` : search}
+                  placeholder="Select Bank"
+                  onClick={() => setIsSearchContentModalOpen(true)}
+                  className="w-full px-3 py-3.5 pl-10 text-sm border rounded-lg cursor-pointer bg-surface-card
+                 text-text-main placeholder-text-subtle border-border-input
+                 hover:border-[var(--color-border-input-hover)] 
+                 focus:border-[var(--color-border-input-focus)] focus:ring-primary"
+                />
+                {selectedCountry && (
+                  <button
+                    data-no-ripple
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedCountry(null);
+                      setSearch("");
+                    }}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-full 
+                   text-text-subtle hover:bg-surface-hover hover:text-text-main transition-colors"
+                  >
+                    <Icon name="x" className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+              <div className="relative flex-1">
+                <Icon
+                  name="ri-search-line"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-text-subtle"
+                />
+                <input
+                  readOnly
+                  value={selectedCountry ? `${selectedCountry.name}` : search}
+                  placeholder="Select Mode"
                   onClick={() => setIsSearchContentModalOpen(true)}
                   className="w-full px-3 py-3.5 pl-10 text-sm border rounded-lg cursor-pointer bg-surface-card
                  text-text-main placeholder-text-subtle border-border-input
@@ -398,7 +417,7 @@ const WalletTransfer = () => {
               <div className="text-text-subtle">
                 <Button
                   className="p-2 transition-colors rounded-full"
-                  text="Add Product"
+                  text="Balance Credit/Debit"
                   onClick={handleAdd}
                   size="sm"
                   width="150px"
@@ -408,41 +427,6 @@ const WalletTransfer = () => {
               </div>
             </div>
           </div>
-
-          {selectedTab !== "All" && (
-            <>
-              <div className="mt-4 text-xs font-bold">
-                {filteredOrders.length}
-
-                <span className="font-normal text-text-subtle">
-                  {" "}
-                  result found
-                </span>
-              </div>
-              <div className="flex flex-wrap items-center gap-3 mt-3">
-                <span className="flex items-center px-3 py-2 text-xs font-semibold border border-dashed rounded-lg bg-surface-card border-border-primary text-text-main">
-                  Status:
-                  <span className="flex items-center px-2 py-1 ml-2 font-medium rounded-md bg-surface-hover text-xxs text-text-main">
-                    {selectedTab}
-                    <button
-                      onClick={() => setSelectedTab("All")}
-                      // Inner button is neutral gray, using subtle text color as BG
-                      className="flex items-center justify-center w-3.5 h-3.5 ml-2 text-white bg-text-subtle rounded-full hover:bg-text-main"
-                    >
-                      <Icon
-                        name="x"
-                        className="w-1.5 h-1.5 text-white dark:text-black"
-                      />
-                    </button>
-                  </span>
-                </span>
-                <AnimatedDeleteButton
-                  onClick={() => setSelectedTab("All")}
-                  label="Clear"
-                />
-              </div>
-            </>
-          )}
         </div>
 
         {/* Table Section */}
@@ -472,7 +456,6 @@ const WalletTransfer = () => {
                       )}
                     />
 
-                    {/* FIX: Checkmark icon rendered only when fully checked, subtract icon for indeterminate */}
                     <span className="absolute inset-0 flex items-center justify-center pointer-events-none">
                       {allSelected && (
                         <Icon
@@ -546,30 +529,15 @@ const WalletTransfer = () => {
                       </span>
                     </div>
                   </th>
-                  <th className="px-3 py-5 text-xs font-semibold text-left">
-                    #
-                  </th>
-                  <th className="px-3 py-5 text-xs font-semibold text-left">
-                    Icon
-                  </th>
-                  <th className="px-3 py-5 text-xs font-semibold text-left">
-                    Category
-                  </th>
-                  <th className="px-3 py-5 text-xs font-semibold text-left">
-                    Name
-                  </th>
-                  <th className="px-3 py-5 text-xs font-semibold text-left">
-                    Slug
-                  </th>
-                  <th className="px-3 py-5 text-xs font-semibold text-left">
-                    Created
-                  </th>
-                  <th className="px-3 py-5 text-xs font-semibold text-left">
-                    Status
-                  </th>
-                  <th className="px-3 py-5 text-xs font-semibold text-left">
-                    Action
-                  </th>
+                  <th className="table-header">Txn id</th>
+                  <th className="table-header">User Details</th>
+                  <th className="table-header">Data & Time</th>
+                  <th className="table-header">pre (₹)</th>
+                  <th className="table-header">Amount</th>
+                  <th className="table-header">Post (₹)</th>
+                  <th className="table-header">Payment Mode</th>
+                  <th className="table-header">UTR/Remark</th>
+                  <th className="table-header">Bank Detials</th>
                 </tr>
               </thead>
 
@@ -614,49 +582,41 @@ const WalletTransfer = () => {
                           </span>
                         </div>
                       </td>
-                      <td className="p-3 text-xs font-medium text-text-main">
-                        {order.id}
-                      </td>
-                      <td className="flex items-center gap-2 p-3">
+                      <td className="table-data">{order.id}</td>
+                      <td className="table-data">
                         <img
                           src={order.avatar}
                           alt={order.name}
                           className="w-8 h-8 rounded-full"
                         />
                       </td>
-                      <td className="p-3 text-xs">
+                      <td className="table-data">
                         <div className="text-text-main">
                           {order.categroyName}
                         </div>
                       </td>
-                      <td className="p-3 text-xs text-text-main">
-                        {order.name}
-                      </td>
-                      <td className="p-3 text-xs text-text-main">
-                        {order.slug}
-                      </td>
-                      <td className="p-3 text-xs">
-                        <div className="text-text-main">{order.date}</div>
-                        <div className="text-text-subtle text-xxs">
+                      <td className="table-data">{order.name}</td>
+                      <td className="table-data">{order.slug}</td>
+                      <td className="table-data">
+                        <div>{order.date}</div>
+                        <div className="text-md text-text-subtle">
                           {order.time}
                         </div>
                       </td>
-                      <td className="p-3">
-                        <StatusBadge
-                          status={order.status}
-                          onClick={() => toggleStatus(order.id)}
-                          loading={
-                            statusState.loading && statusState.id === order.id
-                          }
-                        />
+                      <td className="table-data">
+                        <div className="text-text-main">
+                          {order.categroyName}
+                        </div>
                       </td>
-                      <td className="p-3">
-                        <button
-                          className="px-2 py-2 rounded-full text-text-subtle hover:text-text-main hover:bg-surface-hover"
-                          onClick={(e) => openPopup(e, order.id)}
-                        >
-                          <Icon name="bx bx-dots-vertical-rounded" />
-                        </button>
+                      <td className="table-data">
+                        <div className="text-text-main">
+                          {order.categroyName}
+                        </div>
+                      </td>
+                      <td className="table-data">
+                        <div className="text-text-main">
+                          {order.categroyName}
+                        </div>
                       </td>
                     </tr>
                   );
@@ -748,24 +708,8 @@ const WalletTransfer = () => {
       </div>
 
       {/* ✅ Modal used for both Add and Edit */}
+      <TransactionsModal isOpen={isAddModalOpen} toggle={toggleAddModal} />
 
-      {/* Existing Modals */}
-      {selectedOrderId && (
-        <DynamicSidebarMenu
-          open={menuOpen}
-          position={menuPosition}
-          onClose={() => setMenuOpen(false)}
-          actions={actions}
-        />
-      )}
-
-      <DeleteModal
-        isOpen={isDeleteModalOpen}
-        toggle={closeDeleteModal}
-        itemsToDelete={selectedOrders.length}
-        confirmColor="bg-red-600 hover:bg-red-700 text-white"
-        cancelColor="bg-gray-200 hover:bg-gray-300 text-black"
-      />
       <SearchModalWrapper
         initialSearch={search}
         isOpen={isSearchContentModalOpen}

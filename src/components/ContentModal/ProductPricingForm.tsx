@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import InputField from "../../components/Common/inputField";
 import SearchModalWrapper from "../Modal/SearchModalWrapper";
 import Icon from "../../components/ui/Icon";
 import type { Country } from "../../components/ContentModal/SearchContentModal";
@@ -87,23 +88,16 @@ const ProductPricingForm: React.FC<Props> = ({
 
       {/* Price */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Price
-        </label>
-        <input
-          type="number"
+        <InputField
+          label="Price"
+          type="text"
           value={values.price}
           onChange={(e) => onChange({ ...values, price: e.target.value })}
           onBlur={() => onBlur("price")}
-          className={`w-full border rounded-lg px-3 py-2 ${
-            touched.price && errors.price
-              ? "border-red-500 focus:ring-red-500"
-              : "border-gray-300 focus:ring-primary-500"
-          }`}
+          touched={touched.price}
+          error={errors.price}
+          themeMode="light"
         />
-        {touched.price && errors.price && (
-          <p className="mt-1 text-sm text-red-500">{errors.price}</p>
-        )}
       </div>
 
       {/* Currency */}

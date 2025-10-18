@@ -1,8 +1,8 @@
 import { motion, AnimatePresence } from "framer-motion";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState} from "react";
 import clsx from "clsx";
 import DynamicSidebarMenu from "../../../components/Modal/SidebarSubmenu";
-import {EditIcon, DeleteIcon} from "../../../components/ContentModal/SidebarSubmenuContent";
+import { EditIcon, DeleteIcon } from "../../../components/ContentModal/SidebarSubmenuContent";
 import Icon from "../../../components/ui/Icon";
 import DeleteModal from "../../../components/Modal/DeleteModal";
 import AnimatedDeleteButton from "../../../components/Common/AnimatedDeleteButton";
@@ -10,111 +10,37 @@ import Tab from "../../../components/Common/Tabs";
 import StatusBadge from "../../../components/Common/StatusBadge";
 import { Button } from "../../../components/Common/Button";
 import AddCategoryModal from "../../../components/Modal/AddCategoryModal";
+import Checkbox from "../../../components/Common/Checkbox";
+import SearchInput from "../../../components/Common/SearchInput";
+import AnimatedDropdown from "../../../components/Common/AnimatedDropdown";
+
 
 interface Category {
-  id: string;
-  name: string;
-  date: string;
-  time: string;
-  slug: string;
-  status: "All" | "Active" | "Inactive";
+    id: string;
+    name: string;
+    date: string;
+    time: string;
+    slug: string;
+    status: "Active" | "Inactive";
 }
 
 const categoryData: Category[] = [
-  {
-    id: "11",
-    name: "Aadhaar / Pan",
-    date: "20 Sep 2025",
-    time: "11:01 am",
-    slug: "aadhaar-pan",
-    status: "Active",
-  },
-  {
-    id: "10",
-    name: "Bank Account",
-    date: "19 Sep 2025",
-    time: "10:01 am",
-    slug: "bank-account",
-    status: "Active",
-  },
-  {
-    id: "9",
-    name: "KYB (Know your business)",
-    date: "10 Sep 2025",
-    time: "1:01 am",
-    slug: "kyb-know-your-business",
-    status: "Inactive",
-  },
-  {
-    id: "8",
-    name: "Regulated Digital KYC",
-    date: "09 Sep 2025",
-    time: "12:01 am",
-    slug: "regulated-digital-kyc",
-    status: "Inactive",
-  },
-  {
-    id: "7",
-    name: "Other Official Documents",
-    date: "07 Sep 2025",
-    time: "11:01 pm",
-    slug: "other-official-documents",
-    status: "Active",
-  },
-  {
-    id: "6",
-    name: "Telecom Intelligence",
-    date: "16 Sep 2025",
-    time: "1:20 am",
-    slug: "telecom-intelligence",
-    status: "Inactive",
-  },
-  {
-    id: "5",
-    name: "Utility Bill Intelligence",
-    date: "17 Sep 2025",
-    time: "2:20 am",
-    slug: "utility-bill-intelligence",
-    status: "Active",
-  },
-  {
-    id: "4",
-    name: "Melanie Noble",
-    date: "18 Sep 2025",
-    time: "3:20 am",
-    slug: "aadhaar-pan",
-    status: "Inactive",
-  },
-  {
-    id: "3",
-    name: "Christopher Cardenas",
-    date: "19 Sep 2025",
-    time: "4:20 am",
-    slug: "aadhaar-pan",
-    status: "Inactive",
-  },
-  {
-    id: "2",
-    name: "Lainey Davidson",
-    date: "20 Sep 2025",
-    time: "5:20 am",
-    slug: "aadhaar-pan",
-    status: "Active",
-  },
-  {
-    id: "1",
-    name: "Elias Graham",
-    date: "21 Sep 2025",
-    time: "6:00 am",
-    slug: "aadhaar-pan",
-    status: "Inactive",
-  },
+    { id: "1", name: "Aadhaar / Pan", date: "20 Sep 2025", time: "11:01 am", slug: "aadhaar-pan", status: "Active" },
+    { id: "2", name: "Bank Account", date: "19 Sep 2025", time: "10:01 am", slug: "bank-account", status: "Active" },
+    { id: "3", name: "KYB (Know your business)", date: "10 Sep 2025", time: "1:01 am", slug: "kyb-know-your-business", status: "Inactive" },
+    { id: "4", name: "Regulated Digital KYC", date: "09 Sep 2025", time: "12:01 am", slug: "regulated-digital-kyc", status: "Inactive" },
+    { id: "5", name: "Other Official Documents", date: "07 Sep 2025", time: "11:01 pm", slug: "other-official-documents", status: "Active" },
+    { id: "6", name: "Telecom Intelligence", date: "16 Sep 2025", time: "1:20 am", slug: "telecom-intelligence", status: "Inactive" },
+    { id: "7", name: "Utility Bill Intelligence", date: "17 Sep 2025", time: "2:20 am", slug: "utility-bill-intelligence", status: "Active" },
+    { id: "8", name: "Melanie Noble", date: "18 Sep 2025", time: "3:20 am", slug: "aadhaar-pan", status: "Inactive" },
+    { id: "9", name: "Christopher Cardenas", date: "19 Sep 2025", time: "4:20 am", slug: "aadhaar-pan", status: "Inactive" },
+    { id: "10", name: "Lainey Davidson", date: "20 Sep 2025", time: "5:20 am", slug: "aadhaar-pan", status: "Active" },
+    { id: "11", name: "Elias Graham", date: "21 Sep 2025", time: "6:00 am", slug: "aadhaar-pan", status: "Inactive" },
 ];
 
 const ROWS_PER_PAGE_OPTIONS = [5, 10, 25];
 
 const ProductCategory = () => {
-  // Combine both arrays once into state
   const [allOrders, setAllOrders] = useState([...categoryData]);
   const [selectedTab, setSelectedTab] = useState<string>("All");
   const [selectedOrders, setSelectedOrders] = useState<string[]>([]);
@@ -126,11 +52,8 @@ const ProductCategory = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(ROWS_PER_PAGE_OPTIONS[0]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const selectAllHeaderRef = useRef<HTMLInputElement>(null);
-  const selectAllOverlayRef = useRef<HTMLInputElement>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<any>(null);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -169,37 +92,10 @@ const ProductCategory = () => {
   const partiallySelected =
     selectedOrders.length > 0 && selectedOrders.length < currentOrders.length;
 
-  useEffect(() => {
-    const indeterminate = selectedOrders.length > 0 && !allSelected;
-
-    if (selectAllHeaderRef.current) {
-      selectAllHeaderRef.current.indeterminate = indeterminate;
-      selectAllHeaderRef.current.checked = allSelected;
-    }
-
-    if (selectAllOverlayRef.current) {
-      selectAllOverlayRef.current.indeterminate = indeterminate;
-      selectAllOverlayRef.current.checked = allSelected;
-    }
-  }, [selectedOrders, currentOrders, allSelected]);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsDropdownOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
   const closeDeleteModal = () => setIsDeleteModalOpen(false);
   const openDeleteModal = () => setIsDeleteModalOpen(true);
 
-  const toggleStatus = (id) => {
+  const toggleStatus = (id: string) => {
     setStatusState({ loading: true, id });
     setTimeout(() => {
       setAllOrders((prev) =>
@@ -235,7 +131,6 @@ const ProductCategory = () => {
     ) {
       setSelectedOrders([]);
     } else {
-      // Select all visible orders on the current page
       setSelectedOrders(currentOrders.map((o) => o.id));
     }
   };
@@ -260,21 +155,37 @@ const ProductCategory = () => {
     setMenuOpen(true);
   };
 
-const actions = [
-  { label: "Edit", icon: <EditIcon />, onClick: handleEdit },
-  {
-    label: "Delete",
-    icon: <DeleteIcon />,
-    onClick: deleteSelectedOrders,
-    danger: true,
-  },
-];
+  // Logic to determine the icon for the Checkbox component (for both header and overlay)
+  const getHeaderIcon = (allSelected: boolean, partiallySelected: boolean) => {
+    if (partiallySelected) {
+      return <Icon name="ri-subtract-fill" size={10} className="text-white" />;
+    }
+    if (allSelected) {
+      return <Icon name="ri-check-fill" size={12} className="text-white" />;
+    }
+    // Return undefined for unchecked state to show no icon (default behavior)
+    return undefined;
+  };
+
+  const actions = [
+    {
+      label: "Edit",
+      icon: <EditIcon />,
+      onClick: (category: Category) => handleEdit(category),
+    },
+    {
+      label: "Delete",
+      icon: <DeleteIcon />,
+      onClick: deleteSelectedOrders,
+      danger: true,
+    },
+  ];
 
   interface Tab {
     name: string;
     key: string;
     count: number;
-  };
+  }
 
   const orderTabs: Tab[] = [
     { name: "All", key: "All", count: allOrders.length },
@@ -294,7 +205,7 @@ const actions = [
   return (
     <div className="rounded-lg bg-surface-body text-text-main">
       <div className="shadow-xl bg-surface-card rounded-xl">
-        <div className="p-4 sm:p-6">
+        <div className="p-4 sm:p-6 md:p-4">
           <Tab
             tabs={orderTabs}
             selectedTab={selectedTab}
@@ -303,19 +214,20 @@ const actions = [
 
           <div className={`-mx-4 border-b-[1px] border-border-primary`}></div>
 
-          <div className="flex flex-col gap-4 mt-6 md:flex-row md:items-center md:gap-4">
+          <div className="flex flex-col gap-4 mt-3 md:flex-row md:items-center md:gap-4">
             <div className="flex items-center w-full gap-5 md:flex-1 ">
               <div className="relative flex-1 w-1/2">
                 <Icon
                   name="ri-search-line"
                   className="absolute -translate-y-1/2 text-text-subtle left-3 top-1/2"
                 />
-                <input
-                  placeholder="Search By Name..."
+                {/* ✅ GANTI: Menggunakan komponen SearchInput */}
+                <SearchInput
+                  value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="w-1/2 px-3 py-3.5 pl-10 text-sm border rounded-lg cursor-pointer bg-surface-card text-text-main placeholder-text-subtle
-    border-border-input hover:border-[var(--color-border-input-hover)] 
-    focus:border-[var(--color-border-input-focus)] focus:ring-primary"
+                  placeholder="Search By Name..."
+                  width="100%" // Full width within its flex container
+                  wrapperClassName="w-1/2"
                 />
               </div>
 
@@ -350,7 +262,6 @@ const actions = [
                     {selectedTab}
                     <button
                       onClick={() => setSelectedTab("All")}
-                      // Inner button is neutral gray, using subtle text color as BG
                       className="flex items-center justify-center w-3.5 h-3.5 ml-2 text-white bg-text-subtle rounded-full hover:bg-text-main"
                     >
                       <Icon
@@ -371,48 +282,27 @@ const actions = [
 
         {/* Table Section */}
         <div className="relative w-full mt-4">
-
+          {/* Selected Row Overlay */}
           <AnimatePresence>
             {selectedOrders.length > 0 && (
               <motion.div
-                initial={{ x: "-100%" }}
+                initial={{ x: "0%" }}
                 animate={{ x: "0%" }}
-                exit={{ x: "-100%" }}
-                transition={{ duration: 0.0 }}
-                className="absolute top-0 left-0 right-0 z-[0] flex items-center justify-between h-[60px] order-item-active px-6 "
+                exit={{ x: "0%" }}
+                transition={{ duration: 0.2 }}
+                className="absolute top-0 left-0 right-0 z-[1] flex items-center justify-between h-[65px] order-item-active px-6 "
               >
-                <div className="flex items-center gap-4 text-sm font-medium">
-                  <div className="relative w-4 h-4">
-
-                    <input
-                      type="checkbox"
-                      ref={selectAllOverlayRef}
-                      onChange={toggleSelectAll}
-                      className={clsx(
-                        "w-4 h-4 appearance-none rounded cursor-pointer focus:outline-none focus:ring-0",
-                        selectedOrders.length > 0
-                          ? "bg-primary text-white"
-                          : "bg-[var(--color-checkbox-bg)] border-[1.5px] border-[var(--color-checkbox-border)]"
-                      )}
-                    />
-
-                    <span className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                      {allSelected && (
-                        <Icon
-                          name="ri-check-fill"
-                          size={12}
-                          className="text-white"
-                        />
-                      )}
-                      {partiallySelected && (
-                        <Icon
-                          name="ri-subtract-fill"
-                          size={10}
-                          className="text-white"
-                        />
-                      )}
-                    </span>
-                  </div>
+                <div className="flex items-center gap-6 text-sm font-medium">
+                  <Checkbox
+                    // Set to true if all are selected OR partially selected
+                    checked={allSelected || partiallySelected}
+                    onChange={toggleSelectAll}
+                    size="xs"
+                    shape="rounded"
+                    checkedColor="bg-primary"
+                    uncheckedColor="bg-[var(checkbox-bg)] border-[1.5px] border-[var(--color-checkbox-border)]"
+                    checkedIcon={getHeaderIcon(allSelected, partiallySelected)}
+                  />
                   <span>{selectedOrders.length} selected</span>
                 </div>
                 <button
@@ -427,66 +317,34 @@ const actions = [
 
           {/* Table Scroll Container */}
           <div
-            className="overflow-x-auto overflow-y-visible  max-h-[500px] w-full"
+            className="overflow-x-auto overflow-y-visible max-h-[500px] w-full"
             style={{ marginTop: selectedOrders.length > 0 ? "0" : "0" }}
           >
             <table className="min-w-[800px] md:min-w-full divide-gray-200 w-full">
               {/* Table Header */}
-              <thead className="top-0 z-0 bg-surface-hover text-text-subtle">
+              <thead className="sticky top-0 z-[0] bg-surface-hover text-text-subtle h-[60px]">
                 <tr>
                   <th className="w-12 pl-6">
-                    <div className="relative w-4 h-4">
-                      <input
-                        type="checkbox"
-                        ref={selectAllHeaderRef}
-                        onChange={toggleSelectAll}
-                        // Removed 'checked' prop here, letting the ref manage the state
-                        className={`
-                                                    w-4 h-4 
-                                                    appearance-none rounded 
-                                                    bg-[var(--color-checkbox-bg)] border-[1.5px] border-[var(--color-checkbox-border)] 
-                                                    checked:bg-primary checked:border-primary checked:border-none 
-                                                    cursor-pointer focus:outline-none focus:ring-0
-                                                `}
-                      />
-                      {/* FIX: Checkmark icon rendered only when fully checked, subtract icon for indeterminate */}
-                      {/* Header / Overlay */}
-                      <span className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                        {allSelected && (
-                          <Icon
-                            name="ri-check-fill"
-                            size={12}
-                            className="text-white"
-                          />
-                        )}
-                        {partiallySelected && (
-                          <Icon
-                            name="ri-subtract-fill"
-                            size={10}
-                            className="text-white"
-                          />
-                        )}
-                      </span>
-                    </div>
+                    {/* Header Checkbox using new Checkbox component */}
+                    <Checkbox
+                      checked={allSelected || partiallySelected}
+                      onChange={toggleSelectAll}
+                      size="xs"
+                      shape="rounded"
+                      checkedColor="bg-primary"
+                      uncheckedColor="bg-checkbox-bg border-[1.5px] border-checkbox-border"
+                      checkedIcon={getHeaderIcon(
+                        allSelected,
+                        partiallySelected
+                      )}
+                    />
                   </th>
-                  <th className="px-3 py-5 text-xs font-semibold text-left">
-                    #
-                  </th>
-                  <th className="px-3 py-5 text-xs font-semibold text-left">
-                    Name
-                  </th>
-                  <th className="px-3 py-5 text-xs font-semibold text-left">
-                    Slug
-                  </th>
-                  <th className="px-3 py-5 text-xs font-semibold text-left">
-                    Created
-                  </th>
-                  <th className="px-3 py-5 text-xs font-semibold text-left">
-                    Status
-                  </th>
-                  <th className="px-3 py-5 text-xs font-semibold text-left">
-                    Action
-                  </th>
+                  <th className="table-header">#</th>
+                  <th className="table-header">Name</th>
+                  <th className="table-header">Slug</th>
+                  <th className="table-header">Created</th>
+                  <th className="table-header">Status</th>
+                  <th className="table-header">Action</th>
                 </tr>
               </thead>
 
@@ -505,61 +363,34 @@ const actions = [
                       )}
                     >
                       <td className="p-3 w-12 min-w-[48px] pl-6">
-                        <div className="relative w-4 h-4">
-                          <input
-                            type="checkbox"
-                            checked={isChecked}
-                            onChange={() => toggleSelect(order.id)}
-                            className={`
-                                                            w-4 h-4
-                                                            appearance-none
-                                                            rounded
-                                                            bg-[var(--color-checkbox-bg)] border-[1.5px] border-[var(--color-checkbox-border)]
-                                                            checked:bg-primary checked:border-primary checked:border-none
-                                                            cursor-pointer
-                                                            focus:outline-none focus:ring-0
-                                                        `}
-                          />
-                          <span className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                            {isChecked && (
-                              <Icon
-                                name="ri-check-fill"
-                                size={12}
-                                className="font-extrabold text-white"
-                              />
-                            )}
-                          </span>
-                        </div>
+                        <Checkbox
+                          checked={isChecked}
+                          onChange={() => toggleSelect(order.id)}
+                          size="xs"
+                          shape="rounded"
+                          checkedColor="bg-primary"
+                          uncheckedColor="bg-checkbox-bg border-[1.5px] border-checkbox-border"
+                        />
                       </td>
-                      <td className="p-3 text-xs font-medium text-text-main">
-                        {order.id}
-                      </td>
-                      <td className="p-3 text-xs">
-                        <div className="text-xs font-medium text-text-main">
-                          {order.name}
-                        </div>
-                      </td>
-                      <td className="p-3 text-xs text-text-main">
-                        {order.slug}
-                      </td>
-                      <td className="p-3 text-xs">
-                        <div className="text-text-main">{order.date}</div>
-                        <div className="text-text-subtle text-xxs">
+                      <td className="table-data">{order.id}</td>
+                      <td className="table-data">{order.name}</td>
+                      <td className="table-data">{order.slug}</td>
+                      <td className="table-data">
+                        <div>{order.date}</div>
+                        <div className="text-md text-text-subtle">
                           {order.time}
                         </div>
                       </td>
-                      <td className="p-3">
-                        <td className="p-3">
-                          <StatusBadge
-                            status={order.status}
-                            onClick={() => toggleStatus(order.id)}
-                            loading={
-                              statusState.loading && statusState.id === order.id
-                            }
-                          />
-                        </td>
+                      <td className="table-data">
+                        <StatusBadge
+                          status={order.status}
+                          onClick={() => toggleStatus(order.id)}
+                          loading={
+                            statusState.loading && statusState.id === order.id
+                          }
+                        />
                       </td>
-                      <td className="p-3">
+                      <td className="table-data">
                         <button
                           className="px-2 py-2 rounded-full text-text-subtle hover:text-text-main hover:bg-surface-hover"
                           onClick={(e) => openPopup(e, order.id)}
@@ -578,50 +409,44 @@ const actions = [
         {/* Pagination */}
         <div className="flex flex-col gap-4 px-5 py-6 mt-0 text-xs border-t sm:flex-row sm:items-center sm:justify-end sm:gap-8 border-border-primary text-text-subtle">
           <div className="flex flex-wrap items-center justify-between w-full gap-4 sm:justify-end sm:gap-8 sm:w-auto">
-            {/* Rows per page selector */}
-            <div className="flex items-center gap-2">
+            {/* Rows per page selector (NOW USING NEW COMPONENT) */}
+            <div className="flex items-center gap-2 ">
               <span className="font-semibold text-text-main whitespace-nowrap">
                 Rows per page:
               </span>
-              <div className="relative" ref={dropdownRef}>
-                <button
-                  className="flex items-center font-medium text-text-main"
-                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                >
-                  {rowsPerPage}
-                  <Icon
-                    name={isDropdownOpen ? "bx:chevron-up" : "bx:chevron-down"}
-                    size={16}
-                    className="ml-0.5 transition-transform duration-200"
-                  />
-                </button>
-                <AnimatePresence>
-                  {isDropdownOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                      transition={{ duration: 0.15 }}
-                      className="absolute right-0 z-20 w-16 p-1 mb-2 overflow-hidden border rounded-lg shadow-lg bg-surface-card border-border-primary bottom-full"
-                    >
-                      {ROWS_PER_PAGE_OPTIONS.map((rows) => (
-                        <div
-                          key={rows}
-                          className={clsx(
-                            "px-3 py-1 text-sm cursor-pointer rounded-md transition-colors",
-                            rows === rowsPerPage
-                              ? "bg-primary text-white font-semibold"
-                              : "text-text-main hover:bg-surface-hover"
-                          )}
-                          onClick={() => handleRowsPerPageChange(rows)}
-                        >
-                          {rows}
-                        </div>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+              <AnimatedDropdown
+                isOpen={isDropdownOpen}
+                setIsOpen={setIsDropdownOpen}
+                // The button element is passed as a prop
+                button={
+                  <button className="flex items-center font-medium text-text-main">
+                    {rowsPerPage}
+                    <Icon
+                      name={
+                        isDropdownOpen ? "bx:chevron-up" : "bx:chevron-down"
+                      }
+                      size={16}
+                      className="ml-0.5 transition-transform duration-200"
+                    />
+                  </button>
+                }
+              >
+                {/* The dropdown menu content */}
+                {ROWS_PER_PAGE_OPTIONS.map((rows) => (
+                  <div
+                    key={rows}
+                    className={clsx(
+                      "px-3 py-1 text-sm cursor-pointer rounded-md transition-colors",
+                      rows === rowsPerPage
+                        ? "bg-primary text-white font-semibold"
+                        : "text-text-main hover:bg-surface-hover"
+                    )}
+                    onClick={() => handleRowsPerPageChange(rows)}
+                  >
+                    {rows}
+                  </div>
+                ))}
+              </AnimatedDropdown>
             </div>
 
             {/* Showing range */}
@@ -656,11 +481,11 @@ const actions = [
         </div>
       </div>
 
-      {/* ✅ Modal used for both Add and Edit */}
+      {/* Modal used for both Add and Edit */}
       <AddCategoryModal
         isOpen={isAddModalOpen}
         toggle={toggleAddModal}
-        categoryData={selectedId} // null → Add mode | object → Edit mode
+        categoryData={selectedId}
       />
 
       {/* Existing Modals */}
@@ -669,7 +494,16 @@ const actions = [
           open={menuOpen}
           position={menuPosition}
           onClose={() => setMenuOpen(false)}
-          actions={actions}
+          actions={actions.map((action) => ({
+            ...action,
+            onClick:
+              action.label === "Edit"
+                ? () => {
+                    setMenuOpen(false);
+                    handleEdit(allOrders.find((o) => o.id === selectedOrderId));
+                  }
+                : action.onClick,
+          }))}
         />
       )}
 
@@ -677,8 +511,7 @@ const actions = [
         isOpen={isDeleteModalOpen}
         toggle={closeDeleteModal}
         itemsToDelete={selectedOrders.length}
-        confirmColor="bg-red-600 hover:bg-red-700 text-white"
-        cancelColor="bg-gray-200 hover:bg-gray-300 text-black"
+        confirmColor="bg-danger hover:bg-red-700 text-white"
       />
     </div>
   );

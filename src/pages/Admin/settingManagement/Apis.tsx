@@ -460,8 +460,6 @@ const actions = [
                                                     cursor-pointer focus:outline-none focus:ring-0
                                                 `}
                       />
-                      {/* FIX: Checkmark icon rendered only when fully checked, subtract icon for indeterminate */}
-                      {/* Header / Overlay */}
                       <span className="absolute inset-0 flex items-center justify-center pointer-events-none">
                         {allSelected && (
                           <Icon
@@ -480,22 +478,22 @@ const actions = [
                       </span>
                     </div>
                   </th>
-                  <th className="px-3 py-5 text-xs font-semibold text-left">
+                  <th className="table-header">
                     #
                   </th>
-                  <th className="px-3 py-5 text-xs font-semibold text-left">
+                  <th className="table-header">
                     Name
                   </th>
-                  <th className="px-3 py-5 text-xs font-semibold text-left">
+                  <th className="table-header">
                     Balance
                   </th>
-                  <th className="px-3 py-5 text-xs font-semibold text-left">
+                  <th className="table-header">
                     Created
                   </th>
-                  <th className="px-3 py-5 text-xs font-semibold text-left">
+                  <th className="table-header">
                     Status
                   </th>
-                  <th className="px-3 py-5 text-xs font-semibold text-left">
+                  <th className="table-header">
                     Action
                   </th>
                 </tr>
@@ -539,24 +537,16 @@ const actions = [
                           </span>
                         </div>
                       </td>
-                      <td className="p-3 text-xs font-medium text-text-main">
-                        {order.id}
-                      </td>
-                      <td className="p-3 text-xs">
-                        <div className="text-xs font-medium text-text-main">
-                          {order.name}
-                        </div>
-                      </td>
-                      <td className="p-3 text-xs text-text-main">
-                        {order.price}
-                      </td>
-                      <td className="p-3 text-xs">
+                      <td className="table-data">{order.id}</td>
+                      <td className="table-data">{order.name}</td>
+                      <td className="table-data">{order.price}</td>
+                      <td className="table-data">
                         <div className="text-text-main">{order.date}</div>
-                        <div className="text-text-subtle text-xxs">
+                        <div className="text-md text-text-subtle">
                           {order.time}
                         </div>
                       </td>
-                      <td className="p-3">
+                      <td className="table-data">
                         <td className="p-3">
                           <StatusBadge
                             status={order.status}

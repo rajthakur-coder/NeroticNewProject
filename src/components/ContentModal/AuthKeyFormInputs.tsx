@@ -18,8 +18,8 @@ const AuthKeyFormInputs: React.FC<Props> = ({
   return (
     <div className="space-y-4 overflow-y-auto max-h-96 pr-1">
       {[1, 2, 3, 4, 5, 6].map((i) => (
-        <div key={i} className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <div>
+        <div key={i} className="grid grid-cols-1 gap-3 ml-1">
+          <div className="w-1/3">
             <label
               htmlFor={`auth_key${i}`}
               className="block text-sm font-medium text-gray-700 mb-1"
@@ -38,12 +38,6 @@ const AuthKeyFormInputs: React.FC<Props> = ({
           </div>
 
           <div>
-            <label
-              htmlFor={`auth_value${i}`}
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Auth Value {i}
-            </label>
             <input
               id={`auth_value${i}`}
               type="text"

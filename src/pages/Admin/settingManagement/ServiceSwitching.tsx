@@ -317,20 +317,41 @@ const ServiceSwitching = () => {
           <div className={`-mx-4 border-b-[1px] border-border-primary`}></div>
 
           <div className="flex flex-col gap-4 mt-6 md:flex-row md:items-center md:gap-4">
-            {/* Search Input */}
+
+            {/* Dropdown / Filter Input */}
             <div className="relative flex-1">
               <Icon
                 name="ri-search-line"
                 className="absolute left-3 top-1/2 -translate-y-1/2 text-text-subtle"
               />
               <input
-                placeholder="Search By ApiName"
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full px-3 py-3.5 pl-10 text-sm border rounded-lg bg-surface-card 
+                readOnly
+                value={
+                  selectedCountry
+                    ? `${selectedCountry.name}`
+                    : search
+                }
+                placeholder="Search By Products"
+                onClick={() => setIsSearchContentModalOpen(true)}
+                className="w-full px-3 py-3.5 pl-10 text-sm border rounded-lg cursor-pointer bg-surface-card
                  text-text-main placeholder-text-subtle border-border-input
-                 hover:border-[var(--color-border-input-hover)] 
+                 hover:border-[var(--color-border-input-hover)]
                  focus:border-[var(--color-border-input-focus)] focus:ring-primary"
               />
+              {selectedCountry && (
+                <button
+                  data-no-ripple
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedCountry(null);
+                    setSearch("");
+                  }}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-full
+                   text-text-subtle hover:bg-surface-hover hover:text-text-main transition-colors"
+                >
+                  <Icon name="x" className="w-4 h-4" />
+                </button>
+              )}
             </div>
 
             {/* Dropdown / Filter Input */}
@@ -346,11 +367,11 @@ const ServiceSwitching = () => {
                     ? `Filtering by: ${selectedCountry.name}`
                     : search
                 }
-                placeholder="Search By Products"
+                placeholder="Search By ApiName"
                 onClick={() => setIsSearchContentModalOpen(true)}
                 className="w-full px-3 py-3.5 pl-10 text-sm border rounded-lg cursor-pointer bg-surface-card
                  text-text-main placeholder-text-subtle border-border-input
-                 hover:border-[var(--color-border-input-hover)] 
+                 hover:border-[var(--color-border-input-hover)]
                  focus:border-[var(--color-border-input-focus)] focus:ring-primary"
               />
               {selectedCountry && (
@@ -361,7 +382,7 @@ const ServiceSwitching = () => {
                     setSelectedCountry(null);
                     setSearch("");
                   }}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-full 
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-full
                    text-text-subtle hover:bg-surface-hover hover:text-text-main transition-colors"
                 >
                   <Icon name="x" className="w-4 h-4" />
@@ -493,10 +514,10 @@ const ServiceSwitching = () => {
                         onChange={toggleSelectAll}
                         // Removed 'checked' prop here, letting the ref manage the state
                         className={`
-                                                    w-4 h-4 
-                                                    appearance-none rounded 
-                                                    bg-[var(--color-checkbox-bg)] border-[1.5px] border-[var(--color-checkbox-border)] 
-                                                    checked:bg-primary checked:border-primary checked:border-none 
+                                                    w-4 h-4
+                                                    appearance-none rounded
+                                                    bg-[var(--color-checkbox-bg)] border-[1.5px] border-[var(--color-checkbox-border)]
+                                                    checked:bg-primary checked:border-primary checked:border-none
                                                     cursor-pointer focus:outline-none focus:ring-0
                                                 `}
                       />
@@ -520,30 +541,14 @@ const ServiceSwitching = () => {
                       </span>
                     </div>
                   </th>
-                  <th className="px-3 py-5 text-xs font-semibold text-left">
-                    #
-                  </th>
-                  <th className="px-3 py-5 text-xs font-semibold text-left">
-                    Api Name
-                  </th>
-                  <th className="px-3 py-5 text-xs font-semibold text-left">
-                    Product
-                  </th>
-                  <th className="px-3 py-5 text-xs font-semibold text-left">
-                    Api Service Code
-                  </th>
-                  <th className="px-3 py-5 text-xs font-semibold text-left">
-                    Purchase(₹, %)
-                  </th>
-                  <th className="px-3 py-5 text-xs font-semibold text-left">
-                    Limit
-                  </th>
-                  <th className="px-3 py-5 text-xs font-semibold text-left">
-                    Status
-                  </th>
-                  <th className="px-3 py-5 text-xs font-semibold text-left">
-                    Action
-                  </th>
+                  <th className="table-header">#</th>
+                  <th className="table-header">Api Name</th>
+                  <th className="table-header">Product</th>
+                  <th className="table-header">Api Service Code</th>
+                  <th className="table-header">Purchase(₹, %)</th>
+                  <th className="table-header">Limit</th>
+                  <th className="table-header">Status</th>
+                  <th className="table-header">Action</th>
                 </tr>
               </thead>
 
@@ -588,26 +593,12 @@ const ServiceSwitching = () => {
                           </span>
                         </div>
                       </td>
-                      <td className="p-3 text-xs font-medium text-text-main">
-                        {order.id}
-                      </td>
-                      <td className="p-3 text-xs">
-                        <div className="text-xs font-medium text-text-main">
-                          {order.apiName}
-                        </div>
-                      </td>
-                      <td className="p-3 text-xs text-text-main">
-                        {order.product}
-                      </td>
-                      <td className="p-3 text-xs text-text-main">
-                        {order.serviceCode}
-                      </td>
-                      <td className="p-3 text-xs text-text-main">
-                        {order.purchase}
-                      </td>
-                      <td className="p-3 text-xs text-text-main">
-                        {order.limit}
-                      </td>
+                      <td className="table-data">{order.id}</td>
+                      <td className="table-data">{order.apiName}</td>
+                      <td className="table-data">{order.product}</td>
+                      <td className="table-data">{order.serviceCode}</td>
+                      <td className="table-data">{order.purchase}</td>
+                      <td className="table-data">{order.limit}</td>
                       <td className="p-3">
                         <td className="p-3">
                           <StatusBadge

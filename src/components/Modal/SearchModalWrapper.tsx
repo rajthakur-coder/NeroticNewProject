@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import CenteredSearchModal from "../BaseModals/DropdowmBaseModal";
 import SearchContent from "../ContentModal/SearchContentModal";
 import type { Country } from "../ContentModal/SearchContentModal";

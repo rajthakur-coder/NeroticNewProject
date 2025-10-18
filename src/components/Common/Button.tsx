@@ -18,8 +18,6 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   loading?: boolean;
   disabled?: boolean;
   animationSpeed?: number;
-
-  // ✅ new props
   width?: string | number;
   height?: string | number;
 }

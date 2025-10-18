@@ -77,11 +77,19 @@ const Tabs: React.FC<TabsProps> = ({ tabs, selectedTab, onTabChange }) => {
         setUnderlinePos({ left, width: currentTab.offsetWidth });
 
         // Smooth scroll selected tab into view
-        currentTab.scrollIntoView({
-          behavior: "smooth",
-          inline: "center",
-          block: "nearest",
-        });
+     if (containerRef.current && currentTab) {
+  const container = containerRef.current;
+  const tabRect = currentTab.getBoundingClientRect();
+  const containerRect = container.getBoundingClientRect();
+
+  // Only scroll the tab list horizontally if needed
+  if (tabRect.left < containerRect.left || tabRect.right > containerRect.right) {
+    container.scrollTo({
+      left: currentTab.offsetLeft - container.offsetWidth / 2 + currentTab.offsetWidth / 2,
+      behavior: "smooth",
+    });
+  }
+}
       }
     };
 

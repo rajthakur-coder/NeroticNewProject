@@ -65,6 +65,8 @@ module.exports = {
         'badge-cancelled-text': "var(--badge-danger-text)",
         'badge-refunded-bg': "var(--badge-netural-bg)",
         'badge-refunded-text': "var(--badge-netural-text)",
+        'checkbox-bg': 'var(--color-checkbox-bg)',
+        'checkbox-border': 'var(--color-checkbox-border)',
         /* Preloader */
         'preloader-outer': "var(--preloader-outer)",
         'preloader-inner': "var(--preloader-inner)",
@@ -75,10 +77,35 @@ module.exports = {
         120: "30rem",
         128: "32rem",
       },
-      fontSize: {
-        xxs: "0.625rem",
-        tiny: "0.6875rem",
+     fontSize: {
+        // New Addition
+        'xxs': ['var(--font-size-base-xxs)', '1rem'], 
+        
+        // Existing
+        'xs': ['var(--font-size-base-xs)', 'var(--line-height-base-xs)'], 
+        'sm': ['var(--font-size-base-sm)', '1.25rem'], 
+        'md': ['var(--font-size-base-md)', 'var(--line-height-base-md)'], 
+        'lg': ['var(--font-size-base-lg)', '1.75rem'], 
+        
+        // New Additions
+        'xl': ['var(--font-size-base-xl)', 'var(--line-height-base-xl)'], 
+        '2xl': ['var(--font-size-base-2xl)', 'var(--line-height-base-2xl)'], 
       },
+
+fontWeight: {
+      'hairline': '100',
+      'thin': '200',
+      'light': '300',
+      'normal': '400',        
+      'medium': '500',
+      'semibold': '600',
+      'bold': '700',
+      'extrabold': '800',
+      'black': '900',
+      
+    },
+
+
        transitionDuration: {
         300: "300ms",
       },
