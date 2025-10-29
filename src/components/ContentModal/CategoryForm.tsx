@@ -37,7 +37,7 @@ const AddCategoryForm: React.FC<Props> = ({
                     type="text"
                     themeMode="light"
                     value={values.name}
-                    onChange={(e) => onChange({ ...values, name: e.target.value })}
+                    onChange={(e) => onChange({ ...values, name: e })}
                     onBlur={() => onBlur("name")}
                     touched={touched.name}
                     error={errors.name}

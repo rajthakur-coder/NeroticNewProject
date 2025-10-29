@@ -7,9 +7,7 @@ interface CustomInputProps {
   placeholder?: string;
   value: string;
   type?: "email" | "password" | "text" | "number" | "textarea";
-  onChange: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => void;
+  onChange: (value: string) => void;
   onBlur?: (
     e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
@@ -17,6 +15,7 @@ interface CustomInputProps {
   themeMode?: "light" | "dark";
   error?: string;
   touched?: boolean;
+  variant?: string; // 👈 add this line
 }
 
 export default function CustomInput({
@@ -30,6 +29,7 @@ export default function CustomInput({
   themeMode = "light",
   error,
   touched,
+  variant,
 }: CustomInputProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
@@ -42,10 +42,10 @@ export default function CustomInput({
 
 const handleChange = (
   e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-) => onChange(e);
+) => onChange(e.target.value);
 
-
-  const handleFocus = () => setIsFocused(true);
+  
+const handleFocus = () => setIsFocused(true);
 const handleBlur = (
   e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
 ) => {
@@ -55,7 +55,6 @@ const handleBlur = (
   }
   if (onBlur) onBlur(e); // ✅ trigger parent blur
 };
-
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (type === "number" && ["e", "E", "+", "-"].includes(e.key)) {
@@ -129,7 +128,10 @@ const handleBlur = (
         }}
         InputProps={{
           sx: {
-            color: textColor,
+            color:
+              variant === "authKey" && value.trim() !== ""
+                ? "#32CD32"
+                : textColor,
             backgroundColor,
             borderRadius: "0.75rem",
             "& .MuiOutlinedInput-notchedOutline": {

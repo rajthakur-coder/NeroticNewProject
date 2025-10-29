@@ -14,7 +14,7 @@ import StatusBadge from "../../../components/Common/StatusBadge";
 import { Button } from "../../../components/Common/Button";
 import AddProductModal from "../../../components/Modal/AddproductModal";
 import SearchInput from "../../../components/Common/SearchInput";
-import Checkbox from "../../../components/Common/Checkbox"; // Assuming this path is correct
+import Checkbox from "../../../components/Common/Checkbox";
 import AnimatedDropdown from "../../../components/Common/AnimatedDropdown";
 
 interface Product {

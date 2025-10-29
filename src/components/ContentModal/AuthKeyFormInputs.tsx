@@ -1,4 +1,5 @@
 import React from "react";
+import InputField from "../../components/Common/inputField"; // adjust path if needed
 
 interface Props {
   formData: Record<string, string>;
@@ -16,36 +17,34 @@ const AuthKeyFormInputs: React.FC<Props> = ({
   };
 
   return (
-    <div className="space-y-4 overflow-y-auto max-h-96 pr-1">
+    <div className="space-y-4 overflow-y-auto max-h-96 pr-1 pt-3">
       {[1, 2, 3, 4, 5, 6].map((i) => (
         <div key={i} className="grid grid-cols-1 gap-3 ml-1">
-          <div className="w-1/3">
+          <div className="w-1/2 mb-3">
             <label
-              htmlFor={`auth_key${i}`}
-              className="block text-sm font-medium text-gray-700 mb-1"
+              htmlFor={`Field${i}`}
+              className="block text-md font-medium text-gray-700 mb-3"
             >
-              Auth Key {i}
+              Field- {i}
             </label>
-            <input
+            {/* Auth Key Field */}
+            <InputField
+              label={`Auth Key ${i}`}
               id={`auth_key${i}`}
-              type="text"
               placeholder={`Enter Auth Key ${i}`}
               value={formData[`auth_key${i}`] || ""}
-              onChange={(e) => handleChange(`auth_key${i}`, e.target.value)}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm 
-                         focus:outline-none focus:ring-2 focus:ring-blue-500"
+              onChange={(e) => handleChange(`auth_key${i}`, e)}
+              variant="authKey"
             />
           </div>
 
-          <div>
-            <input
+          <div className="">
+            {/* Auth Value Field */}
+            <InputField
               id={`auth_value${i}`}
-              type="text"
               placeholder={`Enter Auth Value ${i}`}
               value={formData[`auth_value${i}`] || ""}
-              onChange={(e) => handleChange(`auth_value${i}`, e.target.value)}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm 
-                         focus:outline-none focus:ring-2 focus:ring-blue-500"
+              onChange={(e) => handleChange(`auth_value${i}`, e)}
             />
           </div>
         </div>

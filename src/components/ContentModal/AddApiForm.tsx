@@ -31,7 +31,7 @@ const AddApiModalForm: React.FC<Props> = ({
           type="text"
           themeMode="light"
           value={values.api_name}
-          onChange={(e) => onChange({ ...values, api_name: e.target.value })}
+          onChange={(e) => onChange({ ...values, api_name: e })}
           onBlur={() => onBlur("api_name")}
           touched={touched.api_name}
           error={errors.api_name}

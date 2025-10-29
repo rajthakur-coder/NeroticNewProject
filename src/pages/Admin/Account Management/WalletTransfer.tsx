@@ -11,8 +11,6 @@ import SearchModalWrapper from "../../../components/Modal/SearchModalWrapper";
 import type { Country } from "../../../components/ContentModal/SearchContentModal";
 import Icon from "../../../components/ui/Icon";
 import DeleteModal from "../../../components/Modal/DeleteModal";
-import AnimatedDeleteButton from "../../../components/Common/AnimatedDeleteButton";
-import StatusBadge from "../../../components/Common/StatusBadge";
 import { Button } from "../../../components/Common/Button";
 import TransactionsModal from "../../../components/Modal/TransactionsModal";
 
@@ -537,7 +535,7 @@ const WalletTransfer = () => {
                   <th className="table-header">Post (₹)</th>
                   <th className="table-header">Payment Mode</th>
                   <th className="table-header">UTR/Remark</th>
-                  <th className="table-header">Bank Detials</th>
+                  <th className="table-header">Bank Details</th>
                 </tr>
               </thead>
 
@@ -709,6 +707,13 @@ const WalletTransfer = () => {
 
       {/* ✅ Modal used for both Add and Edit */}
       <TransactionsModal isOpen={isAddModalOpen} toggle={toggleAddModal} />
+
+      <DeleteModal
+        isOpen={isDeleteModalOpen}
+        toggle={closeDeleteModal}
+        itemsToDelete={selectedOrders.length}
+        confirmColor="bg-danger hover:bg-red-700 text-white"
+      />
 
       <SearchModalWrapper
         initialSearch={search}

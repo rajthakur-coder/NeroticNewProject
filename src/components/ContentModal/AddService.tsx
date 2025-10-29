@@ -134,7 +134,7 @@ const AddService: React.FC<AddServiceProps> = ({
         type="text"
         themeMode="light"
         value={values.api_code || ""}
-        onChange={(e) => onChange({ ...values, api_code: e.target.value })}
+        onChange={(e) => onChange({ ...values, api_code: e })}
         onBlur={() => onBlur("api_code")}
         touched={touched.api_code}
         error={errors.api_code}
@@ -148,7 +148,7 @@ const AddService: React.FC<AddServiceProps> = ({
           type="number"
           themeMode="light"
           value={values.rate || ""}
-          onChange={(e) => onChange({ ...values, rate: e.target.value })}
+          onChange={(e) => onChange({ ...values, rate: e })}
           onBlur={() => onBlur("rate")}
           touched={touched.rate}
           error={errors.rate}
@@ -158,22 +158,7 @@ const AddService: React.FC<AddServiceProps> = ({
       <CustomSelect
         label="Commission / Surcharge"
         value={values.commission_surcharge || ""}
-        options={[
-          { value: "Commission", label: "Commission" },
-          { value: "Surcharge", label: "Surcharge" },
-          { value: "Commission", label: "Commission" },
-          { value: "Surcharge", label: "Surcharge" },
-          { value: "Commission", label: "Commission" },
-          { value: "Surcharge", label: "Surcharge" },
-          { value: "Commission", label: "Commission" },
-          { value: "Surcharge", label: "Surcharge" },
-          { value: "Commission", label: "Commission" },
-          { value: "Surcharge", label: "Surcharge" },
-          { value: "Commission", label: "Commission" },
-          { value: "Surcharge", label: "Surcharge" },
-          { value: "Commission", label: "Commission" },
-          { value: "Surcharge", label: "Surcharge" },
-        ]}
+        options={typeOptions}
         onChange={(val) => onChange({ ...values, commission_surcharge: val })}
       />
       {touched.commission_surcharge && errors.commission_surcharge && (
@@ -183,20 +168,7 @@ const AddService: React.FC<AddServiceProps> = ({
       <CustomSelect
         label="Flat / Percentage"
         value={values.flat_per || ""}
-        options={[
-          { value: "flat", label: "Flat" },
-          { value: "percent", label: "Percent" },
-          { value: "flat", label: "Flat" },
-          { value: "percent", label: "Percent" },
-          { value: "flat", label: "Flat" },
-          { value: "percent", label: "Percent" },
-          { value: "flat", label: "Flat" },
-          { value: "percent", label: "Percent" },
-          { value: "flat", label: "Flat" },
-          { value: "percent", label: "Percent" },
-          { value: "flat", label: "Flat" },
-          { value: "percent", label: "Percent" },
-        ]}
+        options={flateRateOptions}
         onChange={(val) => onChange({ ...values, flat_per: val })}
       />
       {touched.flat_per && errors.flat_per && (
@@ -211,7 +183,7 @@ const AddService: React.FC<AddServiceProps> = ({
           type="number"
           themeMode="light"
           value={values.gst || ""}
-          onChange={(e) => onChange({ ...values, gst: e.target.value })}
+          onChange={(e) => onChange({ ...values, gst: e })}
           onBlur={() => onBlur("gst")}
           touched={touched.gst}
           error={errors.gst}
@@ -226,7 +198,7 @@ const AddService: React.FC<AddServiceProps> = ({
           type="number"
           themeMode="light"
           value={values.tds || ""}
-          onChange={(e) => onChange({ ...values, tds: e.target.value })}
+          onChange={(e) => onChange({ ...values, tds: e })}
           onBlur={() => onBlur("tds")}
           touched={touched.tds}
           error={errors.tds}
@@ -235,22 +207,13 @@ const AddService: React.FC<AddServiceProps> = ({
 
       {/* Transaction Limit */}
       <div>
-        {/* <label className="block mb-1 font-medium">Transaction Limit</label>
-        <input
-          type="number"
-          value={values.txn_limit || ""}
-          onChange={(e) => onChange({ ...values, txn_limit: e.target.value })}
-          onBlur={() => onBlur("txn_limit")}
-          placeholder="Enter Transaction Limit"
-          className={inputClass}
-        /> */}
         <InputField
           label="Limit"
           placeholder="Enter Transaction Limit"
           type="number"
           themeMode="light"
           value={values.txn_limit || ""}
-          onChange={(e) => onChange({ ...values, txn_limit: e.target.value })}
+          onChange={(e) => onChange({ ...values, txn_limit: e })}
           onBlur={() => onBlur("txn_limit")}
           touched={touched.txn_limit}
           error={errors.txn_limit}
@@ -260,10 +223,7 @@ const AddService: React.FC<AddServiceProps> = ({
       <CustomSelect
         label="Status"
         value={values.status || ""}
-        options={[
-          { value: "Active", label: "Active" },
-          { value: "Inactive", label: "Inactive" },
-        ]}
+        options={statusOptions}
         onChange={(val) => onChange({ ...values, status: val })}
       />
 

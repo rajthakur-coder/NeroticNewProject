@@ -87,11 +87,11 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
       <div>
         <InputField
           label="Name"
-          placeholder="Enter Product Category Name"
+          placeholder="Enter Product Name"
           type="text"
           themeMode="light"
           value={values.name}
-          onChange={(e) => onChange({ ...values, name: e.target.value })}
+          onChange={(e) => onChange({ ...values, name: e })}
           onBlur={() => onBlur("name")}
           touched={touched.name}
           error={errors.name}
@@ -106,7 +106,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
           type="textarea"
           themeMode="light"
           value={values.description}
-          onChange={(e) => onChange({ ...values, description: e.target.value })}
+          onChange={(e) => onChange({ ...values, description: e })}
           onBlur={() => onBlur("description")}
           touched={touched.description}
           error={errors.description}

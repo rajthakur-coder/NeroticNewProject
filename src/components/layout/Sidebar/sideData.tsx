@@ -56,7 +56,32 @@ export const sidebarSections = [
         name: "Account Management",
         icon: <Icon name="mdi:package-variant" />,
         children: [
-          { name: "Wallet Transfer", path: "/account-management/wallet-transfer" },
+          {
+            name: "Wallet Transfer",
+            path: "/account-management/wallet-transfer",
+          },
+        ],
+      },
+      {
+        name: "Message Management",
+        icon: <Icon name="mdi:package-variant" />,
+        children: [
+          {
+            name: "Add Message API(s)",
+            path: "/message-management/add-msg",
+          },
+          {
+            name: "Send Message",
+            path: "/message-management/send-message",
+          },
+          {
+            name: "Message Signature",
+            path: "/message-management/msg-signature",
+          },
+          {
+            name: "Message Logs",
+            path: "/message-management/message-logs",
+          },
         ],
       },
       { name: "Order", path: "/order", icon: <Icon name="mdi:bank-outline" /> },

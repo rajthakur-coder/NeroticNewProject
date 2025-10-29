@@ -158,6 +158,7 @@ const Apis = () => {
 
   // ✅ Open modal for Edit
   const handleEdit = (category: any) => {
+    console.log(category);
     setSelectedId(category); // pass category data
     setIsAddModalOpen(true);
   };
@@ -277,13 +278,13 @@ const Apis = () => {
 
 const actions = [
   { label: "Edit", icon: <EditIcon />, onClick: handleEdit },
+  { label: "AuthKey", icon: <AuthKeyIcon />, onClick: toggleAuthModal },
   {
     label: "Delete",
     icon: <DeleteIcon />,
     onClick: deleteSelectedOrders,
     danger: true,
   },
-  { label: "AuthKey", icon: <AuthKeyIcon />, onClick: toggleAuthModal },
 ];
 
   const orderTabs: Tab[] = [

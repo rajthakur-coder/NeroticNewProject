@@ -56,7 +56,7 @@ const ProductPricingForm: React.FC<Props> = ({
               readOnly
               value={
                 selectedCountry
-                  ? `Filtering by: ${selectedCountry.name}`
+                  ? `${selectedCountry.name}`
                   : search
               }
               placeholder="Search customer or order number..."
@@ -90,9 +90,9 @@ const ProductPricingForm: React.FC<Props> = ({
       <div>
         <InputField
           label="Price"
-          type="text"
+          type="number"
           value={values.price}
-          onChange={(e) => onChange({ ...values, price: e.target.value })}
+          onChange={(e) => onChange({ ...values, price: e })}
           onBlur={() => onBlur("price")}
           touched={touched.price}
           error={errors.price}

@@ -42,15 +42,20 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
           label={label}
           onChange={handleChange}
           disabled={disabled}
+          MenuProps={{
+            PaperProps: { sx: { zIndex: 99999 } },
+            disablePortal: true, // ensures menu appears inside modal DOM
+          }}
         >
-          {/* Placeholder option */}
           <MenuItem value="" disabled>
             {placeholder}
           </MenuItem>
 
-          {/* Render all options */}
-          {options.map((option) => (
-            <MenuItem key={option.value} value={String(option.value)}>
+          {options.map((option, index) => (
+            <MenuItem
+              key={`${option.value}-${index}`}
+              value={String(option.value)}
+            >
               {option.label}
             </MenuItem>
           ))}

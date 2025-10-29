@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
-import { Row, Col, FormGroup, Label, Input, FormFeedback } from "reactstrap";
 import RadioButton from "../Common/RadioButton";
+import CustomSelect from "../Common/CustomSelect";
+import CustomInput from "../Common/inputField"; // renamed import to match your file
+// ^ ensure this path is correct in your project
 
 interface TransactionFormProps {
   values: {
@@ -12,49 +14,25 @@ interface TransactionFormProps {
     reference_number: string;
     remark: string;
   };
-  errors?: Partial<{
-    transfer_type: string;
-    user_id: string;
-    amount: string;
-    payment_mode: string;
-    bank: string;
-    reference_number: string;
-    remark: string;
-  }>;
-  touched: Record<
-    | "transfer_type"
-    | "user_id"
-    | "amount"
-    | "payment_mode"
-    | "bank"
-    | "reference_number"
-    | "remark",
-    boolean
-  >;
+  errors?: Partial<Record<keyof TransactionFormProps["values"], string>>;
+  touched: Record<keyof TransactionFormProps["values"], boolean>;
   onChange: (v: TransactionFormProps["values"]) => void;
   onBlur: (field: keyof TransactionFormProps["values"]) => void;
-  users: {
-    options: any[];
-    loadMore: () => void;
-    hasMore: boolean;
-    loading: boolean;
-  };
-  banks: {
-    options: any[];
-    loadMore: () => void;
-    hasMore: boolean;
-    loading: boolean;
-  };
-
-  mainBalance: {
-    free_balance: number;
-    total_balance: number;
-  };
-  balanceFetchState?: {
-    loading: boolean;
-    error: string | null;
-  };
 }
+
+// Dummy data
+const dummyUsers = [
+  { value: 1, label: "Amit Sharma - 9876543210" },
+  { value: 2, label: "Neha Verma - 9823456789" },
+  { value: 3, label: "Rahul Singh - 9811122233" },
+];
+
+const dummyBanks = [
+  { value: "SBI", label: "State Bank of India" },
+  { value: "HDFC", label: "HDFC Bank" },
+  { value: "ICICI", label: "ICICI Bank" },
+  { value: "AXIS", label: "Axis Bank" },
+];
 
 const paymentModeOptions = [
   { value: "Credit Note", label: "Credit Note" },
@@ -71,26 +49,18 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   touched,
   onChange,
   onBlur,
-  users,
-  banks,
-  mainBalance = { free_balance: 0, total_balance: 0 },
-  balanceFetchState,
 }) => {
+  // ✅ Default type
   useEffect(() => {
     if (!values.transfer_type) {
-      onChange({
-        ...values,
-        transfer_type: "Credit",
-      });
+      onChange({ ...values, transfer_type: "Credit" });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const numberToWords = (num: number | string): string => {
-    if (num === null || num === undefined || num === "") return "ZERO";
+    if (num === "" || num === undefined || num === null) return "";
     const [intPartStr, decimalStr] = num.toString().split(".");
     const intPart = parseInt(intPartStr, 10);
-
     const a = [
       "",
       "One",
@@ -125,7 +95,6 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
       "Eighty",
       "Ninety",
     ];
-
     const inWords = (n: number): string => {
       if (n < 20) return a[n];
       if (n < 100)
@@ -154,7 +123,6 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         (n % 10000000 ? " " + inWords(n % 10000000) : "")
       );
     };
-
     let result = `Rupees ${inWords(intPart).trim() || "Zero"}`;
     if (decimalStr) {
       const paise = parseInt(decimalStr.substring(0, 2), 10);
@@ -165,26 +133,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     return result + " Only";
   };
 
-  const handleTransferTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newType = e.target.value as "Credit" | "Debit";
-    if (newType === "Debit") {
-      onChange({
-        ...values,
-        transfer_type: newType,
-        payment_mode: "",
-        bank: "",
-        reference_number: "",
-      });
-      return;
-    }
-    onChange({
-      ...values,
-      transfer_type: newType,
-    });
-  };
-
-  const resetFields = ["Credit Note", "Cash In-Hand"];
-
+  // ✅ Conditional logic
   const isBankFieldsVisible =
     values.transfer_type === "Credit" &&
     ["Cash Deposit", "Bank Transfer", "IMPS/UPI", "NEFT/RTGS"].includes(
@@ -198,173 +147,135 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     }).format(num);
 
   return (
-    <Row>
-      {/* Transfer Type */}
-      <Col md={12} className="mb-3">
-        <FormGroup>
-          <Label>
-            Transfer Type<span className="text-danger">*</span>
-          </Label>
-          <div>
-            <div className="form-check form-check-inline form-radio-success">
-              <Input
-                className="form-check-input"
-                type="radio"
-                id="credit"
-                value="Credit"
-                checked={values.transfer_type === "Credit"}
-                onChange={handleTransferTypeChange}
-                onBlur={() => onBlur("transfer_type")}
-              />
-              <Label className="form-check-label" htmlFor="credit">
-                Credit
-              </Label>
-            </div>
-            <div className="form-check form-check-inline form-radio-danger">
-              <Input
-                className="form-check-input"
-                type="radio"
-                id="debit"
-                value="Debit"
-                checked={values.transfer_type === "Debit"}
-                onChange={handleTransferTypeChange}
-                onBlur={() => onBlur("transfer_type")}
-              />
-              <Label className="form-check-label" htmlFor="debit">
-                Debit
-              </Label>
-            </div>
-          </div>
-        </FormGroup>
-      </Col>
-
-      {/* Transfer To */}
-      <Col md={12} className="mb-3">
-        <Label>
-          Transfer To <span className="text-danger">*</span>
-        </Label>
-        {touched.user_id && errors?.user_id && (
-          <FormFeedback className="d-block">{errors.user_id}</FormFeedback>
+    <div className="space-y-6 px-1 py-3">
+      {/* ===== Transfer Type ===== */}
+      <div>
+        <label className="block font-medium mb-2">
+          Transfer Type <span className="text-red-600">*</span>
+        </label>
+        <div className="flex gap-6 mt-1">
+          <RadioButton
+            label="Credit"
+            checked={values.transfer_type === "Credit"}
+            onChange={() => {
+              onChange({ ...values, transfer_type: "Credit" });
+              onBlur("transfer_type");
+            }}
+            size="sm"
+            activeColor="bg-green-600"
+            borderColor="border-green-600"
+            labelColor="text-text-main"
+          />
+          <RadioButton
+            label="Debit"
+            checked={values.transfer_type === "Debit"}
+            onChange={() => {
+              onChange({ ...values, transfer_type: "Debit" });
+              onBlur("transfer_type");
+            }}
+            size="sm"
+            activeColor="bg-red-600"
+            borderColor="border-red-600"
+            labelColor="text-text-main"
+          />
+        </div>
+        {touched.transfer_type && errors?.transfer_type && (
+          <p className="text-red-600 text-sm mt-1">{errors.transfer_type}</p>
         )}
-      </Col>
+      </div>
 
-      {/* Amount & Payment Mode */}
-      <Row className="w-100">
-        <Col md={values.transfer_type === "Credit" ? 6 : 12} className="mb-3">
-          <FormGroup>
-            <Label for="amount">
-              Amount (₹)<span className="text-danger">*</span>
-            </Label>
-            <Input
-              type="number"
-              id="amount"
-              value={values.amount}
-              onChange={(e) => onChange({ ...values, amount: e.target.value })}
-              onBlur={() => onBlur("amount")}
-              placeholder="Enter amount"
-              invalid={touched.amount && !!errors.amount}
-            />
-            {touched.amount && errors.amount && (
-              <FormFeedback>{errors.amount}</FormFeedback>
-            )}
-            {values.amount && (
-              <div className="mt-2 text-muted fw-semibold">
-                {numberToWords(Number(values.amount))}
-              </div>
-            )}
-          </FormGroup>
-        </Col>
+      {/* ===== Transfer To ===== */}
+      <CustomSelect
+        label="Transfer To"
+        options={dummyUsers}
+        value={values.user_id ?? ""}
+        onChange={(val) => onChange({ ...values, user_id: Number(val) })}
+        placeholder="Select User"
+      />
+      {touched.user_id && errors?.user_id && (
+        <p className="text-red-600 text-sm mt-1">{errors.user_id}</p>
+      )}
+
+      {/* ===== Balance Summary ===== */}
+      <div className="flex justify-between font-semibold border-b pb-1">
+        <span>Main Balance: {formatINR(0)}</span>
+        <span>Free Balance: {formatINR(0)}</span>
+      </div>
+
+      {/* 💰 Amount & Payment Mode side by side */}
+      <div className="flex flex-col md:flex-row gap-4">
+        {/* Amount Field */}
+        <div className="w-full md:w-1/2">
+          <CustomInput
+            label="Amount (₹)"
+            type="number"
+            onChange={(e) => onChange({ ...values, amount: e })}
+            value={values.amount}
+            onBlur={() => onBlur("amount")}
+            error={touched.amount ? errors?.amount : ""}
+          />
+          {values.amount && (
+            <p className="text-gray-500 text-sm mt-1">
+              {numberToWords(Number(values.amount))}
+            </p>
+          )}
+        </div>
+
+        {/* Payment Mode Field */}
         {values.transfer_type === "Credit" && (
-          <Col md={6} className="mb-3">
-            <FormGroup>
-              <Label>
-                Payment Mode<span className="text-danger">*</span>
-              </Label>
-              {/* <Select
-                value={paymentModeOptions.find(
-                  (opt) => opt.value === values.payment_mode
-                )}
-                onChange={(opt) => {
-                  const selectedMode = opt?.value || "";
-
-                  if (resetFields.includes(selectedMode)) {
-                    onChange({
-                      ...values,
-                      payment_mode: selectedMode,
-                      bank: "",
-                      reference_number: "",
-                    });
-                  } else {
-                    onChange({
-                      ...values,
-                      payment_mode: selectedMode,
-                    });
-                  }
-                }}
-                onBlur={() => onBlur("payment_mode")}
-                options={paymentModeOptions}
-                placeholder="Select Payment Mode"
-              /> */}
-              {touched.payment_mode && errors.payment_mode && (
-                <FormFeedback className="d-block">
-                  {errors.payment_mode}
-                </FormFeedback>
-              )}
-            </FormGroup>
-          </Col>
+          <div className="w-full md:w-1/2">
+            <CustomSelect
+              label="Payment Mode"
+              options={paymentModeOptions}
+              value={values.payment_mode}
+              onChange={(val) =>
+                onChange({ ...values, payment_mode: String(val) })
+              }
+              placeholder="Select Payment Mode"
+            />
+            {touched.payment_mode && errors?.payment_mode && (
+              <p className="text-red-600 text-sm mt-1">{errors.payment_mode}</p>
+            )}
+          </div>
         )}
-      </Row>
+      </div>
 
-      {/* Bank & Reference */}
+      {/* ===== Bank & Reference ===== */}
       {isBankFieldsVisible && (
         <>
-          <Col md={12} className="mb-3">
-            <Label>
-              Bank <span className="text-danger">*</span>
-            </Label>
-          </Col>
-          <Col md={12} className="mb-3">
-            <FormGroup>
-              <Label for="reference_number">
-                Reference No<span className="text-danger">*</span>
-              </Label>
-              <Input
-                id="reference_number"
-                value={values.reference_number}
-                onChange={(e) =>
-                  onChange({ ...values, reference_number: e.target.value })
-                }
-                onBlur={() => onBlur("reference_number")}
-                placeholder="Reference No / UTR No"
-                invalid={touched.reference_number && !!errors.reference_number}
-              />
-              {touched.reference_number && errors.reference_number && (
-                <FormFeedback>{errors.reference_number}</FormFeedback>
-              )}
-            </FormGroup>
-          </Col>
+          <CustomSelect
+            label="Bank"
+            value={values.bank ?? ""}
+            options={dummyBanks}
+            onChange={(val) => onChange({ ...values, bank: val })}
+            placeholder="Select Bank"
+          />
+
+          <CustomInput
+            label="Reference Number"
+            type="text"
+            value={values.reference_number}
+            onChange={(e) =>
+              onChange({ ...values, reference_number: e })
+            }
+            onBlur={() => onBlur("reference_number")}
+            touched={touched.reference_number}
+            error={errors?.reference_number}
+          />
         </>
       )}
 
-      {/* Remark */}
-      <Col md={12} className="mb-3">
-        <FormGroup>
-          <Label for="remark">Remark</Label>
-          <Input
-            id="remark"
-            type="textarea"
-            value={values.remark}
-            onChange={(e) => onChange({ ...values, remark: e.target.value })}
-            onBlur={() => onBlur("remark")}
-            placeholder="Enter remark (optional)"
-            invalid={touched.remark && !!errors.remark}
-          />
-          {touched.remark && errors.remark && (
-            <FormFeedback>{errors.remark}</FormFeedback>
-          )}
-        </FormGroup>
-      </Col>
-    </Row>
+      {/* ===== Remark ===== */}
+      <CustomInput
+        label="Remark"
+        type="textarea"
+        value={values.remark}
+        onChange={(e) => onChange({ ...values, remark: e })}
+        onBlur={() => onBlur("remark")}
+        touched={touched.remark}
+        error={errors?.remark}
+      />
+    </div>
   );
 };
 

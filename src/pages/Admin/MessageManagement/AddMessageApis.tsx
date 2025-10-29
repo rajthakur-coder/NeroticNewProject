@@ -6,8 +6,8 @@ import {
   EditIcon,
   DeleteIcon,
 } from "../../../components/ContentModal/SidebarSubmenuContent";
-import SearchModalWrapper from "../../../components/Modal/SearchModalWrapper";
-import type { Country } from "../../../components/ContentModal/SearchContentModal";
+import InputField from "../../../components/Common/inputField";
+import CustomSelect from "../../../components/Common/CustomSelect";
 import Icon from "../../../components/ui/Icon";
 import DeleteModal from "../../../components/Modal/DeleteModal";
 import AnimatedDeleteButton from "../../../components/Common/AnimatedDeleteButton";
@@ -16,106 +16,30 @@ import StatusBadge from "../../../components/Common/StatusBadge";
 import { Button } from "../../../components/Common/Button";
 import AddServiceModal from "../../../components/Modal/AddServiceModal";
 
-// src/data/apiTableData.ts
 export interface ApiTableData {
   id: number;
   apiName: string;
-  product: string;
-  serviceCode: string;
-  purchase: string;
-  limit: string;
+  type: string;
+  method: string;
+  created_at: string;
   status: "Active" | "Inactive";
 }
 
 export const apiTableData: ApiTableData[] = [
   {
     id: 1,
-    apiName: "Cashfree",
-    product: "Aadhaar OKYC",
-    serviceCode: "PR001",
-    purchase: "surcharge @ 1 ₹/Txn",
-    limit: "10000",
+    apiName: "Message Gateway",
+    type: "SMS",
+    method: "POST",
+    created_at: "2025-10-20",
     status: "Active",
   },
   {
     id: 2,
-    apiName: "Cashfree",
-    product: "Aadhaar Masking",
-    serviceCode: "UB001",
-    purchase: "surcharge @ 1.0 ₹/Txn",
-    limit: "50000",
-    status: "Active",
-  },
-  {
-    id: 3,
-    apiName: "Cashfree",
-    product: "PAN",
-    serviceCode: "DTH01",
-    purchase: "surcharge @ 1 ₹/Txn",
-    limit: "20000",
-    status: "Active",
-  },
-  {
-    id: 4,
-    apiName: "Cashfree",
-    product: "PAN 360",
-    serviceCode: "POST01",
-    purchase: "surcharge @ 1 ₹/Txn",
-    limit: "15000",
-    status: "Inactive",
-  },
-  {
-    id: 5,
-    apiName: "Cashfree",
-    product: "PAN Lite",
-    serviceCode: "POST01",
-    purchase: "surcharge @ 1 ₹/Txn",
-    limit: "15000",
-    status: "Inactive",
-  },
-  {
-    id: 6,
-    apiName: "Cashfree",
-    product: "Penny Drop",
-    serviceCode: "POST01",
-    purchase: "surcharge @ 1 ₹/Txn",
-    limit: "15000",
-    status: "Inactive",
-  },
-  {
-    id: 7,
-    apiName: "Cashfree",
-    product: "IFSC Lookup",
-    serviceCode: "API_P7",
-    purchase: "",
-    limit: "50000",
-    status: "Inactive",
-  },
-  {
-    id: 8,
-    apiName: "Surepass",
-    product: "UPI ID Validation",
-    serviceCode: "API_P8",
-    purchase: "",
-    limit: "50000",
-    status: "Active",
-  },
-  {
-    id: 9,
-    apiName: "Surepass",
-    product: "PAN to GSTIN",
-    serviceCode: "API_P9",
-    purchase: "",
-    limit: "50000",
-    status: "Active",
-  },
-  {
-    id: 10,
-    apiName: "Surepass",
-    product: "CIN / MCA Lookup",
-    serviceCode: "API_P10",
-    purchase: "",
-    limit: "50000",
+    apiName: "Promo Gateway",
+    type: "WhatsApp",
+    method: "GET",
+    created_at: "2025-10-21",
     status: "Inactive",
   },
 ];
@@ -123,7 +47,7 @@ export const apiTableData: ApiTableData[] = [
 
 const ROWS_PER_PAGE_OPTIONS = [5, 10, 25];
 
-const ServiceSwitching = () => {
+const AddMessageApis = () => {
   // Combine both arrays once into state
   const [allOrders, setAllOrders] = useState([...apiTableData]);
   const [selectedTab, setSelectedTab] = useState<string>("All");
@@ -144,16 +68,7 @@ const ServiceSwitching = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<any>(null);
   const [menuOpen, setMenuOpen] = useState(false);
-    const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
-      const [isSearchContentModalOpen, setIsSearchContentModalOpen] = useState(false);
-      const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
-    
-        const handleCountrySelect = (country: Country) => {
-            setSelectedCountry(country);
-    
-            setSearch(country.name);
-            setIsSearchContentModalOpen(false);
-        };
+  const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
 
   // ✅ Open modal for Add
   const handleAdd = () => {
@@ -235,12 +150,6 @@ const ServiceSwitching = () => {
     }, 800);
   };
 
-  const handleRowsPerPageChange = (newRows: number) => {
-    setRowsPerPage(newRows);
-    setCurrentPage(1);
-    setIsDropdownOpen(false);
-  };
-
   const toggleSelect = (id: string) => {
     setSelectedOrders((prev) =>
       prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
@@ -317,84 +226,36 @@ const ServiceSwitching = () => {
           <div className={`-mx-4 border-b-[1px] border-border-primary`}></div>
 
           <div className="flex flex-col gap-4 mt-6 md:flex-row md:items-center md:gap-4">
-
             {/* Dropdown / Filter Input */}
             <div className="relative flex-1">
-              <Icon
-                name="ri-search-line"
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-text-subtle"
+              <CustomSelect
+                label="API Type"
+                value=""
+                options={[
+                  { label: "All", value: "all" },
+                  { label: "SMS", value: "sms" },
+                  { label: "WhatsApp", value: "whatsapp" },
+                ]}
+                onChange={() => {}}
               />
-              <input
-                readOnly
-                value={
-                  selectedCountry
-                    ? `${selectedCountry.name}`
-                    : search
-                }
-                placeholder="Search By Products"
-                onClick={() => setIsSearchContentModalOpen(true)}
-                className="w-full px-3 py-3.5 pl-10 text-sm border rounded-lg cursor-pointer bg-surface-card
-                 text-text-main placeholder-text-subtle border-border-input
-                 hover:border-[var(--color-border-input-hover)]
-                 focus:border-[var(--color-border-input-focus)] focus:ring-primary"
-              />
-              {selectedCountry && (
-                <button
-                  data-no-ripple
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedCountry(null);
-                    setSearch("");
-                  }}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-full
-                   text-text-subtle hover:bg-surface-hover hover:text-text-main transition-colors"
-                >
-                  <Icon name="x" className="w-4 h-4" />
-                </button>
-              )}
             </div>
 
             {/* Dropdown / Filter Input */}
             <div className="relative flex-1">
-              <Icon
-                name="ri-search-line"
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-text-subtle"
+              <InputField
+                type="text"
+                placeholder="Search by name"
+                value=""
+                onChange={() => {}}
+                themeMode="light"
               />
-              <input
-                readOnly
-                value={
-                  selectedCountry
-                    ? `${selectedCountry.name}`
-                    : search
-                }
-                placeholder="Search By ApiName"
-                onClick={() => setIsSearchContentModalOpen(true)}
-                className="w-full px-3 py-3.5 pl-10 text-sm border rounded-lg cursor-pointer bg-surface-card
-                 text-text-main placeholder-text-subtle border-border-input
-                 hover:border-[var(--color-border-input-hover)]
-                 focus:border-[var(--color-border-input-focus)] focus:ring-primary"
-              />
-              {selectedCountry && (
-                <button
-                  data-no-ripple
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedCountry(null);
-                    setSearch("");
-                  }}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-full
-                   text-text-subtle hover:bg-surface-hover hover:text-text-main transition-colors"
-                >
-                  <Icon name="x" className="w-4 h-4" />
-                </button>
-              )}
             </div>
 
             {/* Add Button */}
             <div>
               <Button
                 className="p-2 transition-colors rounded-full"
-                text="Add Service"
+                text="Add API"
                 onClick={handleAdd}
                 size="sm"
                 width="150px"
@@ -454,7 +315,6 @@ const ServiceSwitching = () => {
               >
                 <div className="flex items-center gap-4 text-sm font-medium">
                   <div className="relative w-4 h-4">
-
                     <input
                       type="checkbox"
                       ref={selectAllOverlayRef}
@@ -466,7 +326,6 @@ const ServiceSwitching = () => {
                           : "bg-[var(--color-checkbox-bg)] border-[1.5px] border-[var(--color-checkbox-border)]"
                       )}
                     />
-
 
                     <span className="absolute inset-0 flex items-center justify-center pointer-events-none">
                       {allSelected && (
@@ -540,13 +399,12 @@ const ServiceSwitching = () => {
                     </div>
                   </th>
                   <th className="table-header">#</th>
-                  <th className="table-header">Api Name</th>
-                  <th className="table-header">Product</th>
-                  <th className="table-header">Api Service Code</th>
-                  <th className="table-header">Purchase(₹, %)</th>
-                  <th className="table-header">Limit</th>
-                  <th className="table-header">Status</th>
-                  <th className="table-header">Action</th>
+                  <th className="px-4 py-3 text-left">API Name</th>
+                  <th className="px-4 py-3 text-left">API Type</th>
+                  <th className="table-header">Method</th>
+                  <th className="table-header">Created Date</th>
+                  <th className="px-4 py-3 text-left">Status</th>
+                  <th className="px-4 py-3 text-center">Actions</th>
                 </tr>
               </thead>
 
@@ -593,10 +451,9 @@ const ServiceSwitching = () => {
                       </td>
                       <td className="table-data">{order.id}</td>
                       <td className="table-data">{order.apiName}</td>
-                      <td className="table-data">{order.product}</td>
-                      <td className="table-data">{order.serviceCode}</td>
-                      <td className="table-data">{order.purchase}</td>
-                      <td className="table-data">{order.limit}</td>
+                      <td className="table-data">{order.type}</td>
+                      <td className="table-data">{order.method}</td>
+                      <td className="table-data">{order.created_at}</td>
                       <td className="p-3">
                         <td className="p-3">
                           <StatusBadge
@@ -621,86 +478,6 @@ const ServiceSwitching = () => {
                 })}
               </tbody>
             </table>
-          </div>
-        </div>
-
-        {/* Pagination */}
-        <div className="flex flex-col gap-4 px-5 py-6 mt-0 text-xs border-t sm:flex-row sm:items-center sm:justify-end sm:gap-8 border-border-primary text-text-subtle">
-          <div className="flex flex-wrap items-center justify-between w-full gap-4 sm:justify-end sm:gap-8 sm:w-auto">
-            {/* Rows per page selector */}
-            <div className="flex items-center gap-2">
-              <span className="font-semibold text-text-main whitespace-nowrap">
-                Rows per page:
-              </span>
-              <div className="relative" ref={dropdownRef}>
-                <button
-                  className="flex items-center font-medium text-text-main"
-                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                >
-                  {rowsPerPage}
-                  <Icon
-                    name={isDropdownOpen ? "bx:chevron-up" : "bx:chevron-down"}
-                    size={16}
-                    className="ml-0.5 transition-transform duration-200"
-                  />
-                </button>
-                <AnimatePresence>
-                  {isDropdownOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                      transition={{ duration: 0.15 }}
-                      className="absolute right-0 z-20 w-16 p-1 mb-2 overflow-hidden border rounded-lg shadow-lg bg-surface-card border-border-primary bottom-full"
-                    >
-                      {ROWS_PER_PAGE_OPTIONS.map((rows) => (
-                        <div
-                          key={rows}
-                          className={clsx(
-                            "px-3 py-1 text-sm cursor-pointer rounded-md transition-colors",
-                            rows === rowsPerPage
-                              ? "bg-primary text-white font-semibold"
-                              : "text-text-main hover:bg-surface-hover"
-                          )}
-                          onClick={() => handleRowsPerPageChange(rows)}
-                        >
-                          {rows}
-                        </div>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </div>
-
-            {/* Showing range */}
-            <span className="font-medium text-text-main whitespace-nowrap">
-              {filteredOrders.length > 0 ? indexOfFirstRow + 1 : 0}-
-              {Math.min(indexOfLastRow, filteredOrders.length)} of{" "}
-              {filteredOrders.length}
-            </span>
-
-            {/* Pagination arrows */}
-            <div className="flex items-center gap-2">
-              <button
-                className="p-1 rounded-full text-text-subtle hover:bg-surface-hover disabled:opacity-50"
-                onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-                disabled={currentPage === 1}
-              >
-                <Icon name="bx:chevron-left" size={20} />
-              </button>
-              <button
-                className="p-1 rounded-full text-text-subtle hover:bg-surface-hover disabled:opacity-50"
-                onClick={() =>
-                  setCurrentPage((prev) => Math.min(totalPages, prev + 1))
-                }
-                disabled={
-                  currentPage === totalPages || filteredOrders.length === 0
-                }
-              >
-                <Icon name="bx:chevron-right" size={20} />
-              </button>
-            </div>
           </div>
         </div>
       </div>
@@ -729,14 +506,8 @@ const ServiceSwitching = () => {
         confirmColor="bg-red-600 hover:bg-red-700 text-white"
         cancelColor="bg-gray-200 hover:bg-gray-300 text-black"
       />
-      <SearchModalWrapper
-        initialSearch={search}
-        isOpen={isSearchContentModalOpen}
-        onClose={() => setIsSearchContentModalOpen(false)}
-        onSelect={handleCountrySelect}
-      />
     </div>
   );
 };
 
-export default ServiceSwitching;
+export default AddMessageApis;
