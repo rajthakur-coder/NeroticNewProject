@@ -20,11 +20,6 @@ export const sidebarSections = [
         path: "/banking",
         icon: <Icon name="mdi:bank-outline" />,
       },
-      // {
-      //   name: "Product Category",
-      //   path: "/product-category",
-      //   icon: <Icon name="mdi:calendar-check-outline" />,
-      // },
       { name: "File", path: "/file", icon: <Icon name="mdi:file-outline" /> },
       { name: "Course", path: "/course", icon: <Icon name="mdi:monitor" /> },
     ],
@@ -68,6 +63,10 @@ export const sidebarSections = [
         children: [
           {
             name: "Add Message API(s)",
+            path: "/message-management/add-msg",
+          },
+          {
+            name: "Message Content",
             path: "/message-management/add-msg",
           },
           {

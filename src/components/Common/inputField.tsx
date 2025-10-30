@@ -100,7 +100,7 @@ const handleBlur = (
         onBlur={handleBlur}
         onKeyDown={handleKeyDown}
         multiline={type === "textarea"}
-        minRows={type === "textarea" ? 3 : undefined}
+        minRows={type === "textarea" ? 4 : undefined}
         autoComplete={
           type === "password"
             ? "new-password"

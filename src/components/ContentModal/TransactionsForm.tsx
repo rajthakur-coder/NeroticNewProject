@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import RadioButton from "../Common/RadioButton";
 import CustomSelect from "../Common/CustomSelect";
 import CustomInput from "../Common/inputField"; // renamed import to match your file
@@ -50,13 +50,6 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   onChange,
   onBlur,
 }) => {
-  // ✅ Default type
-  useEffect(() => {
-    if (!values.transfer_type) {
-      onChange({ ...values, transfer_type: "Credit" });
-    }
-  }, []);
-
   const numberToWords = (num: number | string): string => {
     if (num === "" || num === undefined || num === null) return "";
     const [intPartStr, decimalStr] = num.toString().split(".");
@@ -147,7 +140,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     }).format(num);
 
   return (
-    <div className="space-y-6 px-1 py-3">
+    <div className="space-y-6 px-1 max-h-96 overflow-y-auto p-3 py-3">
       {/* ===== Transfer Type ===== */}
       <div>
         <label className="block font-medium mb-2">
@@ -187,10 +180,10 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
       {/* ===== Transfer To ===== */}
       <CustomSelect
         label="Transfer To"
+        placeholder="Select User"
         options={dummyUsers}
         value={values.user_id ?? ""}
         onChange={(val) => onChange({ ...values, user_id: Number(val) })}
-        placeholder="Select User"
       />
       {touched.user_id && errors?.user_id && (
         <p className="text-red-600 text-sm mt-1">{errors.user_id}</p>
@@ -255,9 +248,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
             label="Reference Number"
             type="text"
             value={values.reference_number}
-            onChange={(e) =>
-              onChange({ ...values, reference_number: e })
-            }
+            onChange={(e) => onChange({ ...values, reference_number: e })}
             onBlur={() => onBlur("reference_number")}
             touched={touched.reference_number}
             error={errors?.reference_number}

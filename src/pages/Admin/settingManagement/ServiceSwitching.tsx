@@ -14,6 +14,7 @@ import AnimatedDeleteButton from "../../../components/Common/AnimatedDeleteButto
 import Tab from "../../../components/Common/Tabs";
 import StatusBadge from "../../../components/Common/StatusBadge";
 import { Button } from "../../../components/Common/Button";
+import Checkbox from "../../../components/Common/Checkbox";
 import AddServiceModal from "../../../components/Modal/AddServiceModal";
 
 // src/data/apiTableData.ts
@@ -279,6 +280,16 @@ const ServiceSwitching = () => {
     setMenuOpen(true);
   };
 
+  const getHeaderIcon = (allSelected: boolean, partiallySelected: boolean) => {
+    if (allSelected) {
+      return <Icon name="ri-check-fill" size={12} className="text-white" />;
+    }
+    if (partiallySelected) {
+      return <Icon name="ri-subtract-fill" size={10} className="text-white" />;
+    }
+    return null; // The default unchecked state has no icon
+  };
+
   const actions = [
     { label: "Edit", icon: <EditIcon />, onClick: handleEdit },
     {
@@ -317,7 +328,6 @@ const ServiceSwitching = () => {
           <div className={`-mx-4 border-b-[1px] border-border-primary`}></div>
 
           <div className="flex flex-col gap-4 mt-6 md:flex-row md:items-center md:gap-4">
-
             {/* Dropdown / Filter Input */}
             <div className="relative flex-1">
               <Icon
@@ -326,11 +336,7 @@ const ServiceSwitching = () => {
               />
               <input
                 readOnly
-                value={
-                  selectedCountry
-                    ? `${selectedCountry.name}`
-                    : search
-                }
+                value={selectedCountry ? `${selectedCountry.name}` : search}
                 placeholder="Search By Products"
                 onClick={() => setIsSearchContentModalOpen(true)}
                 className="w-full px-3 py-3.5 pl-10 text-sm border rounded-lg cursor-pointer bg-surface-card
@@ -362,11 +368,7 @@ const ServiceSwitching = () => {
               />
               <input
                 readOnly
-                value={
-                  selectedCountry
-                    ? `${selectedCountry.name}`
-                    : search
-                }
+                value={selectedCountry ? `${selectedCountry.name}` : search}
                 placeholder="Search By ApiName"
                 onClick={() => setIsSearchContentModalOpen(true)}
                 className="w-full px-3 py-3.5 pl-10 text-sm border rounded-lg cursor-pointer bg-surface-card
@@ -446,45 +448,23 @@ const ServiceSwitching = () => {
           <AnimatePresence>
             {selectedOrders.length > 0 && (
               <motion.div
-                initial={{ x: "-100%" }}
+                initial={{ x: "0%" }}
                 animate={{ x: "0%" }}
-                exit={{ x: "-100%" }}
-                transition={{ duration: 0.0 }}
-                className="absolute top-0 left-0 right-0 z-[0] flex items-center justify-between h-[60px] order-item-active px-6 "
+                exit={{ x: "0%" }}
+                transition={{ duration: 0.2 }}
+                className="absolute top-0 left-0 right-0 z-[1] flex items-center justify-between h-[65px] order-item-active px-6 "
               >
-                <div className="flex items-center gap-4 text-sm font-medium">
-                  <div className="relative w-4 h-4">
-
-                    <input
-                      type="checkbox"
-                      ref={selectAllOverlayRef}
-                      onChange={toggleSelectAll}
-                      className={clsx(
-                        "w-4 h-4 appearance-none rounded cursor-pointer focus:outline-none focus:ring-0",
-                        selectedOrders.length > 0
-                          ? "bg-primary text-white"
-                          : "bg-[var(--color-checkbox-bg)] border-[1.5px] border-[var(--color-checkbox-border)]"
-                      )}
-                    />
-
-
-                    <span className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                      {allSelected && (
-                        <Icon
-                          name="ri-check-fill"
-                          size={12}
-                          className="text-white"
-                        />
-                      )}
-                      {partiallySelected && (
-                        <Icon
-                          name="ri-subtract-fill"
-                          size={10}
-                          className="text-white"
-                        />
-                      )}
-                    </span>
-                  </div>
+                <div className="flex items-center gap-6 text-sm font-medium">
+                  <Checkbox
+                    // Set to true if all are selected OR partially selected
+                    checked={allSelected || partiallySelected}
+                    onChange={toggleSelectAll}
+                    size="xs"
+                    shape="rounded"
+                    checkedColor="bg-primary"
+                    uncheckedColor="bg-[var(checkbox-bg)] border-[1.5px] border-[var(--color-checkbox-border)]"
+                    checkedIcon={getHeaderIcon(allSelected, partiallySelected)}
+                  />
                   <span>{selectedOrders.length} selected</span>
                 </div>
                 <button
@@ -508,19 +488,19 @@ const ServiceSwitching = () => {
                 <tr>
                   <th className="w-12 pl-6">
                     <div className="relative w-4 h-4">
-                      <input
-                        type="checkbox"
-                        ref={selectAllHeaderRef}
+                      <Checkbox
+                        checked={allSelected || partiallySelected}
                         onChange={toggleSelectAll}
-                        className={`
-                                                    w-4 h-4
-                                                    appearance-none rounded
-                                                    bg-[var(--color-checkbox-bg)] border-[1.5px] border-[var(--color-checkbox-border)]
-                                                    checked:bg-primary checked:border-primary checked:border-none
-                                                    cursor-pointer focus:outline-none focus:ring-0
-                                                `}
+                        size="xs"
+                        shape="rounded"
+                        checkedColor="bg-primary"
+                        uncheckedColor="bg-checkbox-bg border-[1.5px] border-checkbox-border"
+                        checkedIcon={getHeaderIcon(
+                          allSelected,
+                          partiallySelected
+                        )}
                       />
-
+                      {/* Header / Overlay */}
                       <span className="absolute inset-0 flex items-center justify-center pointer-events-none">
                         {allSelected && (
                           <Icon
@@ -565,31 +545,14 @@ const ServiceSwitching = () => {
                       )}
                     >
                       <td className="p-3 w-12 min-w-[48px] pl-6">
-                        <div className="relative w-4 h-4">
-                          <input
-                            type="checkbox"
-                            checked={isChecked}
-                            onChange={() => toggleSelect(order.id)}
-                            className={`
-                                                            w-4 h-4
-                                                            appearance-none
-                                                            rounded
-                                                            bg-[var(--color-checkbox-bg)] border-[1.5px] border-[var(--color-checkbox-border)]
-                                                            checked:bg-primary checked:border-primary checked:border-none
-                                                            cursor-pointer
-                                                            focus:outline-none focus:ring-0
-                                                        `}
-                          />
-                          <span className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                            {isChecked && (
-                              <Icon
-                                name="ri-check-fill"
-                                size={12}
-                                className="font-extrabold text-white"
-                              />
-                            )}
-                          </span>
-                        </div>
+                        <Checkbox
+                          checked={isChecked}
+                          onChange={() => toggleSelect(order.id)}
+                          size="xs"
+                          shape="rounded"
+                          checkedColor="bg-primary"
+                          uncheckedColor="bg-checkbox-bg border-[1.5px] border-checkbox-border"
+                        />
                       </td>
                       <td className="table-data">{order.id}</td>
                       <td className="table-data">{order.apiName}</td>
@@ -628,78 +591,11 @@ const ServiceSwitching = () => {
         <div className="flex flex-col gap-4 px-5 py-6 mt-0 text-xs border-t sm:flex-row sm:items-center sm:justify-end sm:gap-8 border-border-primary text-text-subtle">
           <div className="flex flex-wrap items-center justify-between w-full gap-4 sm:justify-end sm:gap-8 sm:w-auto">
             {/* Rows per page selector */}
-            <div className="flex items-center gap-2">
-              <span className="font-semibold text-text-main whitespace-nowrap">
-                Rows per page:
-              </span>
-              <div className="relative" ref={dropdownRef}>
-                <button
-                  className="flex items-center font-medium text-text-main"
-                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                >
-                  {rowsPerPage}
-                  <Icon
-                    name={isDropdownOpen ? "bx:chevron-up" : "bx:chevron-down"}
-                    size={16}
-                    className="ml-0.5 transition-transform duration-200"
-                  />
-                </button>
-                <AnimatePresence>
-                  {isDropdownOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                      transition={{ duration: 0.15 }}
-                      className="absolute right-0 z-20 w-16 p-1 mb-2 overflow-hidden border rounded-lg shadow-lg bg-surface-card border-border-primary bottom-full"
-                    >
-                      {ROWS_PER_PAGE_OPTIONS.map((rows) => (
-                        <div
-                          key={rows}
-                          className={clsx(
-                            "px-3 py-1 text-sm cursor-pointer rounded-md transition-colors",
-                            rows === rowsPerPage
-                              ? "bg-primary text-white font-semibold"
-                              : "text-text-main hover:bg-surface-hover"
-                          )}
-                          onClick={() => handleRowsPerPageChange(rows)}
-                        >
-                          {rows}
-                        </div>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </div>
 
-            {/* Showing range */}
-            <span className="font-medium text-text-main whitespace-nowrap">
-              {filteredOrders.length > 0 ? indexOfFirstRow + 1 : 0}-
-              {Math.min(indexOfLastRow, filteredOrders.length)} of{" "}
-              {filteredOrders.length}
-            </span>
 
             {/* Pagination arrows */}
             <div className="flex items-center gap-2">
-              <button
-                className="p-1 rounded-full text-text-subtle hover:bg-surface-hover disabled:opacity-50"
-                onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-                disabled={currentPage === 1}
-              >
-                <Icon name="bx:chevron-left" size={20} />
-              </button>
-              <button
-                className="p-1 rounded-full text-text-subtle hover:bg-surface-hover disabled:opacity-50"
-                onClick={() =>
-                  setCurrentPage((prev) => Math.min(totalPages, prev + 1))
-                }
-                disabled={
-                  currentPage === totalPages || filteredOrders.length === 0
-                }
-              >
-                <Icon name="bx:chevron-right" size={20} />
-              </button>
+
             </div>
           </div>
         </div>

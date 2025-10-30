@@ -24,6 +24,8 @@ const AddMessageApiModal: React.FC<AddMessageApiModalProps> = ({
   onSuccess,
   apiData,
 }) => {
+  console.log(apiData);
+  
   const [values, setValues] = useState<MessageApiData>({
     api_name: "",
     api_type: "",

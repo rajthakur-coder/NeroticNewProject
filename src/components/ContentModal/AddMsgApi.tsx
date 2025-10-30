@@ -40,7 +40,7 @@ const AddMessageApi: React.FC<AddMessageApiFormProps> = ({
   ];
 
   return (
-    <div className="grid grid-cols-1 gap-4">
+    <div className="grid grid-cols-1 gap-4 max-h-96 overflow-y-auto p-3">
       {/* API Name */}
       <div>
         <InputField
@@ -101,7 +101,7 @@ const AddMessageApi: React.FC<AddMessageApiFormProps> = ({
           error={errors.params}
         />
         <span className="mt-2 text-sm text-gray-500 block">
-          You can use placeholders like{" "}
+          Exp:
           <code className="text-pink-600">[NUMBER]</code>,{" "}
           <code className="text-pink-600">[MESSAGE]</code>,{" "}
           <code className="text-pink-600">[TEMP_ID]</code>

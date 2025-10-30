@@ -1,148 +1,121 @@
 import { motion, AnimatePresence } from "framer-motion";
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import clsx from "clsx";
 import DateAndTime from "../../../components/Common/DateAndTime";
-import DynamicSidebarMenu from "../../../components/Modal/SidebarSubmenu";
-import {
-  EditIcon,
-  DeleteIcon,
-} from "../../../components/ContentModal/SidebarSubmenuContent";
 import SearchModalWrapper from "../../../components/Modal/SearchModalWrapper";
 import type { Country } from "../../../components/ContentModal/SearchContentModal";
 import Icon from "../../../components/ui/Icon";
 import DeleteModal from "../../../components/Modal/DeleteModal";
 import { Button } from "../../../components/Common/Button";
+import Checkbox from "../../../components/Common/Checkbox";
 import TransactionsModal from "../../../components/Modal/TransactionsModal";
 
-interface Product {
-  id: string;
-  categroyName: string;
-  name: string;
+interface Transaction {
+  txnId: string;
+  user: {
+    name: string;
+    avatar: string;
+    userId: number;
+  };
   date: string;
   time: string;
-  slug: string;
-  status: "All" | "Active" | "Inactive";
-  avatar: string;
+  preBalance: number;
+  amount: number;
+  postBalance: number;
+  paymentMode: string;
+  utrOrRemark: string;
+  bank: string;
 }
 
-const productData: Product[] = [
+export const transactionsData: Transaction[] = [
   {
-    id: "11",
-    categroyName: "Aadhaar / Pan",
-    name: "Jayvion Simon",
+    txnId: "TXN001",
+    user: {
+      name: "Jayvion Simon",
+      avatar: "https://i.pravatar.cc/40?img=1",
+      userId: 1,
+    },
     date: "20 Sep 2025",
-    time: "11:01 am",
-    slug: "aadhaar-pan",
-    status: "Active",
-    avatar: "https://i.pravatar.cc/40?img=1",
+    time: "11:01 AM",
+    preBalance: 5000,
+    amount: 1000,
+    postBalance: 6000,
+    paymentMode: "Bank Transfer",
+    utrOrRemark: "UTR9845123",
+    bank: "HDFC Bank - 1234",
   },
   {
-    id: "10",
-    categroyName: "Aadhaar / Pan",
-    name: "Lucian Obrien",
+    txnId: "TXN002",
+    user: {
+      name: "Lucian Obrien",
+      avatar: "https://i.pravatar.cc/40?img=2",
+      userId: 2,
+    },
     date: "19 Sep 2025",
-    time: "10:01 am",
-    slug: "aadhaar-pan",
-    status: "Active",
-    avatar: "https://i.pravatar.cc/40?img=2",
+    time: "10:15 AM",
+    preBalance: 4500,
+    amount: -500,
+    postBalance: 4000,
+    paymentMode: "UPI",
+    utrOrRemark: "remark: monthly charge",
+    bank: "SBI - 4321",
   },
   {
-    id: "9",
-    categroyName: "Aadhaar / Pan",
-    name: "Soren Durham",
-    date: "10 Sep 2025",
-    time: "1:01 am",
-    slug: "aadhaar-pan",
-    status: "Inactive",
-    avatar: "https://i.pravatar.cc/40?img=3",
-  },
-  {
-    id: "8",
-    categroyName: "Aadhaar / Pan",
-    name: "Cortez Herring",
-    date: "09 Sep 2025",
-    time: "12:01 am",
-    slug: "aadhaar-pan",
-    status: "Inactive",
-    avatar: "https://i.pravatar.cc/40?img=4",
-  },
-  {
-    id: "7",
-    categroyName: "Aadhaar / Pan",
-    name: "Brycen Jimenez",
-    date: "07 Sep 2025",
-    time: "11:01 pm",
-    slug: "aadhaar-pan",
-    status: "Active",
-    avatar: "https://i.pravatar.cc/40?img=5",
-  },
-  {
-    id: "6",
-    categroyName: "Aadhaar / Pan",
-    name: "Shawn Manning",
-    date: "16 Sep 2025",
-    time: "1:20 am",
-    slug: "aadhaar-pan",
-    status: "Inactive",
-    avatar: "https://i.pravatar.cc/40?img=21",
-  },
-  {
-    id: "5",
-    categroyName: "Aadhaar / Pan",
-    name: "Chase Day",
-    date: "17 Sep 2025",
-    time: "2:20 am",
-    slug: "aadhaar-pan",
-    status: "Active",
-    avatar: "https://i.pravatar.cc/40?img=22",
-  },
-  {
-    id: "4",
-    categroyName: "Aadhaar / Pan",
-    name: "Melanie Noble",
+    txnId: "TXN003",
+    user: {
+      name: "Soren Durham",
+      avatar: "https://i.pravatar.cc/40?img=3",
+      userId: 3,
+    },
     date: "18 Sep 2025",
-    time: "3:20 am",
-    slug: "aadhaar-pan",
-    status: "Inactive",
-    avatar: "https://i.pravatar.cc/40?img=23",
+    time: "03:25 PM",
+    preBalance: 12000,
+    amount: 2000,
+    postBalance: 14000,
+    paymentMode: "Cash Deposit",
+    utrOrRemark: "Deposit via branch",
+    bank: "ICICI Bank - 8765",
   },
   {
-    id: "3",
-    categroyName: "Aadhaar / Pan",
-    name: "Christopher Cardenas",
-    date: "19 Sep 2025",
-    time: "4:20 am",
-    slug: "aadhaar-pan",
-    status: "Inactive",
-    avatar: "https://i.pravatar.cc/40?img=24",
+    txnId: "TXN004",
+    user: {
+      name: "Cortez Herring",
+      avatar: "https://i.pravatar.cc/40?img=4",
+      userId: 4,
+    },
+    date: "17 Sep 2025",
+    time: "01:10 PM",
+    preBalance: 8500,
+    amount: 500,
+    postBalance: 9000,
+    paymentMode: "NEFT/RTGS",
+    utrOrRemark: "UTR8475239",
+    bank: "Axis Bank - 9988",
   },
   {
-    id: "2",
-    categroyName: "Aadhaar / Pan",
-    name: "Lainey Davidson",
-    date: "20 Sep 2025",
-    time: "5:20 am",
-    slug: "aadhaar-pan",
-    status: "Active",
-    avatar: "https://i.pravatar.cc/40?img=25",
-  },
-  {
-    id: "1",
-    categroyName: "Aadhaar / Pan",
-    name: "Elias Graham",
-    date: "21 Sep 2025",
-    time: "6:00 am",
-    slug: "aadhaar-pan",
-    status: "Inactive",
-    avatar: "https://i.pravatar.cc/40?img=26",
+    txnId: "TXN005",
+    user: {
+      name: "Brycen Jimenez",
+      avatar: "https://i.pravatar.cc/40?img=5",
+      userId: 5,
+    },
+    date: "16 Sep 2025",
+    time: "09:45 AM",
+    preBalance: 10000,
+    amount: -1200,
+    postBalance: 8800,
+    paymentMode: "Debit Card",
+    utrOrRemark: "Payment to vendor",
+    bank: "Kotak Bank - 5544",
   },
 ];
+
 
 const ROWS_PER_PAGE_OPTIONS = [5, 10, 25];
 
 const WalletTransfer = () => {
   // Combine both arrays once into state
-  const [allOrders, setAllOrders] = useState([...productData]);
+  const [allOrders, setAllOrders] = useState([...transactionsData]);
   const [selectedTab, setSelectedTab] = useState<string>("All");
   const [selectedOrders, setSelectedOrders] = useState<string[]>([]);
   const [statusState, setStatusState] = useState({
@@ -188,7 +161,7 @@ const WalletTransfer = () => {
     
       const filteredOrders = allOrders.filter((order) => {
         const matchesTab = selectedTab === "All" || order.status === selectedTab;
-        const matchesSearch = order.name
+        const matchesSearch = order.user.name
           .toLowerCase()
           .includes(search.toLowerCase());
         return matchesTab && matchesSearch;
@@ -234,23 +207,6 @@ const WalletTransfer = () => {
       const closeDeleteModal = () => setIsDeleteModalOpen(false);
       const openDeleteModal = () => setIsDeleteModalOpen(true);
     
-      const toggleStatus = (id) => {
-        setStatusState({ loading: true, id });
-        setTimeout(() => {
-          setAllOrders((prev) =>
-            prev.map((product) =>
-              product.id === id
-                ? {
-                    ...product,
-                    status: product.status === "Active" ? "Inactive" : "Active",
-                  }
-                : product
-            )
-          );
-          setStatusState({ loading: false, id: null });
-        }, 800);
-      };
-    
       const handleRowsPerPageChange = (newRows: number) => {
         setRowsPerPage(newRows);
         setCurrentPage(1);
@@ -279,31 +235,18 @@ const WalletTransfer = () => {
         openDeleteModal();
       };
     
-      const handleTabChange = (key: string) => {
-        setSelectedTab(key);
-        setSelectedOrders([]);
-        setCurrentPage(1);
-      };
     
-      const openPopup = (e: React.MouseEvent<HTMLButtonElement>, id: string) => {
-        const rect = e.currentTarget.getBoundingClientRect();
-        setMenuPosition({
-          top: rect.bottom + window.scrollY - 40,
-          left: rect.right - 170,
-        });
-        setSelectedOrderId(id);
-        setMenuOpen(true);
-      };
-    
-    const actions = [
-      { label: "Edit", icon: <EditIcon />, onClick: handleEdit },
-      {
-        label: "Delete",
-        icon: <DeleteIcon />,
-        onClick: deleteSelectedOrders,
-        danger: true,
-      },
-    ];
+    const getHeaderIcon = (allSelected: boolean, partiallySelected: boolean) => {
+    if (allSelected) {
+      return <Icon name="ri-check-fill" size={12} className="text-white" />;
+    }
+    if (partiallySelected) {
+      return <Icon name="ri-subtract-fill" size={10} className="text-white" />;
+    }
+    return null; // The default unchecked state has no icon
+  };
+  
+
 
   return (
     <div className="rounded-lg bg-surface-body text-text-main">
@@ -433,44 +376,23 @@ const WalletTransfer = () => {
           <AnimatePresence>
             {selectedOrders.length > 0 && (
               <motion.div
-                initial={{ x: "-100%" }}
+                initial={{ x: "0%" }}
                 animate={{ x: "0%" }}
-                exit={{ x: "-100%" }}
-                transition={{ duration: 0.0 }}
-                className="absolute top-0 left-0 right-0 z-[0] flex items-center justify-between h-[60px] order-item-active px-6 "
+                exit={{ x: "0%" }}
+                transition={{ duration: 0.2 }}
+                className="absolute top-0 left-0 right-0 z-[1] flex items-center justify-between h-[65px] order-item-active px-6 "
               >
-                <div className="flex items-center gap-4 text-sm font-medium">
-                  <div className="relative w-4 h-4">
-                    {/* Overlay Checkbox Input */}
-                    <input
-                      type="checkbox"
-                      ref={selectAllOverlayRef}
-                      onChange={toggleSelectAll}
-                      className={clsx(
-                        "w-4 h-4 appearance-none rounded cursor-pointer focus:outline-none focus:ring-0",
-                        selectedOrders.length > 0
-                          ? "bg-primary text-white"
-                          : "bg-[var(--color-checkbox-bg)] border-[1.5px] border-[var(--color-checkbox-border)]"
-                      )}
-                    />
-
-                    <span className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                      {allSelected && (
-                        <Icon
-                          name="ri-check-fill"
-                          size={12}
-                          className="text-white"
-                        />
-                      )}
-                      {partiallySelected && (
-                        <Icon
-                          name="ri-subtract-fill"
-                          size={10}
-                          className="text-white"
-                        />
-                      )}
-                    </span>
-                  </div>
+                <div className="flex items-center gap-6 text-sm font-medium">
+                  <Checkbox
+                    // Set to true if all are selected OR partially selected
+                    checked={allSelected || partiallySelected}
+                    onChange={toggleSelectAll}
+                    size="xs"
+                    shape="rounded"
+                    checkedColor="bg-primary"
+                    uncheckedColor="bg-[var(checkbox-bg)] border-[1.5px] border-[var(--color-checkbox-border)]"
+                    checkedIcon={getHeaderIcon(allSelected, partiallySelected)}
+                  />
                   <span>{selectedOrders.length} selected</span>
                 </div>
                 <button
@@ -494,20 +416,18 @@ const WalletTransfer = () => {
                 <tr>
                   <th className="w-12 pl-6">
                     <div className="relative w-4 h-4">
-                      <input
-                        type="checkbox"
-                        ref={selectAllHeaderRef}
+                      <Checkbox
+                        checked={allSelected || partiallySelected}
                         onChange={toggleSelectAll}
-                        // Removed 'checked' prop here, letting the ref manage the state
-                        className={`
-                                                    w-4 h-4 
-                                                    appearance-none rounded 
-                                                    bg-[var(--color-checkbox-bg)] border-[1.5px] border-[var(--color-checkbox-border)] 
-                                                    checked:bg-primary checked:border-primary checked:border-none 
-                                                    cursor-pointer focus:outline-none focus:ring-0
-                                                `}
+                        size="xs"
+                        shape="rounded"
+                        checkedColor="bg-primary"
+                        uncheckedColor="bg-checkbox-bg border-[1.5px] border-checkbox-border"
+                        checkedIcon={getHeaderIcon(
+                          allSelected,
+                          partiallySelected
+                        )}
                       />
-                      {/* FIX: Checkmark icon rendered only when fully checked, subtract icon for indeterminate */}
                       {/* Header / Overlay */}
                       <span className="absolute inset-0 flex items-center justify-center pointer-events-none">
                         {allSelected && (
@@ -542,10 +462,10 @@ const WalletTransfer = () => {
               {/* Table Body */}
               <tbody className="divide-y bg-surface-card divide-border-primary divide-dashed">
                 {currentOrders.map((order) => {
-                  const isChecked = selectedOrders.includes(order.id);
+                  const isChecked = selectedOrders.includes(order.txnId);
                   return (
                     <tr
-                      key={order.id}
+                      key={order.user.userId}
                       className={clsx(
                         "transition-colors duration-200 cursor-pointer",
                         isChecked
@@ -554,67 +474,44 @@ const WalletTransfer = () => {
                       )}
                     >
                       <td className="p-3 w-12 min-w-[48px] pl-6">
-                        <div className="relative w-4 h-4">
-                          <input
-                            type="checkbox"
-                            checked={isChecked}
-                            onChange={() => toggleSelect(order.id)}
-                            className={`
-                                                            w-4 h-4
-                                                            appearance-none
-                                                            rounded
-                                                            bg-[var(--color-checkbox-bg)] border-[1.5px] border-[var(--color-checkbox-border)]
-                                                            checked:bg-primary checked:border-primary checked:border-none
-                                                            cursor-pointer
-                                                            focus:outline-none focus:ring-0
-                                                        `}
-                          />
-                          <span className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                            {isChecked && (
-                              <Icon
-                                name="ri-check-fill"
-                                size={12}
-                                className="font-extrabold text-white"
-                              />
-                            )}
-                          </span>
-                        </div>
+                        <Checkbox
+                          checked={isChecked}
+                          onChange={() => toggleSelect(order.user.userId)}
+                          size="xs"
+                          shape="rounded"
+                          checkedColor="bg-primary"
+                          uncheckedColor="bg-checkbox-bg border-[1.5px] border-checkbox-border"
+                        />
                       </td>
-                      <td className="table-data">{order.id}</td>
+                      <td className="table-data">{order.txnId}</td>
                       <td className="table-data">
                         <img
-                          src={order.avatar}
-                          alt={order.name}
+                          src={order.user.avatar}
+                          alt={order.user.name}
                           className="w-8 h-8 rounded-full"
                         />
                       </td>
                       <td className="table-data">
-                        <div className="text-text-main">
-                          {order.categroyName}
-                        </div>
-                      </td>
-                      <td className="table-data">{order.name}</td>
-                      <td className="table-data">{order.slug}</td>
-                      <td className="table-data">
-                        <div>{order.date}</div>
+                        <div className="text-text-main">{order.date}</div>
                         <div className="text-md text-text-subtle">
                           {order.time}
                         </div>
                       </td>
+                      <td className="table-data">{order.preBalance}</td>
+                      <td className="table-data">{order.amount}</td>
+                      <td className="table-data">{order.postBalance}</td>
                       <td className="table-data">
                         <div className="text-text-main">
-                          {order.categroyName}
+                          {order.paymentMode}
                         </div>
                       </td>
                       <td className="table-data">
                         <div className="text-text-main">
-                          {order.categroyName}
+                          {order.utrOrRemark}
                         </div>
                       </td>
                       <td className="table-data">
-                        <div className="text-text-main">
-                          {order.categroyName}
-                        </div>
+                        <div className="text-text-main">{order.bank}</div>
                       </td>
                     </tr>
                   );
@@ -628,78 +525,13 @@ const WalletTransfer = () => {
         <div className="flex flex-col gap-4 px-5 py-6 mt-0 text-xs border-t sm:flex-row sm:items-center sm:justify-end sm:gap-8 border-border-primary text-text-subtle">
           <div className="flex flex-wrap items-center justify-between w-full gap-4 sm:justify-end sm:gap-8 sm:w-auto">
             {/* Rows per page selector */}
-            <div className="flex items-center gap-2">
-              <span className="font-semibold text-text-main whitespace-nowrap">
-                Rows per page:
-              </span>
-              <div className="relative" ref={dropdownRef}>
-                <button
-                  className="flex items-center font-medium text-text-main"
-                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                >
-                  {rowsPerPage}
-                  <Icon
-                    name={isDropdownOpen ? "bx:chevron-up" : "bx:chevron-down"}
-                    size={16}
-                    className="ml-0.5 transition-transform duration-200"
-                  />
-                </button>
-                <AnimatePresence>
-                  {isDropdownOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                      transition={{ duration: 0.15 }}
-                      className="absolute right-0 z-20 w-16 p-1 mb-2 overflow-hidden border rounded-lg shadow-lg bg-surface-card border-border-primary bottom-full"
-                    >
-                      {ROWS_PER_PAGE_OPTIONS.map((rows) => (
-                        <div
-                          key={rows}
-                          className={clsx(
-                            "px-3 py-1 text-sm cursor-pointer rounded-md transition-colors",
-                            rows === rowsPerPage
-                              ? "bg-primary text-white font-semibold"
-                              : "text-text-main hover:bg-surface-hover"
-                          )}
-                          onClick={() => handleRowsPerPageChange(rows)}
-                        >
-                          {rows}
-                        </div>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </div>
 
             {/* Showing range */}
-            <span className="font-medium text-text-main whitespace-nowrap">
-              {filteredOrders.length > 0 ? indexOfFirstRow + 1 : 0}-
-              {Math.min(indexOfLastRow, filteredOrders.length)} of{" "}
-              {filteredOrders.length}
-            </span>
+
 
             {/* Pagination arrows */}
             <div className="flex items-center gap-2">
-              <button
-                className="p-1 rounded-full text-text-subtle hover:bg-surface-hover disabled:opacity-50"
-                onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-                disabled={currentPage === 1}
-              >
-                <Icon name="bx:chevron-left" size={20} />
-              </button>
-              <button
-                className="p-1 rounded-full text-text-subtle hover:bg-surface-hover disabled:opacity-50"
-                onClick={() =>
-                  setCurrentPage((prev) => Math.min(totalPages, prev + 1))
-                }
-                disabled={
-                  currentPage === totalPages || filteredOrders.length === 0
-                }
-              >
-                <Icon name="bx:chevron-right" size={20} />
-              </button>
+
             </div>
           </div>
         </div>

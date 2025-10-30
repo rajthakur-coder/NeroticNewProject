@@ -9,6 +9,7 @@ import AnimatedDeleteButton from "../../../components/Common/AnimatedDeleteButto
 import Tab from "../../../components/Common/Tabs";
 import StatusBadge from "../../../components/Common/StatusBadge";
 import { Button } from "../../../components/Common/Button";
+import Checkbox from "../../../components/Common/Checkbox";
 import AddApiModal from "../../../components/Modal/AddApiModal";
 import AuthkeyMpinModal from "../../../components/Modal/AuthkeyMpinModal";
 
@@ -276,6 +277,17 @@ const Apis = () => {
     setMenuOpen(true);
   };
 
+
+  const getHeaderIcon = (allSelected: boolean, partiallySelected: boolean) => {
+    if (allSelected) {
+      return <Icon name="ri-check-fill" size={12} className="text-white" />;
+    }
+    if (partiallySelected) {
+      return <Icon name="ri-subtract-fill" size={10} className="text-white" />;
+    }
+    return null; // The default unchecked state has no icon
+  };
+
 const actions = [
   { label: "Edit", icon: <EditIcon />, onClick: handleEdit },
   { label: "AuthKey", icon: <AuthKeyIcon />, onClick: toggleAuthModal },
@@ -386,45 +398,23 @@ const actions = [
           <AnimatePresence>
             {selectedOrders.length > 0 && (
               <motion.div
-                initial={{ x: "-100%" }}
+                initial={{ x: "0%" }}
                 animate={{ x: "0%" }}
-                exit={{ x: "-100%" }}
-                transition={{ duration: 0.0 }}
-                className="absolute top-0 left-0 right-0 z-[0] flex items-center justify-between h-[60px] order-item-active px-6 "
+                exit={{ x: "0%" }}
+                transition={{ duration: 0.2 }}
+                className="absolute top-0 left-0 right-0 z-[1] flex items-center justify-between h-[65px] order-item-active px-6 "
               >
-                <div className="flex items-center gap-4 text-sm font-medium">
-                  <div className="relative w-4 h-4">
-                    {/* Overlay Checkbox Input */}
-                    <input
-                      type="checkbox"
-                      ref={selectAllOverlayRef}
-                      onChange={toggleSelectAll}
-                      className={clsx(
-                        "w-4 h-4 appearance-none rounded cursor-pointer focus:outline-none focus:ring-0",
-                        selectedOrders.length > 0
-                          ? "bg-primary text-white"
-                          : "bg-[var(--color-checkbox-bg)] border-[1.5px] border-[var(--color-checkbox-border)]"
-                      )}
-                    />
-
-                    {/* FIX: Checkmark icon rendered only when fully checked, subtract icon for indeterminate */}
-                    <span className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                      {allSelected && (
-                        <Icon
-                          name="ri-check-fill"
-                          size={12}
-                          className="text-white"
-                        />
-                      )}
-                      {partiallySelected && (
-                        <Icon
-                          name="ri-subtract-fill"
-                          size={10}
-                          className="text-white"
-                        />
-                      )}
-                    </span>
-                  </div>
+                <div className="flex items-center gap-6 text-sm font-medium">
+                  <Checkbox
+                    // Set to true if all are selected OR partially selected
+                    checked={allSelected || partiallySelected}
+                    onChange={toggleSelectAll}
+                    size="xs"
+                    shape="rounded"
+                    checkedColor="bg-primary"
+                    uncheckedColor="bg-[var(checkbox-bg)] border-[1.5px] border-[var(--color-checkbox-border)]"
+                    checkedIcon={getHeaderIcon(allSelected, partiallySelected)}
+                  />
                   <span>{selectedOrders.length} selected</span>
                 </div>
                 <button
@@ -444,23 +434,23 @@ const actions = [
           >
             <table className="min-w-[800px] md:min-w-full divide-gray-200 w-full">
               {/* Table Header */}
-              <thead className="top-0 z-0 bg-surface-hover text-text-subtle">
+              <thead className="sticky top-0 z-[0] bg-surface-hover text-text-subtle h-[60px]">
                 <tr>
                   <th className="w-12 pl-6">
                     <div className="relative w-4 h-4">
-                      <input
-                        type="checkbox"
-                        ref={selectAllHeaderRef}
+                      <Checkbox
+                        checked={allSelected || partiallySelected}
                         onChange={toggleSelectAll}
-                        // Removed 'checked' prop here, letting the ref manage the state
-                        className={`
-                                                    w-4 h-4 
-                                                    appearance-none rounded 
-                                                    bg-[var(--color-checkbox-bg)] border-[1.5px] border-[var(--color-checkbox-border)] 
-                                                    checked:bg-primary checked:border-primary checked:border-none 
-                                                    cursor-pointer focus:outline-none focus:ring-0
-                                                `}
+                        size="xs"
+                        shape="rounded"
+                        checkedColor="bg-primary"
+                        uncheckedColor="bg-checkbox-bg border-[1.5px] border-checkbox-border"
+                        checkedIcon={getHeaderIcon(
+                          allSelected,
+                          partiallySelected
+                        )}
                       />
+                      {/* Header / Overlay */}
                       <span className="absolute inset-0 flex items-center justify-center pointer-events-none">
                         {allSelected && (
                           <Icon
@@ -479,24 +469,12 @@ const actions = [
                       </span>
                     </div>
                   </th>
-                  <th className="table-header">
-                    #
-                  </th>
-                  <th className="table-header">
-                    Name
-                  </th>
-                  <th className="table-header">
-                    Balance
-                  </th>
-                  <th className="table-header">
-                    Created
-                  </th>
-                  <th className="table-header">
-                    Status
-                  </th>
-                  <th className="table-header">
-                    Action
-                  </th>
+                  <th className="table-header">#</th>
+                  <th className="table-header">Name</th>
+                  <th className="table-header">Balance</th>
+                  <th className="table-header">Created</th>
+                  <th className="table-header">Status</th>
+                  <th className="table-header">Action</th>
                 </tr>
               </thead>
 
@@ -515,28 +493,14 @@ const actions = [
                       )}
                     >
                       <td className="p-3 w-12 min-w-[48px] pl-6">
-                        <div className="relative w-4 h-4">
-                          <input
-                            type="checkbox"
-                            checked={isChecked}
-                            onChange={() => toggleSelect(order.id)}
-                            className={`w-4 h-4 appearance-non rounded
-                                                            bg-[var(--color-checkbox-bg)] border-[1.5px] border-[var(--color-checkbox-border)]
-                                                            checked:bg-primary checked:border-primary checked:border-none
-                                                            cursor-pointer
-                                                            focus:outline-none focus:ring-0
-                                                        `}
-                          />
-                          <span className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                            {isChecked && (
-                              <Icon
-                                name="ri-check-fill"
-                                size={12}
-                                className="font-extrabold text-white"
-                              />
-                            )}
-                          </span>
-                        </div>
+                        <Checkbox
+                          checked={isChecked}
+                          onChange={() => toggleSelect(order.id)}
+                          size="xs"
+                          shape="rounded"
+                          checkedColor="bg-primary"
+                          uncheckedColor="bg-checkbox-bg border-[1.5px] border-checkbox-border"
+                        />
                       </td>
                       <td className="table-data">{order.id}</td>
                       <td className="table-data">{order.name}</td>

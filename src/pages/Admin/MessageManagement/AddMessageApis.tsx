@@ -14,7 +14,7 @@ import AnimatedDeleteButton from "../../../components/Common/AnimatedDeleteButto
 import Tab from "../../../components/Common/Tabs";
 import StatusBadge from "../../../components/Common/StatusBadge";
 import { Button } from "../../../components/Common/Button";
-import AddServiceModal from "../../../components/Modal/AddServiceModal";
+import AddMessageApiModal from "../../../components/Modal/AddMessageApiModal";
 
 export interface ApiTableData {
   id: number;
@@ -69,6 +69,7 @@ const AddMessageApis = () => {
   const [selectedId, setSelectedId] = useState<any>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
+  console.log(selectedId);
 
   // ✅ Open modal for Add
   const handleAdd = () => {
@@ -78,7 +79,7 @@ const AddMessageApis = () => {
 
   // ✅ Open modal for Edit
   const handleEdit = (category: any) => {
-    setSelectedId(category); // pass category data
+    setSelectedId(category);
     setIsAddModalOpen(true);
   };
 
@@ -189,7 +190,12 @@ const AddMessageApis = () => {
   };
 
   const actions = [
-    { label: "Edit", icon: <EditIcon />, onClick: handleEdit },
+    { label: "Edit", icon: <EditIcon />, onClick: () => {
+        const orderToEdit = allOrders.find(o => o.id === selectedOrderId);
+        if (orderToEdit) {
+            handleEdit(orderToEdit);
+        }
+    } },
     {
       label: "Delete",
       icon: <DeleteIcon />,
@@ -399,12 +405,12 @@ const AddMessageApis = () => {
                     </div>
                   </th>
                   <th className="table-header">#</th>
-                  <th className="px-4 py-3 text-left">API Name</th>
-                  <th className="px-4 py-3 text-left">API Type</th>
+                  <th className="table-header">API Name</th>
+                  <th className="table-header">API Type</th>
                   <th className="table-header">Method</th>
                   <th className="table-header">Created Date</th>
-                  <th className="px-4 py-3 text-left">Status</th>
-                  <th className="px-4 py-3 text-center">Actions</th>
+                  <th className="table-header">Status</th>
+                  <th className="table-header">Actions</th>
                 </tr>
               </thead>
 
@@ -480,13 +486,24 @@ const AddMessageApis = () => {
             </table>
           </div>
         </div>
+        {/* Pagination */}
+        <div className="flex flex-col gap-4 px-5 py-6 mt-0 text-xs border-t sm:flex-row sm:items-center sm:justify-end sm:gap-8 border-border-primary text-text-subtle">
+          <div className="flex flex-wrap items-center justify-between w-full gap-4 sm:justify-end sm:gap-8 sm:w-auto">
+            {/* Rows per page selector */}
+
+            {/* Showing range */}
+
+            {/* Pagination arrows */}
+            <div className="flex items-center gap-2"></div>
+          </div>
+        </div>
       </div>
 
       {/* ✅ Modal used for both Add and Edit */}
-      <AddServiceModal
+      <AddMessageApiModal
         isOpen={isAddModalOpen}
         toggle={toggleAddModal}
-        initialValues={selectedId} // null → Add mode | object → Edit mode
+        apiData={selectedId} // null → Add mode | object → Edit mode
       />
 
       {/* Existing Modals */}
